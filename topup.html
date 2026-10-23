@@ -161,8 +161,9 @@
         function copyPayCode(el) {
             const text = el.textContent.trim();
             if (!text || text === 'Đăng nhập để xem') return;
+            const tip = document.getElementById('qr-copy-tip');
             navigator.clipboard.writeText(text).then(() => {
-                const tip = document.getElementById('qr-copy-tip');
+                if (!tip) return;
                 const orig = tip.textContent;
                 tip.textContent = '✅ Đã copy!';
                 tip.style.color = '#4CAF50';
@@ -251,11 +252,11 @@
 
         document.getElementById('topupCardForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const user = document.getElementById('username').value;
+            const user = document.getElementById('username').value.trim();
             const type = document.getElementById('cardType').value;
             const amount = document.getElementById('cardAmount').value;
-            const code = document.getElementById('cardCode').value;
-            const seri = document.getElementById('cardSeri').value;
+            const code = document.getElementById('cardCode').value.trim();
+            const seri = document.getElementById('cardSeri').value.trim();
 
             const btn = e.target.querySelector('button');
             btn.innerText = 'Đang xử lý...';

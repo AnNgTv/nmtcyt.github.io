@@ -276,10 +276,10 @@
                         <p><strong>Ngân hàng:</strong> MB BANK</p>
                         <p><strong>Số TK:</strong> 0935420269</p>
                         <p><strong>Chủ TK:</strong> NGUYEN VAN AN</p>
-                        <p><strong>Nội dung:</strong> <span style="color: #4CAF50;">NAP [Ten_In_Game]</span></p>
+                        <p><strong>Nội dung:</strong> <span style="color: #4CAF50;">Mã nạp riêng tại trang Nạp Tiền</span></p>
                     </div>
                     <div style="text-align: center; margin-top: 20px;">
-                        <img src="https://img.vietqr.io/image/MB-0935420269-compact2.png?accountName=NGUYEN%20VAN%20AN&addInfo=NAP%20TEN_CUA_BAN" alt="QR" style="width: 180px; border-radius: 10px; border: 4px solid #fff;">
+                        <p>Để tránh sai nội dung chuyển khoản, hãy <a href="topup.html" style="color:#4CAF50;font-weight:bold;">mở trang Nạp Tiền</a>, đăng nhập và quét QR cá nhân có sẵn mã nạp của bạn.</p>
                     </div>
                 </div>
                 <div class="topup-box">
@@ -440,15 +440,16 @@
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            user: document.getElementById('username').value,
+                            user: document.getElementById('username').value.trim(),
                             type: document.getElementById('cardType').value,
                             amount: document.getElementById('cardAmount').value,
-                            code: document.getElementById('cardCode').value,
-                            seri: document.getElementById('cardSeri').value
+                            code: document.getElementById('cardCode').value.trim(),
+                            seri: document.getElementById('cardSeri').value.trim()
                         })
                     });
-                    const result = await response.json();
-                    alert(result.message);
+                    const result = await response.json().catch(() => ({}));
+                    if (!response.ok) throw new Error(result.message || 'Yêu cầu nạp thẻ thất bại');
+                    alert(result.message || (result.status === 'success' ? 'Gửi yêu cầu thành công.' : 'Không thể xử lý yêu cầu.'));
                     if (result.status === 'success') topupForm.reset();
                 } catch (err) {
                     alert('Lỗi: Không thể kết nối đến máy chủ nạp tiền!');
@@ -471,7 +472,7 @@
                 const data = await response.json();
                 
                 tbody.innerHTML = '';
-                if (!data || data.length === 0) {
+                if (!Array.isArray(data) || data.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 40px; color: #aaa;"><i class="fas fa-info-circle"></i> Chưa có dữ liệu nạp thẻ tháng này. <br> Hãy là người đầu tiên leo Top!</td></tr>';
                     return;
                 }
@@ -499,8 +500,8 @@
                     tbody.innerHTML += `
                         <tr class="${rowClass}">
                             <td>${rankDisplay}</td>
-                            <td><div class="player-info"><i class="fas fa-user-circle"></i> ${item.username}</div></td>
-                            <td>${item.total.toLocaleString()}đ</td>
+                            <td><div class="player-info"><i class="fas fa-user-circle"></i> ${escapeHTML(item.username)}</div></td>
+                            <td>${escapeHTML(formatAmount(item.total))}đ</td>
                             <td>${badge}</td>
                         </tr>
                     `;

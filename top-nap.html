@@ -137,8 +137,8 @@
                     const row = `
                         <tr class="${rowClass}">
                             <td>${rankDisplay}</td>
-                            <td><div class="player-info"><i class="fas fa-user-circle"></i> ${item.username}</div></td>
-                            <td>${item.total.toLocaleString()}đ</td>
+                            <td><div class="player-info"><i class="fas fa-user-circle"></i> ${escapeHTML(item.username)}</div></td>
+                            <td>${escapeHTML(formatAmount(item.total))}đ</td>
                             <td>${badge}</td>
                         </tr>
                     `;
@@ -146,7 +146,8 @@
                 });
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('leaderboard-body').innerHTML = '<tr><td colspan="4" style="text-align: center; color: #ff4d4d; padding: 20px;">Không thể tải dữ liệu từ máy chủ.</td></tr>';
+                const tbody = document.getElementById('leaderboard-body');
+                if (tbody) tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #ff4d4d; padding: 20px;">Không thể tải dữ liệu từ máy chủ.</td></tr>';
             }
         }
 
@@ -155,15 +156,17 @@
             if (!list) return;
             try {
                 const response = await fetch(`${API_BASE}/api/recent-recharge`);
+                if (!response.ok) throw new Error('Recent recharge request failed');
                 const data = await response.json();
+                if (!Array.isArray(data)) throw new Error('Invalid recent recharge response');
                 if (data.length === 0) {
                     list.innerHTML = '<p style="text-align: center; font-size: 12px; color: #888; padding: 10px;">Chưa có hoạt động nạp thẻ gần đây.</p>';
                     return;
                 }
                 list.innerHTML = data.map(item => `
                     <div class="donator-item">
-                        <span class="donator-name"><i class="fas fa-user-circle"></i> ${item.username}</span>
-                        <span class="donator-amount">+${item.amount.toLocaleString()}đ</span>
+                        <span class="donator-name"><i class="fas fa-user-circle"></i> ${escapeHTML(item.username)}</span>
+                        <span class="donator-amount">+${escapeHTML(formatAmount(item.amount))}đ</span>
                     </div>
                 `).join('');
             } catch (error) { console.error(error); }
