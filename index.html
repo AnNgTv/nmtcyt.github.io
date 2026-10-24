@@ -1,12 +1,1430 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nightmare YTYC | TCYT | Minecraft Server</title>
-    <link rel="stylesheet" href="assets/css/style.css?v=1.7">
-    <link rel="stylesheet" href="assets/css/nightmare-v2.css?v=2.0">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#08060c">
+  <meta name="description" content="NIGHTMARE TCYT — Thế giới Minecraft mang phong cách hắc ám, nơi bắt đầu những cuộc phiêu lưu của bạn.">
+  <meta property="og:title" content="NIGHTMARE TCYT | Minecraft Server">
+  <meta property="og:description" content="Bước vào thế giới NIGHTMARE TCYT. Bạn đã sẵn sàng chưa?">
+  <meta property="og:type" content="website">
+
+  <title>NIGHTMARE TCYT | Minecraft Server</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #08060c;
+      --bg-soft: #100b16;
+      --panel: rgba(23, 15, 30, .82);
+      --red: #ff263f;
+      --red-dark: #a10c28;
+      --purple: #a855f7;
+      --text: #f8f4fa;
+      --muted: #aaa0b5;
+      --border: rgba(255, 255, 255, .09);
+      --radius: 18px;
+      --max-width: 1160px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 90px;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      background:
+        radial-gradient(ellipse at 15% 5%, rgba(118, 17, 49, .2), transparent 38%),
+        radial-gradient(ellipse at 90% 35%, rgba(103, 34, 153, .14), transparent 35%),
+        var(--bg);
+      color: var(--text);
+      font-family: "Inter", Arial, sans-serif;
+      line-height: 1.7;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: .16;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 38px 38px;
+      mask-image: linear-gradient(to bottom, black, transparent 85%);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button, a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .container {
+      width: min(var(--max-width), calc(100% - 40px));
+      margin-inline: auto;
+    }
+
+    .section {
+      padding: 100px 0;
+    }
+
+    .section-heading {
+      max-width: 720px;
+      margin: 0 auto 48px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 15px;
+      color: #ff7384;
+      font-size: .76rem;
+      font-weight: 800;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before,
+    .eyebrow::after {
+      width: 20px;
+      height: 1px;
+      background: var(--red);
+      content: "";
+    }
+
+    .section-heading h2 {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      line-height: 1.15;
+      font-weight: 900;
+      letter-spacing: -.045em;
+    }
+
+    .section-heading p {
+      margin-top: 15px;
+      color: var(--muted);
+    }
+
+    .gradient-text {
+      color: transparent;
+      background: linear-gradient(100deg, #ff344d 5%, #ff7183 45%, #c084fc 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+    }
+
+    /* NAVIGATION */
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--border);
+      background: rgba(8, 6, 12, .86);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .nav-inner {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 22px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 43px;
+      height: 43px;
+      place-items: center;
+      border: 1px solid rgba(255, 38, 63, .5);
+      border-radius: 12px;
+      background: linear-gradient(145deg, #37101f, #150c20);
+      box-shadow: 0 0 22px rgba(255, 38, 63, .12);
+      font-size: 1.4rem;
+    }
+
+    .brand-name {
+      display: block;
+      font-size: .94rem;
+      font-weight: 900;
+      letter-spacing: .055em;
+      line-height: 1.2;
+    }
+
+    .brand-sub {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .64rem;
+      letter-spacing: .16em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 27px;
+    }
+
+    .nav-links a {
+      color: #c5bdcc;
+      font-size: .84rem;
+      font-weight: 600;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover {
+      color: #ff7183;
+    }
+
+    .nav-cta {
+      padding: 10px 16px;
+      border: 1px solid rgba(255, 38, 63, .5);
+      border-radius: 10px;
+      background: rgba(255, 38, 63, .09);
+      color: #fff !important;
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 43px;
+      height: 43px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--bg-soft);
+      color: white;
+      cursor: pointer;
+      font-size: 1.35rem;
+    }
+
+    /* HERO */
+
+    .hero {
+      position: relative;
+      display: flex;
+      min-height: 690px;
+      align-items: center;
+      padding: 90px 0 100px;
+      isolation: isolate;
+    }
+
+    .hero::before {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: -1;
+      width: min(850px, 100%);
+      height: 500px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(150, 14, 45, .2), transparent 68%);
+      content: "";
+      filter: blur(20px);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      width: 100%;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 15px;
+      border: 1px solid rgba(255, 38, 63, .3);
+      border-radius: 100px;
+      background: rgba(255, 38, 63, .07);
+      color: #ff9aa7;
+      font-size: .73rem;
+      font-weight: 800;
+      letter-spacing: .13em;
+    }
+
+    .hero-badge span {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 12px var(--red);
+      animation: pulse 1.8s infinite;
+    }
+
+    .hero h1 {
+      margin: 27px 0 10px;
+      font-size: clamp(3.1rem, 10vw, 7.8rem);
+      font-weight: 900;
+      letter-spacing: -.075em;
+      line-height: .99;
+      text-wrap: balance;
+    }
+
+    .hero h1 .top-line {
+      display: block;
+      color: #fff;
+      text-shadow: 0 0 35px rgba(255,255,255,.06);
+    }
+
+    .hero h1 .bottom-line {
+      display: block;
+      margin-top: 10px;
+      color: transparent;
+      background: linear-gradient(100deg, #ff263f, #ff7183 45%, #b56cff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      filter: drop-shadow(0 0 24px rgba(255, 38, 63, .16));
+    }
+
+    .hero-tagline {
+      margin: 25px auto 0;
+      color: #c9bdce;
+      font-size: clamp(.95rem, 2vw, 1.18rem);
+      font-weight: 500;
+    }
+
+    .hero-description {
+      max-width: 640px;
+      margin: 12px auto 0;
+      color: var(--muted);
+      font-size: .94rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 13px;
+      margin-top: 34px;
+    }
+
+    .btn {
+      display: inline-flex;
+      min-height: 49px;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 22px;
+      border: 1px solid transparent;
+      border-radius: 11px;
+      cursor: pointer;
+      font-size: .88rem;
+      font-weight: 800;
+      transition: transform .2s, border-color .2s, box-shadow .2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(110deg, #d91335, #fa304c);
+      color: white;
+      box-shadow: 0 8px 28px rgba(255, 38, 63, .2);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 12px 36px rgba(255, 38, 63, .32);
+    }
+
+    .btn-secondary {
+      border-color: rgba(255,255,255,.15);
+      background: rgba(255,255,255,.035);
+      color: #f8f4fa;
+    }
+
+    .btn-secondary:hover {
+      border-color: rgba(168,85,247,.6);
+    }
+
+    .hero-scroll {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 55px;
+      color: #81758c;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    .hero-scroll span {
+      color: var(--red);
+      animation: float 1.8s ease-in-out infinite;
+    }
+
+    /* SERVER CONNECTION */
+
+    .server-panel {
+      position: relative;
+      overflow: hidden;
+      padding: 32px;
+      border: 1px solid rgba(255, 38, 63, .2);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(ellipse at 100% 0%, rgba(168,85,247,.09), transparent 50%),
+        linear-gradient(135deg, rgba(30,15,29,.94), rgba(13,10,19,.96));
+      box-shadow: 0 22px 70px rgba(0,0,0,.18);
+    }
+
+    .server-panel::after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--red), var(--purple), transparent);
+      content: "";
+    }
+
+    .server-layout {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .server-label {
+      color: #ff8493;
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .17em;
+      text-transform: uppercase;
+    }
+
+    .server-panel h3 {
+      margin-top: 7px;
+      font-size: 1.55rem;
+      font-weight: 900;
+    }
+
+    .server-panel p {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: .87rem;
+    }
+
+    .server-address {
+      display: flex;
+      min-height: 53px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-top: 20px;
+      padding: 9px 10px 9px 16px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: rgba(0,0,0,.23);
+    }
+
+    .server-address code {
+      overflow-wrap: anywhere;
+      color: #f2e9f7;
+      font-size: .9rem;
+    }
+
+    .copy-btn {
+      flex-shrink: 0;
+      padding: 9px 13px;
+      border: 1px solid rgba(255,38,63,.3);
+      border-radius: 8px;
+      background: rgba(255,38,63,.1);
+      color: #ff9aa7;
+      cursor: pointer;
+      font-size: .78rem;
+      font-weight: 800;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255,38,63,.2);
+    }
+
+    .server-note {
+      margin-top: 12px;
+      color: #84798d;
+      font-size: .75rem;
+    }
+
+    .server-icon {
+      display: grid;
+      width: 112px;
+      height: 112px;
+      place-items: center;
+      border: 1px solid rgba(168,85,247,.3);
+      border-radius: 22px;
+      background: linear-gradient(145deg, rgba(255,38,63,.1), rgba(168,85,247,.12));
+      box-shadow: inset 0 0 25px rgba(168,85,247,.05);
+      font-size: 3rem;
+    }
+
+    /* FEATURES */
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 19px;
+    }
+
+    .feature-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 225px;
+      padding: 26px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(25,17,32,.8), rgba(12,10,17,.8));
+      transition: transform .25s, border-color .25s, background .25s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(255,38,63,.35);
+      background: linear-gradient(145deg, rgba(40,17,35,.9), rgba(15,10,20,.9));
+    }
+
+    .feature-icon {
+      display: grid;
+      width: 49px;
+      height: 49px;
+      place-items: center;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255,38,63,.18);
+      border-radius: 13px;
+      background: rgba(255,38,63,.08);
+      font-size: 1.45rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.08rem;
+      font-weight: 800;
+    }
+
+    .feature-card p {
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: .86rem;
+    }
+
+    /* GAME MODES */
+
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 19px;
+    }
+
+    .mode-card {
+      position: relative;
+      display: flex;
+      min-height: 270px;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow: hidden;
+      padding: 25px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(ellipse at 80% 15%, rgba(168,85,247,.15), transparent 55%),
+        linear-gradient(145deg, #21101e, #100b15 70%);
+      transition: transform .25s, border-color .25s;
+    }
+
+    .mode-card:nth-child(2) {
+      background:
+        radial-gradient(ellipse at 80% 15%, rgba(255,38,63,.17), transparent 55%),
+        linear-gradient(145deg, #28111a, #100b15 70%);
+    }
+
+    .mode-card:nth-child(3) {
+      background:
+        radial-gradient(ellipse at 80% 15%, rgba(100,80,255,.16), transparent 55%),
+        linear-gradient(145deg, #19132d, #100b15 70%);
+    }
+
+    .mode-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(168,85,247,.4);
+    }
+
+    .mode-symbol {
+      position: absolute;
+      top: 18px;
+      right: 23px;
+      font-size: 4rem;
+      opacity: .8;
+      filter: drop-shadow(0 0 22px rgba(255,38,63,.12));
+    }
+
+    .mode-number {
+      margin-bottom: 8px;
+      color: #ff8493;
+      font-size: .7rem;
+      font-weight: 800;
+      letter-spacing: .17em;
+    }
+
+    .mode-card h3 {
+      font-size: 1.45rem;
+      font-weight: 900;
+    }
+
+    .mode-card p {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: .85rem;
+    }
+
+    .mode-disclaimer {
+      margin-top: 22px;
+      color: #82788a;
+      text-align: center;
+      font-size: .78rem;
+    }
+
+    /* COMMUNITY */
+
+    .community-box {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(30px, 6vw, 65px);
+      border: 1px solid rgba(168,85,247,.24);
+      border-radius: 24px;
+      background:
+        radial-gradient(ellipse at 0% 100%, rgba(255,38,63,.13), transparent 45%),
+        radial-gradient(ellipse at 100% 0%, rgba(168,85,247,.14), transparent 45%),
+        #100b16;
+      text-align: center;
+    }
+
+    .community-box h2 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      letter-spacing: -.05em;
+      line-height: 1.15;
+    }
+
+    .community-box p {
+      max-width: 590px;
+      margin: 17px auto 0;
+      color: var(--muted);
+    }
+
+    .community-box .hero-actions {
+      margin-top: 28px;
+    }
+
+    /* FAQ */
+
+    .faq-list {
+      display: grid;
+      max-width: 800px;
+      gap: 12px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: rgba(20,14,26,.72);
+    }
+
+    .faq-item summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 19px 21px;
+      cursor: pointer;
+      list-style: none;
+      font-size: .92rem;
+      font-weight: 750;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::after {
+      color: #ff7183;
+      content: "+";
+      font-size: 1.3rem;
+    }
+
+    .faq-item[open] summary::after {
+      content: "−";
+    }
+
+    .faq-answer {
+      padding: 0 21px 20px;
+      color: var(--muted);
+      font-size: .86rem;
+    }
+
+    /* FOOTER */
+
+    footer {
+      padding: 35px 0 25px;
+      border-top: 1px solid var(--border);
+      background: rgba(0,0,0,.12);
+    }
+
+    .footer-main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding-bottom: 25px;
+    }
+
+    .footer-note {
+      max-width: 430px;
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: .81rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    .footer-links a {
+      color: #bcb2c6;
+      font-size: .82rem;
+      transition: color .2s;
+    }
+
+    .footer-links a:hover {
+      color: #ff7183;
+    }
+
+    .footer-bottom {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: #81768b;
+      font-size: .75rem;
+    }
+
+    /* ANIMATIONS */
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 12px var(--red); }
+      50% { opacity: .45; box-shadow: 0 0 3px var(--red); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(5px); }
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 850px) {
+      .nav-links {
+        gap: 16px;
+      }
+
+      .nav-links a {
+        font-size: .78rem;
+      }
+
+      .feature-grid,
+      .mode-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .server-icon {
+        width: 90px;
+        height: 90px;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .container {
+        width: min(100% - 28px, var(--max-width));
+      }
+
+      .nav-inner {
+        min-height: 68px;
+      }
+
+      .brand-mark {
+        width: 39px;
+        height: 39px;
+      }
+
+      .brand-name {
+        font-size: .82rem;
+      }
+
+      .brand-sub {
+        font-size: .59rem;
+      }
+
+      .menu-toggle {
+        display: grid;
+        place-items: center;
+      }
+
+      .nav-links {
+        position: absolute;
+        top: calc(100% + 1px);
+        right: 0;
+        left: 0;
+        display: none;
+        align-items: stretch;
+        gap: 0;
+        padding: 10px 14px 17px;
+        border-bottom: 1px solid var(--border);
+        background: rgba(8,6,12,.98);
+      }
+
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .nav-links a {
+        padding: 13px 10px;
+        font-size: .9rem;
+      }
+
+      .nav-cta {
+        margin-top: 5px;
+        text-align: center;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 90px 0 65px;
+      }
+
+      .hero h1 {
+        font-size: clamp(2.8rem, 13vw, 5rem);
+      }
+
+      .hero-description {
+        max-width: 430px;
+        font-size: .88rem;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+        width: min(100%, 320px);
+        margin-inline: auto;
+        margin-top: 27px;
+      }
+
+      .hero-actions .btn {
+        width: 100%;
+      }
+
+      .hero-scroll {
+        margin-top: 35px;
+      }
+
+      .section {
+        padding: 72px 0;
+      }
+
+      .section-heading {
+        margin-bottom: 33px;
+      }
+
+      .feature-grid,
+      .mode-grid {
+        grid-template-columns: 1fr;
+        gap: 13px;
+      }
+
+      .feature-card {
+        min-height: auto;
+        padding: 23px;
+      }
+
+      .feature-icon {
+        margin-bottom: 14px;
+      }
+
+      .mode-card {
+        min-height: 225px;
+      }
+
+      .server-panel {
+        padding: 23px 18px;
+      }
+
+      .server-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .server-icon {
+        display: none;
+      }
+
+      .server-panel h3 {
+        font-size: 1.3rem;
+      }
+
+      .server-address {
+        align-items: flex-start;
+        gap: 9px;
+        padding-left: 11px;
+      }
+
+      .server-address code {
+        padding-top: 7px;
+        font-size: .78rem;
+      }
+
+      .copy-btn {
+        padding: 9px;
+        font-size: .72rem;
+      }
+
+      .footer-main {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .footer-links {
+        gap: 15px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <!-- NAVIGATION -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a class="brand" href="#home" aria-label="NIGHTMARE TCYT - Trang chủ">
+        <span class="brand-mark" aria-hidden="true">☠</span>
+        <span>
+          <span class="brand-name">NIGHTMARE TCYT</span>
+          <span class="brand-sub">MINECRAFT SERVER</span>
+        </span>
+      </a>
+
+      <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="Mở menu"
+        aria-expanded="false"
+        aria-controls="navLinks"
+      >☰</button>
+
+      <nav class="nav-links" id="navLinks" aria-label="Điều hướng chính">
+        <a href="#home">Trang chủ</a>
+        <a href="#about">Giới thiệu</a>
+        <a href="#modes">Chế độ chơi</a>
+        <a href="#faq">FAQ</a>
+        <a class="nav-cta" href="#connect">Tham gia ngay ↗</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <div class="container hero-content">
+        <div class="hero-badge">
+          <span></span>
+          ENTER THE DARKNESS
+        </div>
+
+        <h1>
+          <span class="top-line">NIGHTMARE</span>
+          <span class="bottom-line">TCYT</span>
+        </h1>
+
+        <p class="hero-tagline">
+          Một thế giới. Vô vàn bí ẩn. Không giới hạn cuộc phiêu lưu.
+        </p>
+
+        <p class="hero-description">
+          Chào mừng đến với NIGHTMARE TCYT — nơi bạn tự viết nên hành trình
+          của mình trong thế giới Minecraft mang sắc màu hắc ám.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#connect">
+            ⚔ Tham gia máy chủ
+          </a>
+          <a class="btn btn-secondary" href="#about">
+            Khám phá thế giới ↓
+          </a>
+        </div>
+
+        <a class="hero-scroll" href="#about">
+          <span>↓</span> SCROLL TO DISCOVER
+        </a>
+      </div>
+    </section>
+
+    <!-- SERVER CONNECTION -->
+    <section class="section" id="connect">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="eyebrow">CONNECT TO THE SERVER</span>
+          <h2>Đã đến lúc <span class="gradient-text">tham chiến</span></h2>
+          <p>
+            Chuẩn bị Minecraft, nhập địa chỉ máy chủ và bắt đầu hành trình.
+          </p>
+        </div>
+
+        <div class="server-panel reveal">
+          <div class="server-layout">
+            <div>
+              <span class="server-label">☠ NIGHTMARE NETWORK</span>
+              <h3>Kết nối đến NIGHTMARE TCYT</h3>
+              <p>
+                Địa chỉ máy chủ sẽ được cập nhật tại đây.
+              </p>
+
+              <div class="server-address">
+                <code id="serverAddress">YOUR_SERVER_IP</code>
+                <button class="copy-btn" id="copyServer" type="button">
+                  Sao chép
+                </button>
+              </div>
+
+              <p class="server-note" id="copyMessage" aria-live="polite">
+                Chủ máy chủ: hãy thay YOUR_SERVER_IP bằng địa chỉ Minecraft thực tế.
+              </p>
+            </div>
+
+            <div class="server-icon" aria-hidden="true">⛏️</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section" id="about">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="eyebrow">WELCOME TO THE DARK SIDE</span>
+          <h2>Điều gì đang chờ <span class="gradient-text">bạn?</span></h2>
+          <p>
+            Khám phá thế giới theo cách riêng, kết nối cùng cộng đồng
+            và tạo nên câu chuyện của chính mình.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card reveal">
+            <div class="feature-icon" aria-hidden="true">🌑</div>
+            <h3>Thế giới bí ẩn</h3>
+            <p>
+              Không khí hắc ám cùng phong cách riêng tạo nên dấu ấn
+              đặc biệt cho NIGHTMARE TCYT.
+            </p>
+          </article>
+
+          <article class="feature-card reveal">
+            <div class="feature-icon" aria-hidden="true">⚔️</div>
+            <h3>Cuộc phiêu lưu</h3>
+            <p>
+              Khám phá, sinh tồn, xây dựng và tự tạo hành trình
+              của bạn trong Minecraft.
+            </p>
+          </article>
+
+          <article class="feature-card reveal">
+            <div class="feature-icon" aria-hidden="true">🩸</div>
+            <h3>Phong cách Nightmare</h3>
+            <p>
+              Giao diện đỏ máu, tím huyền bí và chất riêng dành
+              cho những người yêu thích bóng tối.
+            </p>
+          </article>
+
+          <article class="feature-card reveal">
+            <div class="feature-icon" aria-hidden="true">🏰</div>
+            <h3>Xây dựng đế chế</h3>
+            <p>
+              Biến ý tưởng thành công trình, tạo dấu ấn và phát triển
+              thế giới theo phong cách của bạn.
+            </p>
+          </article>
+
+          <article class="feature-card reveal">
+            <div class="feature-icon" aria-hidden="true">🤝</div>
+            <h3>Cộng đồng người chơi</h3>
+            <p>
+              Gặp gỡ người chơi khác, cùng hợp tác và tạo nên
+              những kỷ niệm trong game.
+            </p>
+          </article>
+
+          <article class="feature-card reveal">
+            <div class="feature-icon" aria-hidden="true">👑</div>
+            <h3>Khẳng định bản thân</h3>
+            <p>
+              Tạo phong cách riêng, thử thách giới hạn và viết nên
+              câu chuyện của chính bạn.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAME MODES -->
+    <section class="section" id="modes">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="eyebrow">CHOOSE YOUR DESTINY</span>
+          <h2>Chọn con đường <span class="gradient-text">của bạn</span></h2>
+          <p>
+            Mỗi cuộc hành trình đều có một khởi đầu.
+            Bạn sẽ chọn con đường nào?
+          </p>
+        </div>
+
+        <div class="mode-grid">
+          <article class="mode-card reveal">
+            <span class="mode-symbol" aria-hidden="true">🌲</span>
+            <span class="mode-number">01 / SURVIVAL</span>
+            <h3>Survival</h3>
+            <p>
+              Thu thập tài nguyên, sinh tồn và xây dựng thế giới
+              của riêng bạn.
+            </p>
+          </article>
+
+          <article class="mode-card reveal">
+            <span class="mode-symbol" aria-hidden="true">⚔️</span>
+            <span class="mode-number">02 / PVP</span>
+            <h3>PvP & War</h3>
+            <p>
+              Rèn luyện kỹ năng, thử thách bản thân và chứng minh
+              bản lĩnh trong chiến đấu.
+            </p>
+          </article>
+
+          <article class="mode-card reveal">
+            <span class="mode-symbol" aria-hidden="true">💎</span>
+            <span class="mode-number">03 / ADVENTURE</span>
+            <h3>Adventure</h3>
+            <p>
+              Khám phá những điều mới lạ và tìm kiếm hành trình
+              phù hợp với bạn.
+            </p>
+          </article>
+        </div>
+
+        <p class="mode-disclaimer">
+          Các chế độ trên là phần giới thiệu mẫu. Hãy chỉnh sửa để khớp
+          với những chế độ thực sự có trên máy chủ.
+        </p>
+      </div>
+    </section>
+
+    <!-- COMMUNITY -->
+    <section class="section" id="community">
+      <div class="container">
+        <div class="community-box reveal">
+          <span class="eyebrow">JOIN THE COMMUNITY</span>
+          <h2>
+            Bóng tối đang gọi.<br>
+            <span class="gradient-text">Bạn có dám bước vào?</span>
+          </h2>
+          <p>
+            Hãy kết nối với cộng đồng NIGHTMARE TCYT để cập nhật thông tin,
+            trò chuyện và theo dõi những hoạt động của máy chủ.
+          </p>
+
+          <div class="hero-actions">
+            <a
+              class="btn btn-primary"
+              href="#"
+              data-config-link="discord"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              ☠ Tham gia Discord
+            </a>
+
+            <a class="btn btn-secondary" href="#connect">
+              ⛏ Kết nối Minecraft
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="eyebrow">FREQUENTLY ASKED QUESTIONS</span>
+          <h2>Câu hỏi <span class="gradient-text">thường gặp</span></h2>
+          <p>Một vài thông tin dành cho người chơi mới.</p>
+        </div>
+
+        <div class="faq-list">
+          <details class="faq-item reveal">
+            <summary>Làm thế nào để tham gia NIGHTMARE TCYT?</summary>
+            <div class="faq-answer">
+              Bạn cần có Minecraft tương thích, sau đó nhập địa chỉ
+              máy chủ tại mục Kết nối. Địa chỉ chính thức cần được
+              quản trị viên cập nhật trước khi sử dụng website.
+            </div>
+          </details>
+
+          <details class="faq-item reveal">
+            <summary>Máy chủ hỗ trợ phiên bản Minecraft nào?</summary>
+            <div class="faq-answer">
+              Phiên bản hỗ trợ chưa được khai báo trên trang này.
+              Hãy cập nhật phiên bản Java hoặc Bedrock chính xác
+              theo cấu hình thực tế của máy chủ.
+            </div>
+          </details>
+
+          <details class="faq-item reveal">
+            <summary>Tôi có thể tham gia bằng điện thoại không?</summary>
+            <div class="faq-answer">
+              Điều này phụ thuộc vào việc máy chủ có hỗ trợ Bedrock
+              hay không. Hãy xác nhận với quản trị viên trước khi kết nối.
+            </div>
+          </details>
+
+          <details class="faq-item reveal">
+            <summary>Làm thế nào để nhận thông báo mới?</summary>
+            <div class="faq-answer">
+              Bạn có thể thêm liên kết Discord chính thức của NIGHTMARE TCYT
+              vào website sau khi cấu hình đường dẫn chính xác.
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-main">
+        <div>
+          <a class="brand" href="#home">
+            <span class="brand-mark" aria-hidden="true">☠</span>
+            <span>
+              <span class="brand-name">NIGHTMARE TCYT</span>
+              <span class="brand-sub">MINECRAFT SERVER</span>
+            </span>
+          </a>
+
+          <p class="footer-note">
+            Bước vào bóng tối. Viết nên huyền thoại của riêng bạn.
+          </p>
+        </div>
+
+        <nav class="footer-links" aria-label="Liên kết chân trang">
+          <a href="#home">Trang chủ</a>
+          <a href="#about">Giới thiệu</a>
+          <a href="#modes">Chế độ chơi</a>
+          <a href="#faq">FAQ</a>
+          <a
+            href="#"
+            data-config-link="discord"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Discord</a>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© <span id="currentYear"></span> NIGHTMARE TCYT. All Rights Reserved.</span>
+        <span>Made for the darkness ☠</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /*
+     * NIGHTMARE TCYT - WEBSITE CONFIGURATION
+     *
+     * Hãy thay các giá trị mẫu dưới đây bằng thông tin chính xác.
+     * Không để nguyên YOUR_SERVER_IP khi website chính thức hoạt động.
+     */
+
+    const SITE_CONFIG = {
+      serverAddress: "YOUR_SERVER_IP",
+      discordUrl: ""
+    };
+
+    // Đồng bộ địa chỉ Minecraft trên giao diện.
+    const serverAddressElement = document.getElementById("serverAddress");
+    const copyButton = document.getElementById("copyServer");
+    const copyMessage = document.getElementById("copyMessage");
+
+    serverAddressElement.textContent = SITE_CONFIG.serverAddress;
+
+    // Sao chép địa chỉ máy chủ.
+    copyButton.addEventListener("click", async () => {
+      const address = SITE_CONFIG.serverAddress.trim();
+
+      if (!address || address === "YOUR_SERVER_IP") {
+        copyMessage.textContent =
+          "⚠ Quản trị viên chưa cấu hình địa chỉ máy chủ.";
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(address);
+        copyMessage.textContent = "✓ Đã sao chép địa chỉ máy chủ!";
+        copyButton.textContent = "Đã sao chép";
+      } catch (error) {
+        // Dự phòng cho trình duyệt không hỗ trợ Clipboard API.
+        const temporaryInput = document.createElement("textarea");
+        temporaryInput.value = address;
+        temporaryInput.style.position = "fixed";
+        temporaryInput.style.opacity = "0";
+        document.body.appendChild(temporaryInput);
+        temporaryInput.select();
+
+        const copied = document.execCommand("copy");
+        temporaryInput.remove();
+
+        if (copied) {
+          copyMessage.textContent = "✓ Đã sao chép địa chỉ máy chủ!";
+          copyButton.textContent = "Đã sao chép";
+        } else {
+          copyMessage.textContent =
+            "Không thể tự sao chép. Hãy sao chép địa chỉ thủ công.";
+        }
+      }
+
+      window.setTimeout(() => {
+        copyButton.textContent = "Sao chép";
+      }, 2200);
+    });
+
+    // Gắn liên kết Discord khi đã được cấu hình.
+    document.querySelectorAll('[data-config-link="discord"]').forEach(link => {
+      if (SITE_CONFIG.discordUrl.trim()) {
+        link.href = SITE_CONFIG.discordUrl;
+      } else {
+        link.addEventListener("click", event => {
+          event.preventDefault();
+          alert("Liên kết Discord chưa được quản trị viên cấu hình.");
+        });
+      }
+    });
+
+    // Menu điều hướng trên điện thoại.
+    const menuToggle = document.getElementById("menuToggle");
+    const navLinks = document.getElementById("navLinks");
+
+    menuToggle.addEventListener("click", () => {
+      const isOpen = navLinks.classList.toggle("open");
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
+      menuToggle.setAttribute("aria-label", isOpen ? "Đóng menu" : "Mở menu");
+      menuToggle.textContent = isOpen ? "✕" : "☰";
+    });
+
+    navLinks.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => {
+        navLinks.classList.remove("open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Mở menu");
+        menuToggle.textContent = "☰";
+      });
+    });
+
+    // Hiệu ứng xuất hiện khi cuộn trang.
+    const revealElements = document.querySelectorAll(".reveal");
+
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver((entries, currentObserver) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            currentObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      revealElements.forEach(element => observer.observe(element));
+    } else {
+      revealElements.forEach(element => element.classList.add("visible"));
+    }
+
+    // Tự động cập nhật năm ở chân trang.
+    document.getElementById("currentYear").textContent =
+      new Date().getFullYear();
+  </script>
+</body>
+</html>
