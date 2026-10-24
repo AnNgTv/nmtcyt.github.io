@@ -1,0 +1,3 @@
+api-base-url: "https://minecraftrechargebackend.onrender.com"
+plugin-key: "REPLACE_WITH_THE_SAME_PLUGIN_SHARED_SECRET_FROM_RENDER"
+poll-seconds: 10
