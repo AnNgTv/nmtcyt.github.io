@@ -3,1428 +3,672 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#08060c">
-  <meta name="description" content="NIGHTMARE TCYT — Thế giới Minecraft mang phong cách hắc ám, nơi bắt đầu những cuộc phiêu lưu của bạn.">
-  <meta property="og:title" content="NIGHTMARE TCYT | Minecraft Server">
-  <meta property="og:description" content="Bước vào thế giới NIGHTMARE TCYT. Bạn đã sẵn sàng chưa?">
-  <meta property="og:type" content="website">
-
+  <meta name="description" content="NIGHTMARE TCYT — Minecraft Server, tài khoản và nạp tiền.">
   <title>NIGHTMARE TCYT | Minecraft Server</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #08060c;
-      --bg-soft: #100b16;
-      --panel: rgba(23, 15, 30, .82);
-      --red: #ff263f;
-      --red-dark: #a10c28;
-      --purple: #a855f7;
-      --text: #f8f4fa;
-      --muted: #aaa0b5;
-      --border: rgba(255, 255, 255, .09);
-      --radius: 18px;
-      --max-width: 1160px;
+      --bg:#08060c;
+      --panel:#130e19;
+      --panel2:#1a1221;
+      --red:#ff2947;
+      --purple:#ad63ff;
+      --text:#f8f3fa;
+      --muted:#a99caf;
+      --border:rgba(255,255,255,.1);
+      --green:#50e3a4;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing:border-box; margin:0; padding:0; }
 
-    html {
-      scroll-behavior: smooth;
-      scroll-padding-top: 90px;
-    }
+    html { scroll-behavior:smooth; scroll-padding-top:85px; }
 
     body {
-      min-height: 100vh;
-      overflow-x: hidden;
       background:
-        radial-gradient(ellipse at 15% 5%, rgba(118, 17, 49, .2), transparent 38%),
-        radial-gradient(ellipse at 90% 35%, rgba(103, 34, 153, .14), transparent 35%),
+        radial-gradient(ellipse at 10% 5%,#32101e 0,transparent 35%),
+        radial-gradient(ellipse at 90% 35%,#211032 0,transparent 35%),
         var(--bg);
-      color: var(--text);
-      font-family: "Inter", Arial, sans-serif;
-      line-height: 1.7;
+      color:var(--text);
+      font-family:Inter,Arial,sans-serif;
+      line-height:1.7;
     }
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      pointer-events: none;
-      opacity: .16;
-      background-image:
-        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
-      background-size: 38px 38px;
-      mask-image: linear-gradient(to bottom, black, transparent 85%);
-    }
+    a { color:inherit; text-decoration:none; }
+    button,input,select { font:inherit; }
+    button,a { -webkit-tap-highlight-color:transparent; }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button, a {
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    button {
-      font: inherit;
-    }
-
-    .container {
-      width: min(var(--max-width), calc(100% - 40px));
-      margin-inline: auto;
-    }
-
-    .section {
-      padding: 100px 0;
-    }
-
-    .section-heading {
-      max-width: 720px;
-      margin: 0 auto 48px;
-      text-align: center;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      margin-bottom: 15px;
-      color: #ff7384;
-      font-size: .76rem;
-      font-weight: 800;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-    }
-
-    .eyebrow::before,
-    .eyebrow::after {
-      width: 20px;
-      height: 1px;
-      background: var(--red);
-      content: "";
-    }
-
-    .section-heading h2 {
-      font-size: clamp(2rem, 5vw, 3.25rem);
-      line-height: 1.15;
-      font-weight: 900;
-      letter-spacing: -.045em;
-    }
-
-    .section-heading p {
-      margin-top: 15px;
-      color: var(--muted);
-    }
-
-    .gradient-text {
-      color: transparent;
-      background: linear-gradient(100deg, #ff344d 5%, #ff7183 45%, #c084fc 100%);
-      background-clip: text;
-      -webkit-background-clip: text;
-    }
-
-    /* NAVIGATION */
+    .container { width:min(1120px,calc(100% - 32px)); margin:auto; }
+    .section { padding:80px 0; }
 
     .navbar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      border-bottom: 1px solid var(--border);
-      background: rgba(8, 6, 12, .86);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      position:sticky; top:0; z-index:50;
+      border-bottom:1px solid var(--border);
+      background:rgba(8,6,12,.94);
+      backdrop-filter:blur(18px);
     }
 
     .nav-inner {
-      min-height: 76px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 22px;
+      min-height:72px; display:flex; align-items:center;
+      justify-content:space-between; gap:16px;
     }
 
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      flex-shrink: 0;
+    .brand { display:flex; align-items:center; gap:11px; }
+    .brand-icon {
+      display:grid; place-items:center; width:43px; height:43px;
+      border:1px solid #792034; border-radius:12px;
+      background:linear-gradient(145deg,#41101f,#1a1027);
+      font-size:23px;
     }
 
-    .brand-mark {
-      display: grid;
-      width: 43px;
-      height: 43px;
-      place-items: center;
-      border: 1px solid rgba(255, 38, 63, .5);
-      border-radius: 12px;
-      background: linear-gradient(145deg, #37101f, #150c20);
-      box-shadow: 0 0 22px rgba(255, 38, 63, .12);
-      font-size: 1.4rem;
-    }
+    .brand strong { display:block; font-size:.91rem; font-weight:900; letter-spacing:.04em; }
+    .brand small { display:block; color:var(--muted); font-size:.64rem; letter-spacing:.14em; }
 
-    .brand-name {
-      display: block;
-      font-size: .94rem;
-      font-weight: 900;
-      letter-spacing: .055em;
-      line-height: 1.2;
-    }
+    .nav-links { display:flex; align-items:center; gap:19px; }
+    .nav-links a { color:#c9bdce; font-size:.8rem; font-weight:650; }
+    .nav-links a:hover { color:#ff8293; }
 
-    .brand-sub {
-      display: block;
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: .64rem;
-      letter-spacing: .16em;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 27px;
-    }
-
-    .nav-links a {
-      color: #c5bdcc;
-      font-size: .84rem;
-      font-weight: 600;
-      transition: color .2s;
-    }
-
-    .nav-links a:hover {
-      color: #ff7183;
-    }
-
-    .nav-cta {
-      padding: 10px 16px;
-      border: 1px solid rgba(255, 38, 63, .5);
-      border-radius: 10px;
-      background: rgba(255, 38, 63, .09);
-      color: #fff !important;
-    }
-
-    .menu-toggle {
-      display: none;
-      width: 43px;
-      height: 43px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      background: var(--bg-soft);
-      color: white;
-      cursor: pointer;
-      font-size: 1.35rem;
-    }
-
-    /* HERO */
-
-    .hero {
-      position: relative;
-      display: flex;
-      min-height: 690px;
-      align-items: center;
-      padding: 90px 0 100px;
-      isolation: isolate;
-    }
-
-    .hero::before {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      z-index: -1;
-      width: min(850px, 100%);
-      height: 500px;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      background: radial-gradient(ellipse, rgba(150, 14, 45, .2), transparent 68%);
-      content: "";
-      filter: blur(20px);
-      pointer-events: none;
-    }
-
-    .hero-content {
-      width: 100%;
-      text-align: center;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      padding: 8px 15px;
-      border: 1px solid rgba(255, 38, 63, .3);
-      border-radius: 100px;
-      background: rgba(255, 38, 63, .07);
-      color: #ff9aa7;
-      font-size: .73rem;
-      font-weight: 800;
-      letter-spacing: .13em;
-    }
-
-    .hero-badge span {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--red);
-      box-shadow: 0 0 12px var(--red);
-      animation: pulse 1.8s infinite;
-    }
-
-    .hero h1 {
-      margin: 27px 0 10px;
-      font-size: clamp(3.1rem, 10vw, 7.8rem);
-      font-weight: 900;
-      letter-spacing: -.075em;
-      line-height: .99;
-      text-wrap: balance;
-    }
-
-    .hero h1 .top-line {
-      display: block;
-      color: #fff;
-      text-shadow: 0 0 35px rgba(255,255,255,.06);
-    }
-
-    .hero h1 .bottom-line {
-      display: block;
-      margin-top: 10px;
-      color: transparent;
-      background: linear-gradient(100deg, #ff263f, #ff7183 45%, #b56cff);
-      background-clip: text;
-      -webkit-background-clip: text;
-      filter: drop-shadow(0 0 24px rgba(255, 38, 63, .16));
-    }
-
-    .hero-tagline {
-      margin: 25px auto 0;
-      color: #c9bdce;
-      font-size: clamp(.95rem, 2vw, 1.18rem);
-      font-weight: 500;
-    }
-
-    .hero-description {
-      max-width: 640px;
-      margin: 12px auto 0;
-      color: var(--muted);
-      font-size: .94rem;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 13px;
-      margin-top: 34px;
+    .menu-btn {
+      display:none; padding:8px 12px; border:1px solid var(--border);
+      border-radius:9px; background:var(--panel); color:white;
     }
 
     .btn {
-      display: inline-flex;
-      min-height: 49px;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 12px 22px;
-      border: 1px solid transparent;
-      border-radius: 11px;
-      cursor: pointer;
-      font-size: .88rem;
-      font-weight: 800;
-      transition: transform .2s, border-color .2s, box-shadow .2s;
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:8px; min-height:45px; padding:11px 18px;
+      border:1px solid transparent; border-radius:10px;
+      cursor:pointer; font-size:.86rem; font-weight:800;
+      transition:.2s;
     }
 
-    .btn:hover {
-      transform: translateY(-3px);
+    .btn:hover { transform:translateY(-2px); }
+    .primary { background:linear-gradient(110deg,#c91233,var(--red)); color:white; box-shadow:0 8px 25px #ff294722; }
+    .secondary { border-color:var(--border); background:#ffffff08; color:white; }
+    .full { width:100%; }
+
+    .hero { padding:105px 0 75px; text-align:center; }
+    .badge {
+      display:inline-block; padding:7px 13px; border:1px solid #ff29474d;
+      border-radius:50px; background:#ff294710; color:#ff9aa8;
+      font-size:.72rem; font-weight:800; letter-spacing:.14em;
     }
 
-    .btn-primary {
-      background: linear-gradient(110deg, #d91335, #fa304c);
-      color: white;
-      box-shadow: 0 8px 28px rgba(255, 38, 63, .2);
+    .hero h1 {
+      margin:25px 0 15px; font-size:clamp(3rem,10vw,7rem);
+      font-weight:900; letter-spacing:-.07em; line-height:1.03;
     }
 
-    .btn-primary:hover {
-      box-shadow: 0 12px 36px rgba(255, 38, 63, .32);
+    .gradient {
+      color:transparent;
+      background:linear-gradient(100deg,#ff2947,#ff8393,#b975ff);
+      background-clip:text; -webkit-background-clip:text;
     }
 
-    .btn-secondary {
-      border-color: rgba(255,255,255,.15);
-      background: rgba(255,255,255,.035);
-      color: #f8f4fa;
+    .hero p { max-width:680px; margin:12px auto; color:var(--muted); }
+    .actions { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-top:27px; }
+
+    .section-title { text-align:center; margin:0 auto 35px; max-width:720px; }
+    .eyebrow { color:#ff8293; font-size:.72rem; font-weight:850; letter-spacing:.18em; }
+    .section-title h2 { margin-top:8px; font-size:clamp(1.9rem,5vw,3rem); line-height:1.2; }
+    .section-title p { margin-top:12px; color:var(--muted); font-size:.91rem; }
+
+    .panel {
+      padding:26px; border:1px solid var(--border); border-radius:17px;
+      background:linear-gradient(145deg,#1b1120dd,#0e0b14f5);
+      box-shadow:0 20px 55px #0002;
     }
 
-    .btn-secondary:hover {
-      border-color: rgba(168,85,247,.6);
+    .server-box {
+      display:flex; align-items:center; justify-content:space-between;
+      gap:20px; border-color:#ff294738;
     }
 
-    .hero-scroll {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      margin-top: 55px;
-      color: #81758c;
-      font-size: .7rem;
-      font-weight: 700;
-      letter-spacing: .2em;
-      text-transform: uppercase;
+    .server-box h3 { font-size:1.3rem; }
+    .server-box p { margin-top:5px; color:var(--muted); font-size:.85rem; }
+
+    .ip-row {
+      display:flex; align-items:center; gap:10px; margin-top:18px;
+      padding:9px; border:1px solid var(--border); border-radius:10px;
+      background:#0003;
     }
 
-    .hero-scroll span {
-      color: var(--red);
-      animation: float 1.8s ease-in-out infinite;
-    }
-
-    /* SERVER CONNECTION */
-
-    .server-panel {
-      position: relative;
-      overflow: hidden;
-      padding: 32px;
-      border: 1px solid rgba(255, 38, 63, .2);
-      border-radius: var(--radius);
-      background:
-        radial-gradient(ellipse at 100% 0%, rgba(168,85,247,.09), transparent 50%),
-        linear-gradient(135deg, rgba(30,15,29,.94), rgba(13,10,19,.96));
-      box-shadow: 0 22px 70px rgba(0,0,0,.18);
-    }
-
-    .server-panel::after {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--red), var(--purple), transparent);
-      content: "";
-    }
-
-    .server-layout {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      gap: 28px;
-    }
-
-    .server-label {
-      color: #ff8493;
-      font-size: .72rem;
-      font-weight: 800;
-      letter-spacing: .17em;
-      text-transform: uppercase;
-    }
-
-    .server-panel h3 {
-      margin-top: 7px;
-      font-size: 1.55rem;
-      font-weight: 900;
-    }
-
-    .server-panel p {
-      margin-top: 5px;
-      color: var(--muted);
-      font-size: .87rem;
-    }
-
-    .server-address {
-      display: flex;
-      min-height: 53px;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      margin-top: 20px;
-      padding: 9px 10px 9px 16px;
-      border: 1px solid var(--border);
-      border-radius: 11px;
-      background: rgba(0,0,0,.23);
-    }
-
-    .server-address code {
-      overflow-wrap: anywhere;
-      color: #f2e9f7;
-      font-size: .9rem;
-    }
-
+    .ip-row code { flex:1; overflow-wrap:anywhere; font-size:.9rem; }
     .copy-btn {
-      flex-shrink: 0;
-      padding: 9px 13px;
-      border: 1px solid rgba(255,38,63,.3);
-      border-radius: 8px;
-      background: rgba(255,38,63,.1);
-      color: #ff9aa7;
-      cursor: pointer;
-      font-size: .78rem;
-      font-weight: 800;
+      padding:9px 12px; border:1px solid #ff29474d; border-radius:8px;
+      background:#ff294716; color:#ff9aa8; cursor:pointer; font-weight:800;
     }
 
-    .copy-btn:hover {
-      background: rgba(255,38,63,.2);
+    .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+    .grid.two { grid-template-columns:repeat(2,minmax(0,1fr)); }
+
+    .card {
+      padding:24px; border:1px solid var(--border); border-radius:16px;
+      background:linear-gradient(145deg,#1a1222cc,#0e0b14ee);
     }
 
-    .server-note {
-      margin-top: 12px;
-      color: #84798d;
-      font-size: .75rem;
+    .card-icon { font-size:1.8rem; margin-bottom:10px; }
+    .card h3 { font-size:1.05rem; }
+    .card p { margin-top:8px; color:var(--muted); font-size:.86rem; }
+    .card .btn { margin-top:18px; }
+
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+    .field { display:flex; flex-direction:column; gap:7px; }
+    .field.full-width { grid-column:1/-1; }
+    .field label { color:#d9cedf; font-size:.82rem; font-weight:700; }
+
+    .field input,.field select {
+      width:100%; min-height:46px; padding:11px 12px;
+      border:1px solid #ffffff1c; border-radius:9px;
+      outline:none; background:#09070d; color:white;
     }
 
-    .server-icon {
-      display: grid;
-      width: 112px;
-      height: 112px;
-      place-items: center;
-      border: 1px solid rgba(168,85,247,.3);
-      border-radius: 22px;
-      background: linear-gradient(145deg, rgba(255,38,63,.1), rgba(168,85,247,.12));
-      box-shadow: inset 0 0 25px rgba(168,85,247,.05);
-      font-size: 3rem;
+    .field input:focus,.field select:focus { border-color:#a855f7; box-shadow:0 0 0 3px #a855f71c; }
+    .field input::placeholder { color:#756a7e; }
+    .form-note { margin-top:14px; color:var(--muted); font-size:.78rem; }
+    .notice {
+      margin-top:15px; padding:13px 15px; border:1px solid #ffbd5738;
+      border-radius:10px; background:#ffbd570c; color:#f5d8a3; font-size:.8rem;
     }
 
-    /* FEATURES */
+    .status { margin-top:12px; color:#ff9aa8; font-size:.84rem; overflow-wrap:anywhere; }
+    .divider { height:1px; margin:22px 0; background:var(--border); }
 
-    .feature-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 19px;
+    .bank-details {
+      display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:18px;
     }
 
-    .feature-card {
-      position: relative;
-      overflow: hidden;
-      min-height: 225px;
-      padding: 26px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background: linear-gradient(145deg, rgba(25,17,32,.8), rgba(12,10,17,.8));
-      transition: transform .25s, border-color .25s, background .25s;
+    .bank-item { padding:14px; border:1px solid var(--border); border-radius:10px; background:#0002; }
+    .bank-item small { display:block; color:var(--muted); font-size:.73rem; }
+    .bank-item strong { display:block; margin-top:4px; overflow-wrap:anywhere; font-size:.9rem; }
+
+    .community {
+      padding:clamp(28px,6vw,60px); border:1px solid #a855f744;
+      border-radius:20px; text-align:center;
+      background:radial-gradient(ellipse at 0 100%,#ff29471a,transparent 50%),
+                 radial-gradient(ellipse at 100% 0,#a855f71b,transparent 50%),#110c18;
     }
 
-    .feature-card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(255,38,63,.35);
-      background: linear-gradient(145deg, rgba(40,17,35,.9), rgba(15,10,20,.9));
+    .community h2 { font-size:clamp(2rem,5vw,3.2rem); line-height:1.2; }
+    .community p { max-width:600px; margin:15px auto; color:var(--muted); }
+
+    footer { padding:30px 0; border-top:1px solid var(--border); color:var(--muted); font-size:.8rem; }
+    .footer-row { display:flex; flex-wrap:wrap; justify-content:space-between; gap:15px; }
+
+    @media(max-width:850px) {
+      .nav-links { gap:10px; }
+      .nav-links a { font-size:.72rem; }
+      .grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
     }
 
-    .feature-icon {
-      display: grid;
-      width: 49px;
-      height: 49px;
-      place-items: center;
-      margin-bottom: 20px;
-      border: 1px solid rgba(255,38,63,.18);
-      border-radius: 13px;
-      background: rgba(255,38,63,.08);
-      font-size: 1.45rem;
-    }
-
-    .feature-card h3 {
-      font-size: 1.08rem;
-      font-weight: 800;
-    }
-
-    .feature-card p {
-      margin-top: 9px;
-      color: var(--muted);
-      font-size: .86rem;
-    }
-
-    /* GAME MODES */
-
-    .mode-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 19px;
-    }
-
-    .mode-card {
-      position: relative;
-      display: flex;
-      min-height: 270px;
-      flex-direction: column;
-      justify-content: flex-end;
-      overflow: hidden;
-      padding: 25px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background:
-        radial-gradient(ellipse at 80% 15%, rgba(168,85,247,.15), transparent 55%),
-        linear-gradient(145deg, #21101e, #100b15 70%);
-      transition: transform .25s, border-color .25s;
-    }
-
-    .mode-card:nth-child(2) {
-      background:
-        radial-gradient(ellipse at 80% 15%, rgba(255,38,63,.17), transparent 55%),
-        linear-gradient(145deg, #28111a, #100b15 70%);
-    }
-
-    .mode-card:nth-child(3) {
-      background:
-        radial-gradient(ellipse at 80% 15%, rgba(100,80,255,.16), transparent 55%),
-        linear-gradient(145deg, #19132d, #100b15 70%);
-    }
-
-    .mode-card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(168,85,247,.4);
-    }
-
-    .mode-symbol {
-      position: absolute;
-      top: 18px;
-      right: 23px;
-      font-size: 4rem;
-      opacity: .8;
-      filter: drop-shadow(0 0 22px rgba(255,38,63,.12));
-    }
-
-    .mode-number {
-      margin-bottom: 8px;
-      color: #ff8493;
-      font-size: .7rem;
-      font-weight: 800;
-      letter-spacing: .17em;
-    }
-
-    .mode-card h3 {
-      font-size: 1.45rem;
-      font-weight: 900;
-    }
-
-    .mode-card p {
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: .85rem;
-    }
-
-    .mode-disclaimer {
-      margin-top: 22px;
-      color: #82788a;
-      text-align: center;
-      font-size: .78rem;
-    }
-
-    /* COMMUNITY */
-
-    .community-box {
-      position: relative;
-      overflow: hidden;
-      padding: clamp(30px, 6vw, 65px);
-      border: 1px solid rgba(168,85,247,.24);
-      border-radius: 24px;
-      background:
-        radial-gradient(ellipse at 0% 100%, rgba(255,38,63,.13), transparent 45%),
-        radial-gradient(ellipse at 100% 0%, rgba(168,85,247,.14), transparent 45%),
-        #100b16;
-      text-align: center;
-    }
-
-    .community-box h2 {
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 900;
-      letter-spacing: -.05em;
-      line-height: 1.15;
-    }
-
-    .community-box p {
-      max-width: 590px;
-      margin: 17px auto 0;
-      color: var(--muted);
-    }
-
-    .community-box .hero-actions {
-      margin-top: 28px;
-    }
-
-    /* FAQ */
-
-    .faq-list {
-      display: grid;
-      max-width: 800px;
-      gap: 12px;
-      margin: 0 auto;
-    }
-
-    .faq-item {
-      overflow: hidden;
-      border: 1px solid var(--border);
-      border-radius: 13px;
-      background: rgba(20,14,26,.72);
-    }
-
-    .faq-item summary {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      padding: 19px 21px;
-      cursor: pointer;
-      list-style: none;
-      font-size: .92rem;
-      font-weight: 750;
-    }
-
-    .faq-item summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .faq-item summary::after {
-      color: #ff7183;
-      content: "+";
-      font-size: 1.3rem;
-    }
-
-    .faq-item[open] summary::after {
-      content: "−";
-    }
-
-    .faq-answer {
-      padding: 0 21px 20px;
-      color: var(--muted);
-      font-size: .86rem;
-    }
-
-    /* FOOTER */
-
-    footer {
-      padding: 35px 0 25px;
-      border-top: 1px solid var(--border);
-      background: rgba(0,0,0,.12);
-    }
-
-    .footer-main {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      padding-bottom: 25px;
-    }
-
-    .footer-note {
-      max-width: 430px;
-      margin-top: 9px;
-      color: var(--muted);
-      font-size: .81rem;
-    }
-
-    .footer-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px;
-    }
-
-    .footer-links a {
-      color: #bcb2c6;
-      font-size: .82rem;
-      transition: color .2s;
-    }
-
-    .footer-links a:hover {
-      color: #ff7183;
-    }
-
-    .footer-bottom {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 10px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border);
-      color: #81768b;
-      font-size: .75rem;
-    }
-
-    /* ANIMATIONS */
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity .7s ease, transform .7s ease;
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; box-shadow: 0 0 12px var(--red); }
-      50% { opacity: .45; box-shadow: 0 0 3px var(--red); }
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(5px); }
-    }
-
-    /* MOBILE */
-
-    @media (max-width: 850px) {
+    @media(max-width:650px) {
+      .menu-btn { display:block; }
+      .nav-inner { min-height:66px; }
       .nav-links {
-        gap: 16px;
+        display:none; position:absolute; top:100%; left:0; right:0;
+        padding:12px 16px 18px; background:#0b0810;
+        border-bottom:1px solid var(--border);
       }
-
-      .nav-links a {
-        font-size: .78rem;
-      }
-
-      .feature-grid,
-      .mode-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .server-icon {
-        width: 90px;
-        height: 90px;
-      }
+      .nav-links.open { display:flex; flex-direction:column; align-items:stretch; }
+      .nav-links a { padding:9px 3px; font-size:.88rem; }
+      .hero { padding:75px 0 55px; }
+      .section { padding:62px 0; }
+      .grid,.grid.two,.form-grid,.bank-details { grid-template-columns:1fr; }
+      .field.full-width { grid-column:auto; }
+      .server-box { align-items:stretch; flex-direction:column; }
+      .panel { padding:20px; }
+      .actions { flex-direction:column; }
+      .actions .btn { width:100%; }
     }
 
-    @media (max-width: 650px) {
-      .container {
-        width: min(100% - 28px, var(--max-width));
-      }
-
-      .nav-inner {
-        min-height: 68px;
-      }
-
-      .brand-mark {
-        width: 39px;
-        height: 39px;
-      }
-
-      .brand-name {
-        font-size: .82rem;
-      }
-
-      .brand-sub {
-        font-size: .59rem;
-      }
-
-      .menu-toggle {
-        display: grid;
-        place-items: center;
-      }
-
-      .nav-links {
-        position: absolute;
-        top: calc(100% + 1px);
-        right: 0;
-        left: 0;
-        display: none;
-        align-items: stretch;
-        gap: 0;
-        padding: 10px 14px 17px;
-        border-bottom: 1px solid var(--border);
-        background: rgba(8,6,12,.98);
-      }
-
-      .nav-links.open {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .nav-links a {
-        padding: 13px 10px;
-        font-size: .9rem;
-      }
-
-      .nav-cta {
-        margin-top: 5px;
-        text-align: center;
-      }
-
-      .hero {
-        min-height: auto;
-        padding: 90px 0 65px;
-      }
-
-      .hero h1 {
-        font-size: clamp(2.8rem, 13vw, 5rem);
-      }
-
-      .hero-description {
-        max-width: 430px;
-        font-size: .88rem;
-      }
-
-      .hero-actions {
-        flex-direction: column;
-        align-items: stretch;
-        width: min(100%, 320px);
-        margin-inline: auto;
-        margin-top: 27px;
-      }
-
-      .hero-actions .btn {
-        width: 100%;
-      }
-
-      .hero-scroll {
-        margin-top: 35px;
-      }
-
-      .section {
-        padding: 72px 0;
-      }
-
-      .section-heading {
-        margin-bottom: 33px;
-      }
-
-      .feature-grid,
-      .mode-grid {
-        grid-template-columns: 1fr;
-        gap: 13px;
-      }
-
-      .feature-card {
-        min-height: auto;
-        padding: 23px;
-      }
-
-      .feature-icon {
-        margin-bottom: 14px;
-      }
-
-      .mode-card {
-        min-height: 225px;
-      }
-
-      .server-panel {
-        padding: 23px 18px;
-      }
-
-      .server-layout {
-        grid-template-columns: 1fr;
-        gap: 20px;
-      }
-
-      .server-icon {
-        display: none;
-      }
-
-      .server-panel h3 {
-        font-size: 1.3rem;
-      }
-
-      .server-address {
-        align-items: flex-start;
-        gap: 9px;
-        padding-left: 11px;
-      }
-
-      .server-address code {
-        padding-top: 7px;
-        font-size: .78rem;
-      }
-
-      .copy-btn {
-        padding: 9px;
-        font-size: .72rem;
-      }
-
-      .footer-main {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .footer-links {
-        gap: 15px;
-      }
-
-      .footer-bottom {
-        flex-direction: column;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        scroll-behavior: auto !important;
-        animation-duration: .01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: .01ms !important;
-      }
-
-      .reveal {
-        opacity: 1;
-        transform: none;
-      }
+    @media(prefers-reduced-motion:reduce) {
+      *,*::before,*::after { scroll-behavior:auto!important; transition:none!important; }
     }
   </style>
 </head>
 
 <body>
-  <!-- NAVIGATION -->
-  <header class="navbar">
-    <div class="container nav-inner">
-      <a class="brand" href="#home" aria-label="NIGHTMARE TCYT - Trang chủ">
-        <span class="brand-mark" aria-hidden="true">☠</span>
-        <span>
-          <span class="brand-name">NIGHTMARE TCYT</span>
-          <span class="brand-sub">MINECRAFT SERVER</span>
-        </span>
-      </a>
+<header class="navbar">
+  <div class="container nav-inner">
+    <a class="brand" href="#home">
+      <span class="brand-icon">☠</span>
+      <span>
+        <strong>NIGHTMARE TCYT</strong>
+        <small>MINECRAFT SERVER</small>
+      </span>
+    </a>
 
-      <button
-        class="menu-toggle"
-        id="menuToggle"
-        type="button"
-        aria-label="Mở menu"
-        aria-expanded="false"
-        aria-controls="navLinks"
-      >☰</button>
+    <button class="menu-btn" id="menuBtn" aria-label="Mở menu" aria-expanded="false">☰</button>
 
-      <nav class="nav-links" id="navLinks" aria-label="Điều hướng chính">
-        <a href="#home">Trang chủ</a>
-        <a href="#about">Giới thiệu</a>
-        <a href="#modes">Chế độ chơi</a>
-        <a href="#faq">FAQ</a>
-        <a class="nav-cta" href="#connect">Tham gia ngay ↗</a>
-      </nav>
-    </div>
-  </header>
+    <nav class="nav-links" id="navLinks">
+      <a href="#home">Trang chủ</a>
+      <a href="#about">Giới thiệu</a>
+      <a href="#auth">Tài khoản</a>
+      <a href="#deposit">Nạp tiền</a>
+      <a href="#faq">Trợ giúp</a>
+    </nav>
+  </div>
+</header>
 
-  <main>
-    <!-- HERO -->
-    <section class="hero" id="home">
-      <div class="container hero-content">
-        <div class="hero-badge">
-          <span></span>
-          ENTER THE DARKNESS
-        </div>
-
-        <h1>
-          <span class="top-line">NIGHTMARE</span>
-          <span class="bottom-line">TCYT</span>
-        </h1>
-
-        <p class="hero-tagline">
-          Một thế giới. Vô vàn bí ẩn. Không giới hạn cuộc phiêu lưu.
-        </p>
-
-        <p class="hero-description">
-          Chào mừng đến với NIGHTMARE TCYT — nơi bạn tự viết nên hành trình
-          của mình trong thế giới Minecraft mang sắc màu hắc ám.
-        </p>
-
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#connect">
-            ⚔ Tham gia máy chủ
-          </a>
-          <a class="btn btn-secondary" href="#about">
-            Khám phá thế giới ↓
-          </a>
-        </div>
-
-        <a class="hero-scroll" href="#about">
-          <span>↓</span> SCROLL TO DISCOVER
-        </a>
-      </div>
-    </section>
-
-    <!-- SERVER CONNECTION -->
-    <section class="section" id="connect">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="eyebrow">CONNECT TO THE SERVER</span>
-          <h2>Đã đến lúc <span class="gradient-text">tham chiến</span></h2>
-          <p>
-            Chuẩn bị Minecraft, nhập địa chỉ máy chủ và bắt đầu hành trình.
-          </p>
-        </div>
-
-        <div class="server-panel reveal">
-          <div class="server-layout">
-            <div>
-              <span class="server-label">☠ NIGHTMARE NETWORK</span>
-              <h3>Kết nối đến NIGHTMARE TCYT</h3>
-              <p>
-                Địa chỉ máy chủ sẽ được cập nhật tại đây.
-              </p>
-
-              <div class="server-address">
-                <code id="serverAddress">YOUR_SERVER_IP</code>
-                <button class="copy-btn" id="copyServer" type="button">
-                  Sao chép
-                </button>
-              </div>
-
-              <p class="server-note" id="copyMessage" aria-live="polite">
-                Chủ máy chủ: hãy thay YOUR_SERVER_IP bằng địa chỉ Minecraft thực tế.
-              </p>
-            </div>
-
-            <div class="server-icon" aria-hidden="true">⛏️</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section class="section" id="about">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="eyebrow">WELCOME TO THE DARK SIDE</span>
-          <h2>Điều gì đang chờ <span class="gradient-text">bạn?</span></h2>
-          <p>
-            Khám phá thế giới theo cách riêng, kết nối cùng cộng đồng
-            và tạo nên câu chuyện của chính mình.
-          </p>
-        </div>
-
-        <div class="feature-grid">
-          <article class="feature-card reveal">
-            <div class="feature-icon" aria-hidden="true">🌑</div>
-            <h3>Thế giới bí ẩn</h3>
-            <p>
-              Không khí hắc ám cùng phong cách riêng tạo nên dấu ấn
-              đặc biệt cho NIGHTMARE TCYT.
-            </p>
-          </article>
-
-          <article class="feature-card reveal">
-            <div class="feature-icon" aria-hidden="true">⚔️</div>
-            <h3>Cuộc phiêu lưu</h3>
-            <p>
-              Khám phá, sinh tồn, xây dựng và tự tạo hành trình
-              của bạn trong Minecraft.
-            </p>
-          </article>
-
-          <article class="feature-card reveal">
-            <div class="feature-icon" aria-hidden="true">🩸</div>
-            <h3>Phong cách Nightmare</h3>
-            <p>
-              Giao diện đỏ máu, tím huyền bí và chất riêng dành
-              cho những người yêu thích bóng tối.
-            </p>
-          </article>
-
-          <article class="feature-card reveal">
-            <div class="feature-icon" aria-hidden="true">🏰</div>
-            <h3>Xây dựng đế chế</h3>
-            <p>
-              Biến ý tưởng thành công trình, tạo dấu ấn và phát triển
-              thế giới theo phong cách của bạn.
-            </p>
-          </article>
-
-          <article class="feature-card reveal">
-            <div class="feature-icon" aria-hidden="true">🤝</div>
-            <h3>Cộng đồng người chơi</h3>
-            <p>
-              Gặp gỡ người chơi khác, cùng hợp tác và tạo nên
-              những kỷ niệm trong game.
-            </p>
-          </article>
-
-          <article class="feature-card reveal">
-            <div class="feature-icon" aria-hidden="true">👑</div>
-            <h3>Khẳng định bản thân</h3>
-            <p>
-              Tạo phong cách riêng, thử thách giới hạn và viết nên
-              câu chuyện của chính bạn.
-            </p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- GAME MODES -->
-    <section class="section" id="modes">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="eyebrow">CHOOSE YOUR DESTINY</span>
-          <h2>Chọn con đường <span class="gradient-text">của bạn</span></h2>
-          <p>
-            Mỗi cuộc hành trình đều có một khởi đầu.
-            Bạn sẽ chọn con đường nào?
-          </p>
-        </div>
-
-        <div class="mode-grid">
-          <article class="mode-card reveal">
-            <span class="mode-symbol" aria-hidden="true">🌲</span>
-            <span class="mode-number">01 / SURVIVAL</span>
-            <h3>Survival</h3>
-            <p>
-              Thu thập tài nguyên, sinh tồn và xây dựng thế giới
-              của riêng bạn.
-            </p>
-          </article>
-
-          <article class="mode-card reveal">
-            <span class="mode-symbol" aria-hidden="true">⚔️</span>
-            <span class="mode-number">02 / PVP</span>
-            <h3>PvP & War</h3>
-            <p>
-              Rèn luyện kỹ năng, thử thách bản thân và chứng minh
-              bản lĩnh trong chiến đấu.
-            </p>
-          </article>
-
-          <article class="mode-card reveal">
-            <span class="mode-symbol" aria-hidden="true">💎</span>
-            <span class="mode-number">03 / ADVENTURE</span>
-            <h3>Adventure</h3>
-            <p>
-              Khám phá những điều mới lạ và tìm kiếm hành trình
-              phù hợp với bạn.
-            </p>
-          </article>
-        </div>
-
-        <p class="mode-disclaimer">
-          Các chế độ trên là phần giới thiệu mẫu. Hãy chỉnh sửa để khớp
-          với những chế độ thực sự có trên máy chủ.
-        </p>
-      </div>
-    </section>
-
-    <!-- COMMUNITY -->
-    <section class="section" id="community">
-      <div class="container">
-        <div class="community-box reveal">
-          <span class="eyebrow">JOIN THE COMMUNITY</span>
-          <h2>
-            Bóng tối đang gọi.<br>
-            <span class="gradient-text">Bạn có dám bước vào?</span>
-          </h2>
-          <p>
-            Hãy kết nối với cộng đồng NIGHTMARE TCYT để cập nhật thông tin,
-            trò chuyện và theo dõi những hoạt động của máy chủ.
-          </p>
-
-          <div class="hero-actions">
-            <a
-              class="btn btn-primary"
-              href="#"
-              data-config-link="discord"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              ☠ Tham gia Discord
-            </a>
-
-            <a class="btn btn-secondary" href="#connect">
-              ⛏ Kết nối Minecraft
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="section" id="faq">
-      <div class="container">
-        <div class="section-heading reveal">
-          <span class="eyebrow">FREQUENTLY ASKED QUESTIONS</span>
-          <h2>Câu hỏi <span class="gradient-text">thường gặp</span></h2>
-          <p>Một vài thông tin dành cho người chơi mới.</p>
-        </div>
-
-        <div class="faq-list">
-          <details class="faq-item reveal">
-            <summary>Làm thế nào để tham gia NIGHTMARE TCYT?</summary>
-            <div class="faq-answer">
-              Bạn cần có Minecraft tương thích, sau đó nhập địa chỉ
-              máy chủ tại mục Kết nối. Địa chỉ chính thức cần được
-              quản trị viên cập nhật trước khi sử dụng website.
-            </div>
-          </details>
-
-          <details class="faq-item reveal">
-            <summary>Máy chủ hỗ trợ phiên bản Minecraft nào?</summary>
-            <div class="faq-answer">
-              Phiên bản hỗ trợ chưa được khai báo trên trang này.
-              Hãy cập nhật phiên bản Java hoặc Bedrock chính xác
-              theo cấu hình thực tế của máy chủ.
-            </div>
-          </details>
-
-          <details class="faq-item reveal">
-            <summary>Tôi có thể tham gia bằng điện thoại không?</summary>
-            <div class="faq-answer">
-              Điều này phụ thuộc vào việc máy chủ có hỗ trợ Bedrock
-              hay không. Hãy xác nhận với quản trị viên trước khi kết nối.
-            </div>
-          </details>
-
-          <details class="faq-item reveal">
-            <summary>Làm thế nào để nhận thông báo mới?</summary>
-            <div class="faq-answer">
-              Bạn có thể thêm liên kết Discord chính thức của NIGHTMARE TCYT
-              vào website sau khi cấu hình đường dẫn chính xác.
-            </div>
-          </details>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- FOOTER -->
-  <footer>
+<main>
+  <section class="hero" id="home">
     <div class="container">
-      <div class="footer-main">
-        <div>
-          <a class="brand" href="#home">
-            <span class="brand-mark" aria-hidden="true">☠</span>
-            <span>
-              <span class="brand-name">NIGHTMARE TCYT</span>
-              <span class="brand-sub">MINECRAFT SERVER</span>
-            </span>
-          </a>
+      <span class="badge">☠ ENTER THE DARKNESS</span>
+      <h1>NIGHTMARE<br><span class="gradient">TCYT</span></h1>
+      <p>Một thế giới. Vô vàn bí ẩn. Viết nên huyền thoại của riêng bạn.</p>
+      <p>Chào mừng đến với NIGHTMARE TCYT — thế giới Minecraft mang phong cách hắc ám.</p>
+      <div class="actions">
+        <a class="btn primary" href="#connect">⛏ Tham gia máy chủ</a>
+        <a class="btn secondary" href="#deposit">💳 Nạp tiền</a>
+      </div>
+    </div>
+  </section>
 
-          <p class="footer-note">
-            Bước vào bóng tối. Viết nên huyền thoại của riêng bạn.
+  <section class="section" id="connect">
+    <div class="container">
+      <div class="section-title">
+        <span class="eyebrow">CONNECT TO SERVER</span>
+        <h2>Kết nối <span class="gradient">NIGHTMARE</span></h2>
+        <p>Sao chép địa chỉ máy chủ để thêm vào Minecraft.</p>
+      </div>
+
+      <div class="panel server-box">
+        <div>
+          <span class="eyebrow">MINECRAFT SERVER ADDRESS</span>
+          <h3>NIGHTMARE TCYT</h3>
+          <p>Java / Bedrock: hãy kiểm tra phiên bản và cổng tương thích trước khi kết nối.</p>
+          <div class="ip-row">
+            <code id="serverIp">nmtcyt.funserver.top</code>
+            <button class="copy-btn" id="copyIp" type="button">Sao chép</button>
+          </div>
+          <p class="status" id="copyStatus" aria-live="polite"></p>
+        </div>
+        <div class="card-icon" aria-hidden="true">⛏️</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="container">
+      <div class="section-title">
+        <span class="eyebrow">WELCOME TO THE DARK SIDE</span>
+        <h2>Khám phá <span class="gradient">thế giới</span></h2>
+        <p>Bắt đầu hành trình, xây dựng thế giới và kết nối cùng cộng đồng.</p>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <div class="card-icon">🌑</div>
+          <h3>Thế giới bí ẩn</h3>
+          <p>Phong cách hắc ám với dấu ấn riêng của NIGHTMARE TCYT.</p>
+        </article>
+        <article class="card">
+          <div class="card-icon">⚔️</div>
+          <h3>Chiến đấu</h3>
+          <p>Thử thách kỹ năng và chứng minh bản lĩnh trong game.</p>
+        </article>
+        <article class="card">
+          <div class="card-icon">🏰</div>
+          <h3>Xây dựng</h3>
+          <p>Thu thập tài nguyên và tạo nên công trình của riêng bạn.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUTH -->
+  <section class="section" id="auth">
+    <div class="container">
+      <div class="section-title">
+        <span class="eyebrow">ACCOUNT ACCESS</span>
+        <h2>Tài khoản <span class="gradient">Nightmare</span></h2>
+        <p>Đăng nhập hoặc đăng ký tài khoản trên hệ thống website.</p>
+      </div>
+
+      <div class="grid two">
+        <div class="panel">
+          <h3>🔐 Đăng nhập</h3>
+          <p class="form-note">Dành cho tài khoản website nếu hệ thống xác thực đã được thiết lập.</p>
+          <form id="loginForm">
+            <div class="form-grid" style="margin-top:18px">
+              <div class="field full-width">
+                <label for="loginUser">Tên tài khoản hoặc email</label>
+                <input id="loginUser" name="username" autocomplete="username" required placeholder="Nhập tên tài khoản">
+              </div>
+              <div class="field full-width">
+                <label for="loginPass">Mật khẩu</label>
+                <input id="loginPass" name="password" type="password" autocomplete="current-password" required placeholder="Nhập mật khẩu">
+              </div>
+              <div class="field full-width">
+                <button class="btn primary full" type="submit">Đăng nhập</button>
+              </div>
+            </div>
+          </form>
+          <p class="status" id="loginStatus" aria-live="polite"></p>
+        </div>
+
+        <div class="panel">
+          <h3>📝 Đăng ký</h3>
+          <p class="form-note">Tạo tài khoản website khi backend đăng ký đã sẵn sàng.</p>
+          <form id="registerForm">
+            <div class="form-grid" style="margin-top:18px">
+              <div class="field full-width">
+                <label for="registerUser">Tên tài khoản</label>
+                <input id="registerUser" name="username" autocomplete="username" required minlength="3" maxlength="32" placeholder="Tên tài khoản">
+              </div>
+              <div class="field full-width">
+                <label for="registerEmail">Email</label>
+                <input id="registerEmail" name="email" type="email" autocomplete="email" required placeholder="ban@example.com">
+              </div>
+              <div class="field full-width">
+                <label for="registerPass">Mật khẩu</label>
+                <input id="registerPass" name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="Ít nhất 8 ký tự">
+              </div>
+              <div class="field full-width">
+                <button class="btn secondary full" type="submit">Tạo tài khoản</button>
+              </div>
+            </div>
+          </form>
+          <p class="status" id="registerStatus" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <div class="notice">
+        ⚠️ Đây mới là giao diện. Không nhập mật khẩu thật khi website chưa được kết nối
+        backend HTTPS an toàn. AuthMe Reloaded của Minecraft thường xác thực trong game;
+        nó không tự tạo hệ thống đăng nhập web.
+      </div>
+    </div>
+  </section>
+
+  <!-- DEPOSIT -->
+  <section class="section" id="deposit">
+    <div class="container">
+      <div class="section-title">
+        <span class="eyebrow">DEPOSIT CENTER</span>
+        <h2>Nạp tiền <span class="gradient">Nightmare</span></h2>
+        <p>Chọn phương thức nạp. Giao dịch thật cần được xử lý bởi backend hoặc nhà cung cấp thanh toán.</p>
+      </div>
+
+      <div class="grid two">
+        <!-- CARD DEPOSIT -->
+        <div class="panel">
+          <div class="card-icon">💳</div>
+          <h3>Nạp thẻ điện thoại</h3>
+          <p>Hỗ trợ các nhà mạng sau khi cấu hình cổng nạp thẻ.</p>
+
+          <form id="cardForm">
+            <div class="form-grid" style="margin-top:20px">
+              <div class="field full-width">
+                <label for="cardProvider">Nhà mạng</label>
+                <select id="cardProvider" required>
+                  <option value="">-- Chọn nhà mạng --</option>
+                  <option value="VIETTEL">Viettel</option>
+                  <option value="MOBIFONE">MobiFone</option>
+                  <option value="VINAPHONE">VinaPhone</option>
+                  <option value="OTHER">Nhà mạng khác</option>
+                </select>
+              </div>
+              <div class="field full-width">
+                <label for="cardAmount">Mệnh giá dự kiến</label>
+                <select id="cardAmount" required>
+                  <option value="">-- Chọn mệnh giá --</option>
+                  <option value="10000">10.000 VNĐ</option>
+                  <option value="20000">20.000 VNĐ</option>
+                  <option value="50000">50.000 VNĐ</option>
+                  <option value="100000">100.000 VNĐ</option>
+                  <option value="200000">200.000 VNĐ</option>
+                  <option value="500000">500.000 VNĐ</option>
+                </select>
+              </div>
+              <div class="field full-width">
+                <button class="btn primary full" type="submit">Tiếp tục nạp thẻ</button>
+              </div>
+            </div>
+          </form>
+          <p class="status" id="cardStatus" aria-live="polite"></p>
+          <p class="form-note">
+            Không nhập mã thẻ hoặc số serial ở trang tĩnh này. Khi tích hợp,
+            hãy gửi giao dịch qua API HTTPS của nhà cung cấp uy tín.
           </p>
         </div>
 
-        <nav class="footer-links" aria-label="Liên kết chân trang">
-          <a href="#home">Trang chủ</a>
-          <a href="#about">Giới thiệu</a>
-          <a href="#modes">Chế độ chơi</a>
-          <a href="#faq">FAQ</a>
-          <a
-            href="#"
-            data-config-link="discord"
-            target="_blank"
-            rel="noopener noreferrer"
-          >Discord</a>
-        </nav>
+        <!-- BANK DEPOSIT -->
+        <div class="panel">
+          <div class="card-icon">🏦</div>
+          <h3>Nạp qua ngân hàng</h3>
+          <p>Chuyển khoản bằng thông tin chính thức do chủ máy chủ cung cấp.</p>
+
+          <div class="bank-details">
+            <div class="bank-item">
+              <small>Ngân hàng</small>
+              <strong id="bankName">CHƯA CẤU HÌNH</strong>
+            </div>
+            <div class="bank-item">
+              <small>Chủ tài khoản</small>
+              <strong id="bankOwner">CHƯA CẤU HÌNH</strong>
+            </div>
+            <div class="bank-item">
+              <small>Số tài khoản</small>
+              <strong id="bankAccount">CHƯA CẤU HÌNH</strong>
+            </div>
+            <div class="bank-item">
+              <small>Nội dung chuyển khoản</small>
+              <strong id="bankMemo">NAP TCYT [TÊN GAME]</strong>
+            </div>
+          </div>
+
+          <button class="btn secondary full" id="copyMemo" type="button" style="margin-top:16px">
+            Sao chép nội dung chuyển khoản
+          </button>
+
+          <div class="divider"></div>
+
+          <form id="bankForm">
+            <div class="field">
+              <label for="gameName">Tên nhân vật Minecraft</label>
+              <input id="gameName" required maxlength="32" placeholder="Nhập tên trong game">
+            </div>
+            <div class="field" style="margin-top:13px">
+              <label for="transactionRef">Mã giao dịch ngân hàng (nếu có)</label>
+              <input id="transactionRef" maxlength="100" placeholder="Mã tham chiếu giao dịch">
+            </div>
+            <button class="btn primary full" type="submit" style="margin-top:16px">
+              Kiểm tra giao dịch
+            </button>
+          </form>
+          <p class="status" id="bankStatus" aria-live="polite"></p>
+          <p class="form-note">
+            Không nhập PIN, mật khẩu ngân hàng hoặc OTP. Biểu mẫu này chưa xác minh
+            giao dịch và chưa tự cộng tiền trong game.
+          </p>
+        </div>
       </div>
 
-      <div class="footer-bottom">
-        <span>© <span id="currentYear"></span> NIGHTMARE TCYT. All Rights Reserved.</span>
-        <span>Made for the darkness ☠</span>
+      <div class="notice">
+        🔒 Chỉ chuyển tiền khi đã xác minh đúng chủ tài khoản và thông tin thanh toán.
+        Website GitHub Pages tĩnh không thể tự xác nhận chuyển khoản hoặc cộng điểm.
       </div>
     </div>
-  </footer>
+  </section>
 
-  <script>
-    /*
-     * NIGHTMARE TCYT - WEBSITE CONFIGURATION
-     *
-     * Hãy thay các giá trị mẫu dưới đây bằng thông tin chính xác.
-     * Không để nguyên YOUR_SERVER_IP khi website chính thức hoạt động.
-     */
+  <section class="section" id="community">
+    <div class="container">
+      <div class="community">
+        <span class="eyebrow">JOIN THE COMMUNITY</span>
+        <h2>Bóng tối đang gọi.<br><span class="gradient">Bạn đã sẵn sàng?</span></h2>
+        <p>Kết nối với cộng đồng NIGHTMARE TCYT để theo dõi thông tin và hoạt động của máy chủ.</p>
+        <div class="actions">
+          <a class="btn primary" href="#auth">🔐 Tài khoản</a>
+          <a class="btn secondary" href="#deposit">💳 Nạp tiền</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    const SITE_CONFIG = {
-      serverAddress: "YOUR_SERVER_IP",
-      discordUrl: ""
-    };
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section-title">
+        <span class="eyebrow">HELP CENTER</span>
+        <h2>Thông tin <span class="gradient">quan trọng</span></h2>
+      </div>
 
-    // Đồng bộ địa chỉ Minecraft trên giao diện.
-    const serverAddressElement = document.getElementById("serverAddress");
-    const copyButton = document.getElementById("copyServer");
-    const copyMessage = document.getElementById("copyMessage");
+      <div class="grid">
+        <article class="card">
+          <h3>🔐 Auth hoạt động thế nào?</h3>
+          <p>AuthMe trong game không đồng nghĩa với tài khoản website. Muốn dùng chung tài khoản cần backend hoặc API tích hợp phù hợp.</p>
+        </article>
+        <article class="card">
+          <h3>💳 Nạp tiền có tự động không?</h3>
+          <p>Chưa. Cần API cổng nạp thẻ hoặc dịch vụ thanh toán ngân hàng và backend kiểm tra giao dịch.</p>
+        </article>
+        <article class="card">
+          <h3>🪙 Tiền được cộng ở đâu?</h3>
+          <p>Cần tích hợp hệ thống kinh tế hoặc điểm của máy chủ Minecraft để cộng tiền sau khi giao dịch được xác nhận.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
 
-    serverAddressElement.textContent = SITE_CONFIG.serverAddress;
+<footer>
+  <div class="container footer-row">
+    <span>© <span id="year"></span> NIGHTMARE TCYT. All Rights Reserved.</span>
+    <span>⛏ Minecraft Server · Enter the Darkness ☠</span>
+  </div>
+</footer>
 
-    // Sao chép địa chỉ máy chủ.
-    copyButton.addEventListener("click", async () => {
-      const address = SITE_CONFIG.serverAddress.trim();
+<script>
+  /*
+   * NIGHTMARE TCYT CONFIG
+   *
+   * Chỉ điền thông tin ngân hàng được phép công khai.
+   * Không đặt API secret, token hoặc mật khẩu trong JavaScript phía trình duyệt.
+   */
+  const CONFIG = {
+    serverIp: "nmtcyt.funserver.top",
 
-      if (!address || address === "YOUR_SERVER_IP") {
-        copyMessage.textContent =
-          "⚠ Quản trị viên chưa cấu hình địa chỉ máy chủ.";
-        return;
-      }
+    // Điền sau khi xác minh thông tin tài khoản nhận tiền.
+    bankName: "",
+    bankOwner: "",
+    bankAccount: "",
+    bankMemoPrefix: "NAP TCYT",
 
-      try {
-        await navigator.clipboard.writeText(address);
-        copyMessage.textContent = "✓ Đã sao chép địa chỉ máy chủ!";
-        copyButton.textContent = "Đã sao chép";
-      } catch (error) {
-        // Dự phòng cho trình duyệt không hỗ trợ Clipboard API.
-        const temporaryInput = document.createElement("textarea");
-        temporaryInput.value = address;
-        temporaryInput.style.position = "fixed";
-        temporaryInput.style.opacity = "0";
-        document.body.appendChild(temporaryInput);
-        temporaryInput.select();
+    // Chỉ cấu hình sau khi có backend thật.
+    apiBaseUrl: ""
+  };
 
-        const copied = document.execCommand("copy");
-        temporaryInput.remove();
+  const $ = id => document.getElementById(id);
 
-        if (copied) {
-          copyMessage.textContent = "✓ Đã sao chép địa chỉ máy chủ!";
-          copyButton.textContent = "Đã sao chép";
-        } else {
-          copyMessage.textContent =
-            "Không thể tự sao chép. Hãy sao chép địa chỉ thủ công.";
-        }
-      }
+  $("year").textContent = new Date().getFullYear();
+  $("serverIp").textContent = CONFIG.serverIp;
 
-      window.setTimeout(() => {
-        copyButton.textContent = "Sao chép";
-      }, 2200);
-    });
+  $("bankName").textContent = CONFIG.bankName || "CHƯA CẤU HÌNH";
+  $("bankOwner").textContent = CONFIG.bankOwner || "CHƯA CẤU HÌNH";
+  $("bankAccount").textContent = CONFIG.bankAccount || "CHƯA CẤU HÌNH";
 
-    // Gắn liên kết Discord khi đã được cấu hình.
-    document.querySelectorAll('[data-config-link="discord"]').forEach(link => {
-      if (SITE_CONFIG.discordUrl.trim()) {
-        link.href = SITE_CONFIG.discordUrl;
-      } else {
-        link.addEventListener("click", event => {
-          event.preventDefault();
-          alert("Liên kết Discord chưa được quản trị viên cấu hình.");
-        });
-      }
-    });
+  function getBankMemo() {
+    const name = $("gameName").value.trim();
+    return CONFIG.bankMemoPrefix + (name ? " " + name : " [TÊN GAME]");
+  }
 
-    // Menu điều hướng trên điện thoại.
-    const menuToggle = document.getElementById("menuToggle");
-    const navLinks = document.getElementById("navLinks");
+  function refreshMemo() {
+    $("bankMemo").textContent = getBankMemo();
+  }
 
-    menuToggle.addEventListener("click", () => {
-      const isOpen = navLinks.classList.toggle("open");
-      menuToggle.setAttribute("aria-expanded", String(isOpen));
-      menuToggle.setAttribute("aria-label", isOpen ? "Đóng menu" : "Mở menu");
-      menuToggle.textContent = isOpen ? "✕" : "☰";
-    });
+  $("gameName").addEventListener("input", refreshMemo);
 
-    navLinks.querySelectorAll("a").forEach(link => {
-      link.addEventListener("click", () => {
-        navLinks.classList.remove("open");
-        menuToggle.setAttribute("aria-expanded", "false");
-        menuToggle.setAttribute("aria-label", "Mở menu");
-        menuToggle.textContent = "☰";
-      });
-    });
-
-    // Hiệu ứng xuất hiện khi cuộn trang.
-    const revealElements = document.querySelectorAll(".reveal");
-
-    if ("IntersectionObserver" in window) {
-      const observer = new IntersectionObserver((entries, currentObserver) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-            currentObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.12 });
-
-      revealElements.forEach(element => observer.observe(element));
-    } else {
-      revealElements.forEach(element => element.classList.add("visible"));
+  async function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
     }
 
-    // Tự động cập nhật năm ở chân trang.
-    document.getElementById("currentYear").textContent =
-      new Date().getFullYear();
-  </script>
+    const input = document.createElement("textarea");
+    input.value = text;
+    input.style.position = "fixed";
+    input.style.opacity = "0";
+    document.body.appendChild(input);
+    input.select();
+
+    const success = document.execCommand("copy");
+    input.remove();
+    return success;
+  }
+
+  $("copyIp").addEventListener("click", async () => {
+    try {
+      const ok = await copyText(CONFIG.serverIp);
+      $("copyStatus").textContent = ok
+        ? "✓ Đã sao chép IP máy chủ!"
+        : "Không thể sao chép tự động. Hãy sao chép IP thủ công.";
+    } catch {
+      $("copyStatus").textContent = "Không thể sao chép. Hãy sao chép IP thủ công.";
+    }
+  });
+
+  $("copyMemo").addEventListener("click", async () => {
+    refreshMemo();
+
+    try {
+      const ok = await copyText(getBankMemo());
+      $("bankStatus").textContent = ok
+        ? "Đã sao chép nội dung chuyển khoản."
+        : "Không thể sao chép tự động.";
+    } catch {
+      $("bankStatus").textContent = "Không thể sao chép tự động.";
+    }
+  });
+
+  /*
+   * Các biểu mẫu bên dưới CHƯA gửi dữ liệu đi đâu cả.
+   * Chỉ kết nối sau khi đã triển khai backend HTTPS và xác thực an toàn.
+   */
+
+  $("loginForm").addEventListener("submit", event => {
+    event.preventDefault();
+    $("loginStatus").textContent =
+      "Hệ thống đăng nhập chưa được kết nối backend. Chưa có tài khoản nào được xác thực.";
+  });
+
+  $("registerForm").addEventListener("submit", event => {
+    event.preventDefault();
+    $("registerStatus").textContent =
+      "Hệ thống đăng ký chưa được kết nối backend. Chưa có tài khoản nào được tạo.";
+  });
+
+  $("cardForm").addEventListener("submit", event => {
+    event.preventDefault();
+    $("cardStatus").textContent =
+      "Chưa kết nối cổng nạp thẻ. Chưa có giao dịch hoặc khoản nạp nào được tạo.";
+  });
+
+  $("bankForm").addEventListener("submit", event => {
+    event.preventDefault();
+    $("bankStatus").textContent =
+      "Chưa kết nối API kiểm tra giao dịch. Thông tin vừa nhập chưa được gửi đi và giao dịch chưa được xác minh.";
+  });
+
+  // Menu điện thoại.
+  const menuBtn = $("menuBtn");
+  const navLinks = $("navLinks");
+
+  menuBtn.addEventListener("click", () => {
+    const open = navLinks.classList.toggle("open");
+    menuBtn.textContent = open ? "✕" : "☰";
+    menuBtn.setAttribute("aria-expanded", String(open));
+  });
+
+  navLinks.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      navLinks.classList.remove("open");
+      menuBtn.textContent = "☰";
+      menuBtn.setAttribute("aria-expanded", "false");
+    });
+  });
+</script>
 </body>
 </html>
