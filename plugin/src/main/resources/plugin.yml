@@ -1,0 +1,15 @@
+name: NightmareLink
+version: 1.0.0
+main: vn.nightmare.tcyt.NightmareLink
+api-version: '1.20'
+depend: [AuthMe, PlayerPoints]
+commands:
+  nmtcyt:
+    description: Link NIGHTMARE TCYT website and deliver verified points
+    usage: /nmtcyt link
+    aliases: [web]
+    permission: nightmarelink.use
+permissions:
+  nightmarelink.use:
+    description: Allows linking a logged-in Minecraft account to the website
+    default: true
