@@ -331,7 +331,7 @@
       <div class="grid two">
         <div class="panel">
           <h3>🔐 Đăng nhập</h3>
-          <p class="form-note">Dành cho tài khoản website nếu hệ thống xác thực đã được thiết lập.</p>
+          <p class="form-note">Đăng nhập bằng tài khoản Minecraft đã có trong AuthMe của máy chủ.</p>
           <form id="loginForm">
             <div class="form-grid" style="margin-top:18px">
               <div class="field full-width">
@@ -377,9 +377,8 @@
       </div>
 
       <div class="notice">
-        ⚠️ Đây mới là giao diện. Không nhập mật khẩu thật khi website chưa được kết nối
-        backend HTTPS an toàn. AuthMe Reloaded của Minecraft thường xác thực trong game;
-        nó không tự tạo hệ thống đăng nhập web.
+        🔐 Đăng nhập được xác thực qua backend HTTPS bằng tài khoản AuthMe hiện có.
+        Đăng ký website và các chức năng thanh toán vẫn cần được kiểm tra, tích hợp riêng.
       </div>
     </div>
   </section>
@@ -552,13 +551,13 @@
     serverIp: "nmtcyt.funserver.top",
 
     // Điền sau khi xác minh thông tin tài khoản nhận tiền.
-    bankName: "",
-    bankOwner: "",
-    bankAccount: "",
+    bankName: "MB/MOMO/ZaloPay",
+    bankOwner: "NGUYEN VAN AN",
+    bankAccount: "0935420269",
     bankMemoPrefix: "NAP TCYT",
 
     // Chỉ cấu hình sau khi có backend thật.
-    apiBaseUrl: ""
+    apiBaseUrl: "https://minecraftrechargebackend.onrender.com"
   };
 
   const $ = id => document.getElementById(id);
@@ -566,9 +565,9 @@
   $("year").textContent = new Date().getFullYear();
   $("serverIp").textContent = CONFIG.serverIp;
 
-  $("bankName").textContent = CONFIG.bankName || "CHƯA CẤU HÌNH";
-  $("bankOwner").textContent = CONFIG.bankOwner || "CHƯA CẤU HÌNH";
-  $("bankAccount").textContent = CONFIG.bankAccount || "CHƯA CẤU HÌNH";
+  $("bankName").textContent = CONFIG.bankName || "MB/MOMO/ZALOPAY";
+  $("bankOwner").textContent = CONFIG.bankOwner || "NGUYEN VAN AN";
+  $("bankAccount").textContent = CONFIG.bankAccount ||"0935420269";
 
   function getBankMemo() {
     const name = $("gameName").value.trim();
@@ -628,10 +627,58 @@
    * Chỉ kết nối sau khi đã triển khai backend HTTPS và xác thực an toàn.
    */
 
-  $("loginForm").addEventListener("submit", event => {
+  $("loginForm").addEventListener("submit", async event => {
     event.preventDefault();
-    $("loginStatus").textContent =
-      "Hệ thống đăng nhập chưa được kết nối backend. Chưa có tài khoản nào được xác thực.";
+
+    const form = event.currentTarget;
+    const status = $("loginStatus");
+    const button = form.querySelector('button[type="submit"]');
+    const originalText = button.textContent;
+    const username = $("loginUser").value.trim();
+    const password = $("loginPass").value;
+    const apiBaseUrl = String(CONFIG.apiBaseUrl || "").replace(/\/+$/, "");
+
+    if (!apiBaseUrl) {
+      status.textContent = "Backend chưa được cấu hình. Vui lòng thử lại sau.";
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Đang đăng nhập...";
+    status.textContent = "";
+
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
+
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        throw new Error(`Backend trả về phản hồi không hợp lệ (HTTP ${response.status}).`);
+      }
+
+      if (!response.ok || data.status !== "success" || !data.token) {
+        throw new Error(data.message || `Đăng nhập thất bại (HTTP ${response.status}).`);
+      }
+
+      localStorage.setItem("mc_token", data.token);
+      localStorage.setItem("mc_user", data.username || username);
+      status.textContent = `✓ Đăng nhập thành công: ${data.username || username}`;
+    } catch (error) {
+      console.error("NIGHTMARE TCYT login error:", error);
+      if (error instanceof TypeError) {
+        status.textContent = "Không gọi được API. Kiểm tra URL backend, trạng thái Render và CORS.";
+      } else {
+        status.textContent = error.message || "Không thể đăng nhập. Vui lòng thử lại.";
+      }
+    } finally {
+      button.disabled = false;
+      button.textContent = originalText;
+    }
   });
 
   $("registerForm").addEventListener("submit", event => {
