@@ -459,7 +459,15 @@
               <strong id="bankMemo">NAP TCYT [TÊN GAME]</strong>
             </div>
           </div>
-
+          <div style="margin:20px 0;padding:18px;text-align:center;
+            background:#fff;border-radius:14px;color:#17121c">
+  <h3>☠ QR CHUYỂN KHOẢN</h3>
+  <img id="vietQrImage"
+       alt="Mã QR VietQR chuyển khoản NIGHTMARE TCYT"
+       style="display:block;width:100%;max-width:300px;
+              margin:14px auto;min-height:200px;object-fit:contain">
+  <p>Quét bằng ứng dụng ngân hàng để chuyển khoản</p>
+</div>
           <button class="btn secondary full" id="copyMemo" type="button" style="margin-top:16px">
             Sao chép nội dung chuyển khoản
           </button>
@@ -575,11 +583,21 @@
   }
 
   function refreshMemo() {
-    $("bankMemo").textContent = getBankMemo();
-  }
+  const memo = getBankMemo();
+  $("bankMemo").textContent = memo;
 
-  $("gameName").addEventListener("input", refreshMemo);
+  const qrUrl =
+    "https://img.vietqr.io/image/MB-" +
+    encodeURIComponent(CONFIG.bankAccount) +
+    "-compact2.png?addInfo=" +
+    encodeURIComponent(memo) +
+    "&accountName=" +
+    encodeURIComponent(CONFIG.bankOwner);
 
+  $("vietQrImage").src = qrUrl;
+}
+
+refreshMemo();
   async function copyText(text) {
     if (navigator.clipboard && window.isSecureContext) {
       await navigator.clipboard.writeText(text);
@@ -681,16 +699,76 @@
     }
   });
 
-  $("registerForm").addEventListener("submit", event => {
-    event.preventDefault();
-    $("registerStatus").textContent =
-      "Hệ thống đăng ký chưa được kết nối backend. Chưa có tài khoản nào được tạo.";
+  
+$("registerForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const status = $("registerStatus");
+  const button = form.querySelector('button[type="submit"]');
+  const originalText = button.textContent;
+
+  const username = $("registerUser").value.trim();
+  const password = $("registerPass").value;
+  const apiBaseUrl = String(CONFIG.apiBaseUrl || "").replace(/\/+$/, "");
+
+  if (!apiBaseUrl) {
+    status.textContent = "Backend chưa được cấu hình.";
+    return;
+  }
+
+  if (!/^[A-Za-z0-9_]{3,16}$/.test(username)) {
+    status.textContent =
+      "Tên Minecraft phải có 3–16 ký tự, gồm chữ, số hoặc dấu gạch dưới.";
+    return;
+  }
+
+  if (password.length < 8) {
+    status.textContent = "Mật khẩu phải có ít nhất 8 ký tự.";
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "Đang đăng ký...";
+  status.textContent = "";
+
+  try {
+    const response = await fetch(
+      `${apiBaseUrl}/api/auth/register`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || data.status !== "success") {
+      throw new Error(data.message || "Đăng ký thất bại.");
+    }
+
+    status.textContent =
+      "✓ " + (data.message || "Đăng ký thành công!") +
+      " Hãy đăng nhập bằng tài khoản vừa tạo.";
+
+    form.reset();
+  } catch (error) {
+    console.error("Register error:", error);
+    status.textContent =
+      error instanceof TypeError
+        ? "Không kết nối được backend. Hãy kiểm tra Render và CORS."
+        : error.message;
+  } finally {
+    button.disabled = false;
+    button.textContent = originalText;
+  }
   });
 
   $("cardForm").addEventListener("submit", event => {
     event.preventDefault();
     $("cardStatus").textContent =
-      "Chưa kết nối cổng nạp thẻ. Chưa có giao dịch hoặc khoản nạp nào được tạo.";
+      "☠ NẠP THẺ CÀO TẠM THỜI CHƯA KHẢ DỤNG!Hệ thống nạp thẻ cào NIGHTMARE TCYT đang trong quá trình tích hợp. Vui lòng sử dụng phương thức chuyển khoản ngân hàng nếu đã được kích hoạt. Hiện tại, hệ thống chưa tiếp nhận giao dịch thẻ cào. Vui lòng không gửi mã thẻ khi tính năng chưa hoạt động. Hãy liên hệ Admin/Owner để hỗ trợ!";
   });
 
   $("bankForm").addEventListener("submit", event => {
