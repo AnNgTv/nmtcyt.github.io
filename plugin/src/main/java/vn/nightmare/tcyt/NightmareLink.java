@@ -129,7 +129,7 @@ public final class NightmareLink extends JavaPlugin {
             // manual review instead of automatic re-granting.
             ledger.setProperty(orderId, "STARTED"); saveLedger();
             try {
-                Object pp = Bukkit.getPluginManager().getPlugin("PlayerPoints");
+                org.bukkit.plugin.Plugin pp = Bukkit.getPluginManager().getPlugin("PlayerPoints");
                 if (pp == null || !pp.isEnabled()) throw new IllegalStateException("PlayerPoints unavailable");
                 Object api = pp.getClass().getMethod("getAPI").invoke(pp);
                 Method give = api.getClass().getMethod("give", UUID.class, int.class);

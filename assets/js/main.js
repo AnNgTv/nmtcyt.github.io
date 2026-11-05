@@ -66,19 +66,28 @@ async function loadRecentDonators() {
 
     try {
         const response = await fetch(`${API_BASE}/api/recent-recharge`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
+        if (!Array.isArray(data)) throw new Error('Invalid recent-recharge response');
         
         if (data.length === 0) {
             list.innerHTML = '<p style="text-align: center; font-size: 12px; color: #888; padding: 10px;">Chưa có hoạt động nạp thẻ gần đây.</p>';
             return;
         }
 
-        list.innerHTML = data.map(item => `
-            <div class="donator-item">
-                <span class="donator-name"><i class="fas fa-user-circle"></i> ${item.username}</span>
-                <span class="donator-amount">+${item.amount.toLocaleString()}đ</span>
-            </div>
-        `).join('');
+        list.innerHTML = data.map(item => {
+            const row = document.createElement('div');
+            row.className = 'donator-item';
+            const name = document.createElement('span');
+            name.className = 'donator-name';
+            name.textContent = `♙ ${String(item.username ?? 'Người chơi')}`;
+            const amount = document.createElement('span');
+            amount.className = 'donator-amount';
+            const numericAmount = Number(item.amount);
+            amount.textContent = `+${(Number.isFinite(numericAmount) ? numericAmount : 0).toLocaleString('vi-VN')}đ`;
+            row.append(name, amount);
+            return row.outerHTML;
+        }).join('');
     } catch (error) {
         console.error('Lỗi tải nạp gần đây:', error);
     }
@@ -127,20 +136,15 @@ document.querySelectorAll('.nav-links a').forEach(link => {
 // Back to Top Button Logic
 const backToTopBtn = document.getElementById('back-to-top');
 
-window.addEventListener('scroll', () => {
-    if (window.pageYOffset > 300) {
-        backToTopBtn.style.display = 'flex';
-    } else {
-        backToTopBtn.style.display = 'none';
-    }
-});
+if (backToTopBtn) {
+    window.addEventListener('scroll', () => {
+        backToTopBtn.style.display = window.pageYOffset > 300 ? 'flex' : 'none';
+    }, { passive: true });
 
-backToTopBtn.addEventListener('click', () => {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-});
+}
 
 // Background Music Logic
 const musicBtn = document.getElementById('music-toggle');
@@ -168,12 +172,14 @@ const searchInput = document.querySelector('.search-box input');
 const storeCards = document.querySelectorAll('.store-card');
 
 function filterStore() {
-    const activeCategory = document.querySelector('.cat-btn.active').dataset.category;
-    const searchText = searchInput.value.toLowerCase();
+    const activeButton = document.querySelector('.cat-btn.active');
+    const activeCategory = activeButton ? activeButton.dataset.category : 'all';
+    const searchText = searchInput ? searchInput.value.toLowerCase().trim() : '';
 
     storeCards.forEach(card => {
         const cardCategory = card.dataset.category;
-        const cardTitle = card.querySelector('h3').innerText.toLowerCase();
+        const titleElement = card.querySelector('h3');
+        const cardTitle = titleElement ? titleElement.innerText.toLowerCase() : '';
         
         const matchesCategory = activeCategory === 'all' || cardCategory === activeCategory;
         const matchesSearch = cardTitle.includes(searchText);
@@ -215,7 +221,8 @@ async function lookupAccount() {
     loadingDiv.style.display = 'block';
 
     try {
-        const response = await fetch(`${API_BASE}/api/player/${username}`);
+        const response = await fetch(`${API_BASE}/api/player/${encodeURIComponent(username)}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const res = await response.json();
 
         if (res.status === 'success') {
@@ -296,6 +303,7 @@ async function handleAuth(event, type) {
 
         if (data.status === 'success') {
             if (type === 'login') {
+                if (!data.token || !data.username) throw new Error('Invalid login response');
                 localStorage.setItem('mc_token', data.token);
                 localStorage.setItem('mc_user', data.username);
                 alert('Đăng nhập thành công!');
@@ -308,7 +316,8 @@ async function handleAuth(event, type) {
             alert(data.message || 'Có lỗi xảy ra!');
         }
     } catch (error) {
-        alert('Lỗi kết nối server!');
+        console.error('Auth request failed:', error);
+        alert('Không thể kết nối hoặc phản hồi máy chủ không hợp lệ.');
     }
 }
 
@@ -328,10 +337,13 @@ async function checkLoginStatus() {
         });
         const data = await response.json();
 
-        if (data.status === 'success') {
-            document.getElementById('nav-login-btn').style.display = 'none';
-            document.getElementById('nav-user-info').style.display = 'block';
-            document.getElementById('nav-username').innerText = data.user.username;
+        if (data.status === 'success' && data.user) {
+            const navLogin = document.getElementById('nav-login-btn');
+            const navUserInfo = document.getElementById('nav-user-info');
+            if (navLogin) navLogin.style.display = 'none';
+            if (navUserInfo) navUserInfo.style.display = 'block';
+            const navUsername = document.getElementById('nav-username');
+            if (navUsername) navUsername.innerText = data.user.username;
 
             // Update Hero Actions if they exist
             const heroActions = document.querySelector('.hero-actions');
@@ -345,12 +357,18 @@ async function checkLoginStatus() {
             }
 
             // Cập nhật thông tin profile
-            document.getElementById('profile').style.display = 'block';
-            document.getElementById('profile-name').innerText = data.user.username;
-            document.getElementById('profile-rank-badge').innerText = data.user.rank;
-            document.getElementById('profile-points').innerText = data.user.points;
-            document.getElementById('profile-total').innerText = data.user.totalRecharge.toLocaleString() + 'đ';
-            document.getElementById('user-skin').src = `https://crafatar.com/avatars/${data.user.username}?size=100&overlay`;
+            const profile = document.getElementById('profile');
+            if (profile) profile.style.display = 'block';
+            const profileName = document.getElementById('profile-name');
+            const profileRank = document.getElementById('profile-rank-badge');
+            const profilePoints = document.getElementById('profile-points');
+            const profileTotal = document.getElementById('profile-total');
+            const userSkin = document.getElementById('user-skin');
+            if (profileName) profileName.innerText = data.user.username ?? '';
+            if (profileRank) profileRank.innerText = data.user.rank ?? 'Member';
+            if (profilePoints) profilePoints.innerText = Number(data.user.points ?? 0).toLocaleString('vi-VN');
+            if (profileTotal) profileTotal.innerText = Number(data.user.totalRecharge ?? 0).toLocaleString('vi-VN') + 'đ';
+            if (userSkin) userSkin.src = `https://crafatar.com/avatars/${encodeURIComponent(data.user.username)}?size=100&overlay`;
             
             // Tải thêm lịch sử nạp
             loadUserHistory();
@@ -377,6 +395,7 @@ async function loadUserHistory() {
         const response = await fetch(`${API_BASE}/api/auth/transactions`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
 
         if (data.status === 'success') {
@@ -385,13 +404,19 @@ async function loadUserHistory() {
                 return;
             }
 
-            listBody.innerHTML = data.transactions.map(item => `
-                <tr>
-                    <td>${new Date(item.date).toLocaleDateString('vi-VN')}</td>
-                    <td>${item.amount.toLocaleString()}đ</td>
-                    <td class="status-success">Thành công</td>
-                </tr>
-            `).join('');
+            listBody.innerHTML = data.transactions.map(item => {
+                const tr = document.createElement('tr');
+                const date = document.createElement('td');
+                const amount = document.createElement('td');
+                const status = document.createElement('td');
+                const parsedDate = new Date(item.date);
+                date.textContent = Number.isNaN(parsedDate.getTime()) ? '—' : parsedDate.toLocaleDateString('vi-VN');
+                amount.textContent = `${Number(item.amount ?? 0).toLocaleString('vi-VN')}đ`;
+                status.className = 'status-success';
+                status.textContent = 'Thành công';
+                tr.append(date, amount, status);
+                return tr.outerHTML;
+            }).join('');
         }
     } catch (error) {
         console.error('Lỗi tải lịch sử nạp cá nhân');
