@@ -1,522 +1,950 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nightmare YTYC | TCYT | Minecraft Server</title>
-    <link rel="stylesheet" href="assets/css/style.css?v=1.7">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08060c">
+  <meta name="description" content="NIGHTMARE TCYT — Minecraft Server, tài khoản và nạp tiền.">
+  <title>NIGHTMARE TCYT | Minecraft Server</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:#08060c;
+      --panel:#130e19;
+      --panel2:#1a1221;
+      --red:#ff2947;
+      --purple:#ad63ff;
+      --text:#f8f3fa;
+      --muted:#a99caf;
+      --border:rgba(255,255,255,.1);
+      --green:#50e3a4;
+    }
+
+    * { box-sizing:border-box; margin:0; padding:0; }
+
+    html { scroll-behavior:smooth; scroll-padding-top:85px; }
+
+    body {
+      background:
+        radial-gradient(ellipse at 10% 5%,#32101e 0,transparent 35%),
+        radial-gradient(ellipse at 90% 35%,#211032 0,transparent 35%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter,Arial,sans-serif;
+      line-height:1.7;
+    }
+
+    a { color:inherit; text-decoration:none; }
+    button,input,select { font:inherit; }
+    button,a { -webkit-tap-highlight-color:transparent; }
+
+    .container { width:min(1120px,calc(100% - 32px)); margin:auto; }
+    .section { padding:80px 0; }
+
+    .navbar {
+      position:sticky; top:0; z-index:50;
+      border-bottom:1px solid var(--border);
+      background:rgba(8,6,12,.94);
+      backdrop-filter:blur(18px);
+    }
+
+    .nav-inner {
+      min-height:72px; display:flex; align-items:center;
+      justify-content:space-between; gap:16px;
+    }
+
+    .brand { display:flex; align-items:center; gap:11px; }
+    .brand-icon {
+      display:grid; place-items:center; width:43px; height:43px;
+      border:1px solid #792034; border-radius:12px;
+      background:linear-gradient(145deg,#41101f,#1a1027);
+      font-size:23px;
+    }
+
+    .brand strong { display:block; font-size:.91rem; font-weight:900; letter-spacing:.04em; }
+    .brand small { display:block; color:var(--muted); font-size:.64rem; letter-spacing:.14em; }
+
+    .nav-links { display:flex; align-items:center; gap:19px; }
+    .nav-links a { color:#c9bdce; font-size:.8rem; font-weight:650; }
+    .nav-links a:hover { color:#ff8293; }
+
+    .menu-btn {
+      display:none; padding:8px 12px; border:1px solid var(--border);
+      border-radius:9px; background:var(--panel); color:white;
+    }
+
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:8px; min-height:45px; padding:11px 18px;
+      border:1px solid transparent; border-radius:10px;
+      cursor:pointer; font-size:.86rem; font-weight:800;
+      transition:.2s;
+    }
+
+    .btn:hover { transform:translateY(-2px); }
+    .primary { background:linear-gradient(110deg,#c91233,var(--red)); color:white; box-shadow:0 8px 25px #ff294722; }
+    .secondary { border-color:var(--border); background:#ffffff08; color:white; }
+    .full { width:100%; }
+
+    .hero { padding:105px 0 75px; text-align:center; }
+    .badge {
+      display:inline-block; padding:7px 13px; border:1px solid #ff29474d;
+      border-radius:50px; background:#ff294710; color:#ff9aa8;
+      font-size:.72rem; font-weight:800; letter-spacing:.14em;
+    }
+
+    .hero h1 {
+      margin:25px 0 15px; font-size:clamp(3rem,10vw,7rem);
+      font-weight:900; letter-spacing:-.07em; line-height:1.03;
+    }
+
+    .gradient {
+      color:transparent;
+      background:linear-gradient(100deg,#ff2947,#ff8393,#b975ff);
+      background-clip:text; -webkit-background-clip:text;
+    }
+
+    .hero p { max-width:680px; margin:12px auto; color:var(--muted); }
+    .actions { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-top:27px; }
+
+    .section-title { text-align:center; margin:0 auto 35px; max-width:720px; }
+    .eyebrow { color:#ff8293; font-size:.72rem; font-weight:850; letter-spacing:.18em; }
+    .section-title h2 { margin-top:8px; font-size:clamp(1.9rem,5vw,3rem); line-height:1.2; }
+    .section-title p { margin-top:12px; color:var(--muted); font-size:.91rem; }
+
+    .panel {
+      padding:26px; border:1px solid var(--border); border-radius:17px;
+      background:linear-gradient(145deg,#1b1120dd,#0e0b14f5);
+      box-shadow:0 20px 55px #0002;
+    }
+
+    .server-box {
+      display:flex; align-items:center; justify-content:space-between;
+      gap:20px; border-color:#ff294738;
+    }
+
+    .server-box h3 { font-size:1.3rem; }
+    .server-box p { margin-top:5px; color:var(--muted); font-size:.85rem; }
+
+    .ip-row {
+      display:flex; align-items:center; gap:10px; margin-top:18px;
+      padding:9px; border:1px solid var(--border); border-radius:10px;
+      background:#0003;
+    }
+
+    .ip-row code { flex:1; overflow-wrap:anywhere; font-size:.9rem; }
+    .copy-btn {
+      padding:9px 12px; border:1px solid #ff29474d; border-radius:8px;
+      background:#ff294716; color:#ff9aa8; cursor:pointer; font-weight:800;
+    }
+
+    .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+    .grid.two { grid-template-columns:repeat(2,minmax(0,1fr)); }
+
+    .card {
+      padding:24px; border:1px solid var(--border); border-radius:16px;
+      background:linear-gradient(145deg,#1a1222cc,#0e0b14ee);
+    }
+
+    .card-icon { font-size:1.8rem; margin-bottom:10px; }
+    .card h3 { font-size:1.05rem; }
+    .card p { margin-top:8px; color:var(--muted); font-size:.86rem; }
+    .card .btn { margin-top:18px; }
+
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+    .field { display:flex; flex-direction:column; gap:7px; }
+    .field.full-width { grid-column:1/-1; }
+    .field label { color:#d9cedf; font-size:.82rem; font-weight:700; }
+
+    .field input,.field select {
+      width:100%; min-height:46px; padding:11px 12px;
+      border:1px solid #ffffff1c; border-radius:9px;
+      outline:none; background:#09070d; color:white;
+    }
+
+    .field input:focus,.field select:focus { border-color:#a855f7; box-shadow:0 0 0 3px #a855f71c; }
+    .field input::placeholder { color:#756a7e; }
+    .form-note { margin-top:14px; color:var(--muted); font-size:.78rem; }
+    .notice {
+      margin-top:15px; padding:13px 15px; border:1px solid #ffbd5738;
+      border-radius:10px; background:#ffbd570c; color:#f5d8a3; font-size:.8rem;
+    }
+
+    .status { margin-top:12px; color:#ff9aa8; font-size:.84rem; overflow-wrap:anywhere; }
+    .divider { height:1px; margin:22px 0; background:var(--border); }
+
+    .bank-details {
+      display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:18px;
+    }
+
+    .bank-item { padding:14px; border:1px solid var(--border); border-radius:10px; background:#0002; }
+    .bank-item small { display:block; color:var(--muted); font-size:.73rem; }
+    .bank-item strong { display:block; margin-top:4px; overflow-wrap:anywhere; font-size:.9rem; }
+
+    .community {
+      padding:clamp(28px,6vw,60px); border:1px solid #a855f744;
+      border-radius:20px; text-align:center;
+      background:radial-gradient(ellipse at 0 100%,#ff29471a,transparent 50%),
+                 radial-gradient(ellipse at 100% 0,#a855f71b,transparent 50%),#110c18;
+    }
+
+    .community h2 { font-size:clamp(2rem,5vw,3.2rem); line-height:1.2; }
+    .community p { max-width:600px; margin:15px auto; color:var(--muted); }
+
+    footer { padding:30px 0; border-top:1px solid var(--border); color:var(--muted); font-size:.8rem; }
+    .footer-row { display:flex; flex-wrap:wrap; justify-content:space-between; gap:15px; }
+
+    @media(max-width:850px) {
+      .nav-links { gap:10px; }
+      .nav-links a { font-size:.72rem; }
+      .grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+
+    @media(max-width:650px) {
+      .menu-btn { display:block; }
+      .nav-inner { min-height:66px; }
+      .nav-links {
+        display:none; position:absolute; top:100%; left:0; right:0;
+        padding:12px 16px 18px; background:#0b0810;
+        border-bottom:1px solid var(--border);
+      }
+      .nav-links.open { display:flex; flex-direction:column; align-items:stretch; }
+      .nav-links a { padding:9px 3px; font-size:.88rem; }
+      .hero { padding:75px 0 55px; }
+      .section { padding:62px 0; }
+      .grid,.grid.two,.form-grid,.bank-details { grid-template-columns:1fr; }
+      .field.full-width { grid-column:auto; }
+      .server-box { align-items:stretch; flex-direction:column; }
+      .panel { padding:20px; }
+      .actions { flex-direction:column; }
+      .actions .btn { width:100%; }
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+      *,*::before,*::after { scroll-behavior:auto!important; transition:none!important; }
+    }
+
+    [hidden]{display:none!important}.hero-status-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;max-width:850px;margin:28px auto 0}.hero-stat,.stat-tile{padding:14px;border:1px solid var(--border);border-radius:12px;background:#120d19d9;text-align:left}.hero-stat small,.stat-tile small{display:block;color:var(--muted);font-size:.66rem;letter-spacing:.12em}.hero-stat strong,.stat-tile strong{display:block;margin-top:4px;font-size:1rem}.live-dot{display:inline-block;width:8px;height:8px;margin-right:7px;border-radius:50%;background:#888}.live-dot.online{background:#50e3a4;box-shadow:0 0 12px #50e3a4}.live-dot.offline{background:#ff5267}.muted-stat{color:var(--muted)}.compact-section{padding-top:30px}.empty-chart{display:grid;place-items:center;min-height:125px;margin-top:14px;border:1px dashed var(--border);border-radius:12px;color:var(--muted);background:repeating-linear-gradient(0deg,transparent,transparent 30px,#ffffff08 31px)}.join-steps{padding-left:22px;margin-top:12px;color:#d7cedd}.join-steps li{margin:8px 0}.profile-panel{max-width:820px;margin:auto}.profile-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.profile-head>div:nth-child(2){flex:1}.avatar-mark{display:grid;place-items:center;width:58px;height:58px;border-radius:16px;background:linear-gradient(140deg,#5a142b,#351a56);font-size:27px}.rank-chip{display:inline-block;margin-top:5px;padding:3px 10px;border:1px solid #ad63ff66;border-radius:30px;color:#d5aaff;font-size:.75rem}.deposit-tabs{display:flex;justify-content:center;flex-wrap:wrap;gap:9px;margin:0 0 20px}.deposit-tab{padding:10px 15px;border:1px solid var(--border);border-radius:9px;background:#ffffff08;color:#ddd;font-size:.82rem;font-weight:750}.deposit-tab.active,.deposit-tab:hover{border-color:#ff294766;background:#ff29471a;color:#ff9aa8}.table-wrap{overflow-x:auto}.history-table{width:100%;border-collapse:collapse;min-width:560px}.history-table th,.history-table td{padding:13px;text-align:left;border-bottom:1px solid var(--border);font-size:.82rem}.history-table th{color:#ff9aa8}.empty-cell{text-align:center!important;color:var(--muted)}.wheel-panel{text-align:center}.wheel-disc{width:190px;height:190px;margin:0 auto 18px;border:8px solid #57213e;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:conic-gradient(#ff2947 0 45deg,#421c50 45deg 90deg,#ad63ff 90deg 135deg,#36152c 135deg 180deg,#ff2947 180deg 225deg,#421c50 225deg 270deg,#ad63ff 270deg 315deg,#36152c 315deg);box-shadow:0 0 35px #ff294733,inset 0 0 0 8px #0c0812}.wheel-disc span{font-size:2rem}.wheel-disc b{font-size:.82rem;letter-spacing:.12em}.spin-count{margin:12px 0;color:var(--muted)}.prize-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:16px 0}.prize-grid span{padding:10px 5px;border:1px solid var(--border);border-radius:9px;background:#ffffff08;text-align:center;font-size:.78rem;font-weight:750}.prize-grid .miss-prize{grid-column:span 3;color:#c6b8cf}.field textarea{width:100%;padding:12px;border:1px solid #ffffff1c;border-radius:9px;background:#09070d;color:#fff;resize:vertical}.btn:disabled{opacity:.55;cursor:not-allowed;transform:none}.btn[aria-disabled=true]{opacity:.55;pointer-events:none}
+    @media(max-width:650px){.hero-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.profile-head .btn{width:100%}.prize-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.prize-grid .miss-prize{grid-column:span 2}.deposit-tabs{justify-content:stretch}.deposit-tab{flex:1;text-align:center;font-size:.72rem;padding:9px 7px}}
+
+  </style>
 </head>
+
 <body>
-    <header>
-        <nav>
-            <div class="logo">Nightmare <span>YTYC | TCYT</span></div>
-            <div class="menu-toggle" id="mobile-menu">
-                <i class="fas fa-bars"></i>
-            </div>
-            <ul class="nav-links">
-                <li><a href="#hero">Trang Chủ</a></li>
-                <li><a href="#store">Cửa Hàng</a></li>
-                <li><a href="#topup" class="nav-topup">Nạp Thẻ</a></li>
-                <li id="nav-user-info" style="display: none;"><a href="#profile" class="user-link"><i class="fas fa-user-circle"></i> <span id="nav-username">Cá nhân</span></a></li>
-                <li id="nav-login-btn"><a href="javascript:void(0)" onclick="openAuthModal('login')">Đăng Nhập</a></li>
-                <li><a href="#leaderboard">Top Nạp</a></li>
-            </ul>
-        </nav>
-    </header>
+<header class="navbar">
+  <div class="container nav-inner">
+    <a class="brand" href="#home">
+      <span class="brand-icon">☠</span>
+      <span>
+        <strong>NIGHTMARE TCYT</strong>
+        <small>MINECRAFT SERVER</small>
+      </span>
+    </a>
 
-    <!-- Quick Navigation Bar -->
-    <div class="quick-nav">
-        <div class="quick-nav-container">
-            <a href="#hero" class="q-link active"><i class="fas fa-home"></i> Trang Chủ</a>
-            <a href="#store" class="q-link"><i class="fas fa-shopping-cart"></i> Cửa Hàng</a>
-            <a href="#topup" class="q-link"><i class="fas fa-credit-card"></i> Nạp Thẻ</a>
-            <a href="#leaderboard" class="q-link"><i class="fas fa-trophy"></i> Top Nạp</a>
-            <a href="#staff" class="q-link"><i class="fas fa-users"></i> Đội Ngũ</a>
-            <a href="#contact" class="q-link"><i class="fas fa-headset"></i> Hỗ Trợ</a>
-            <a href="https://facebook.com/anngtvvn" target="_blank" class="q-link"><i class="fab fa-facebook"></i> Fanpage</a>
-        </div>
+    <button class="menu-btn" id="menuBtn" aria-label="Mở menu" aria-expanded="false">☰</button>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#home">Trang chủ</a>
+      <a href="#connect">Máy chủ</a>
+      <a href="#profile">Hồ sơ</a>
+      <a href="#deposit">Nạp xu</a>
+      <a href="#wheel">Vòng quay</a>
+      <a href="#support">Hỗ trợ</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="home">
+    <div class="container">
+      <span class="badge">☠ ENTER THE DARKNESS</span>
+      <h1>NIGHTMARE<br><span class="gradient">TCYT</span></h1>
+      <p>Một thế giới. Vô vàn bí ẩn. Viết nên huyền thoại của riêng bạn.</p>
+      <p>Chào mừng đến với NIGHTMARE TCYT — thế giới Minecraft mang phong cách hắc ám.</p>
+      <div class="hero-status-grid">
+        <div class="hero-stat"><span class="live-dot" id="liveDot"></span><small>TRẠNG THÁI</small><strong id="serverState">Đang kiểm tra...</strong></div>
+        <div class="hero-stat"><small>NGƯỜI CHƠI</small><strong><span id="onlinePlayers">—</span><span class="muted-stat"> / </span><span id="maxPlayers">—</span></strong></div>
+        <div class="hero-stat"><small>PHIÊN BẢN</small><strong id="serverVersion">Đang kiểm tra...</strong></div>
+        <div class="hero-stat"><small>UPTIME</small><strong id="serverUptime">Chưa có dữ liệu</strong></div>
+      </div>
+      <div class="actions">
+        <a class="btn primary" href="#connect">⛏ Tham gia máy chủ</a>
+        <a class="btn secondary" href="#deposit">💳 Nạp tiền</a>
+      </div>
     </div>
+  </section>
 
-    <!-- Auth Modal -->
-    <div id="auth-modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <span class="close" onclick="closeAuthModal()">&times;</span>
-            <div id="auth-tabs">
-                <button id="tab-login" class="active" onclick="switchAuthTab('login')">Đăng Nhập</button>
-                <button id="tab-register" onclick="switchAuthTab('register')">Đăng Ký</button>
-            </div>
-            
-            <!-- Login Form -->
-            <form id="login-form" onsubmit="handleAuth(event, 'login')">
-                <input type="text" placeholder="Tên tài khoản" required id="login-user">
-                <input type="password" placeholder="Mật khẩu" required id="login-pass">
-                <button type="submit" class="auth-btn">Vào hệ thống</button>
-            </form>
+  <section class="section" id="connect">
+    <div class="container">
+      <div class="section-title">
+        <span class="eyebrow">CONNECT TO SERVER</span>
+        <h2>Kết nối <span class="gradient">NIGHTMARE</span></h2>
+        <p>Sao chép địa chỉ máy chủ để thêm vào Minecraft.</p>
+      </div>
 
-            <!-- Register Form -->
-            <form id="register-form" onsubmit="handleAuth(event, 'register')" style="display: none;">
-                <input type="text" placeholder="Tên tài khoản Minecraft" required id="reg-user">
-                <input type="password" placeholder="Mật khẩu" required id="reg-pass">
-                <input type="password" placeholder="Xác nhận mật khẩu" required id="reg-pass-confirm">
-                <button type="submit" class="auth-btn">Tạo tài khoản</button>
-            </form>
+      <div class="panel server-box">
+        <div>
+          <span class="eyebrow">MINECRAFT SERVER ADDRESS</span>
+          <h3>NIGHTMARE TCYT</h3>
+          <p>Java / Bedrock: hãy kiểm tra phiên bản và cổng tương thích trước khi kết nối.</p>
+          <div class="ip-row">
+            <code id="serverIp">sg-02.pingless.org:25649</code>
+            <button class="copy-btn" id="copyIp" type="button">Sao chép</button>
+          </div>
+          <p class="status" id="copyStatus" aria-live="polite"></p>
         </div>
+        <div class="card-icon" aria-hidden="true">⛏️</div>
+      </div>
     </div>
+  </section>
 
-    <!-- User Profile Section -->
-    <section id="profile" class="profile-section" style="display: none;">
-        <div class="profile-container">
-            <div class="profile-header">
-                <img id="user-skin" src="https://crafatar.com/avatars/steve?size=100&overlay" alt="Skin">
-                <div class="profile-title">
-                    <h2 id="profile-name">Tên Người Chơi</h2>
-                    <span id="profile-rank-badge" class="badge">Rank</span>
-                </div>
-                <button onclick="handleLogout()" class="logout-btn">Đăng xuất</button>
-            </div>
-            <div class="profile-stats">
-                <div class="stat-box">
-                    <i class="fas fa-coins"></i>
-                    <span class="stat-label">Số dư Xu</span>
-                    <span id="profile-points" class="stat-value">0</span>
-                </div>
-                <div class="stat-box">
-                    <i class="fas fa-credit-card"></i>
-                    <span class="stat-label">Tổng đã nạp</span>
-                    <span id="profile-total" class="stat-value">0đ</span>
-                </div>
-            </div>
-            
-            <div class="profile-history">
-                <h3><i class="fas fa-history"></i> Lịch sử nạp cá nhân</h3>
-                <div class="history-table-wrapper">
-                    <table id="personal-history-table">
-                        <thead>
-                            <tr>
-                                <th>Ngày</th>
-                                <th>Số tiền</th>
-                                <th>Trạng thái</th>
-                            </tr>
-                        </thead>
-                        <tbody id="personal-history-body">
-                            <!-- Dữ liệu sẽ nạp vào đây -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Account Lookup Modal -->
-    <div id="account-lookup" class="lookup-section">
-        <div class="lookup-container">
-            <h3><i class="fas fa-search"></i> Tra cứu tài khoản</h3>
-            <div class="search-form">
-                <input type="text" id="lookup-username" placeholder="Nhập tên người chơi...">
-                <button onclick="lookupAccount()">Tìm kiếm</button>
-            </div>
-            <div id="lookup-result" class="lookup-result" style="display: none;">
-                <div class="player-info-grid">
-                    <div class="info-item">
-                        <span class="label">Tên:</span>
-                        <span id="res-username" class="value">-</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="label">Số dư (Xu):</span>
-                        <span id="res-points" class="value">0</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="label">Hạng (Rank):</span>
-                        <span id="res-rank" class="value">Default</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="label">Tổng nạp:</span>
-                        <span id="res-total" class="value">0đ</span>
-                    </div>
-                </div>
-            </div>
-            <div id="lookup-loading" style="display: none; text-align: center; margin-top: 10px;">
-                <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
-            </div>
-        </div>
+  <section class="section compact-section" id="server-details">
+    <div class="container">
+      <div class="section-title"><span class="eyebrow">SERVER STATUS</span><h2>Thông tin <span class="gradient">máy chủ</span></h2><p>Dữ liệu trực tuyến được kiểm tra định kỳ. Thông tin chưa cấu hình sẽ được hiển thị rõ ràng.</p></div>
+      <div class="grid two">
+        <article class="card"><h3>☕ Java Edition</h3><p>Địa chỉ kết nối</p><div class="ip-row"><code id="javaAddress">nmtcyt.funserver.top</code><button class="copy-btn" type="button" data-copy="javaAddress">Sao chép</button></div><p class="form-note">Phiên bản hỗ trợ: <strong id="javaVersions">Đang cập nhật</strong></p></article>
+        <article class="card"><h3>📱 Bedrock Edition</h3><p>Địa chỉ kết nối</p><div class="ip-row"><code id="bedrockAddress">nmtcyt.funserver.top</code><button class="copy-btn" type="button" data-copy="bedrockAddress">Sao chép</button></div><p class="form-note">Cổng Bedrock: <strong id="bedrockPort">Chưa xác nhận</strong></p></article>
+      </div>
+      <div class="grid two" style="margin-top:16px">
+        <article class="card"><h3>📈 Hoạt động người chơi</h3><p id="activityNotice">Biểu đồ sẽ hiển thị khi backend cung cấp dữ liệu lịch sử người chơi.</p><div class="empty-chart" id="activityChart">Chưa có dữ liệu thống kê</div></article>
+        <article class="card"><h3>🧭 Cách tham gia</h3><ol class="join-steps"><li>Mở Minecraft Java hoặc Bedrock.</li><li>Chọn Multiplayer / Servers → Add Server.</li><li>Nhập địa chỉ máy chủ ở phía trên.</li><li>Tham gia và làm theo hướng dẫn trong game.</li></ol><p class="form-note">Chế độ chơi: <strong>Survival / Thập cẩm</strong> · Các chế độ khác sẽ được cập nhật.</p></article>
+      </div>
+      <div class="notice">📅 Thời gian hoạt động, ngày khai trương và lịch sử sự kiện sẽ được cập nhật sau khi có dữ liệu chính thức.</div>
     </div>
+  </section>
 
-    <main>
-        <section id="hero" class="hero">
-            <div class="hero-content">
-                <h1>Chào mừng đến với <br><span>Thế Giới Minecraft</span></h1>
-                <p>Khám phá vùng đất mới, xây dựng đế chế của riêng bạn và chiến đấu cùng bạn bè.</p>
-                <div class="server-status">
-                    <span id="ip-address">comet.pikamc.vn:25870</span>
-                    <button onclick="copyIP()">Sao chép IP</button>
-                </div>
-                <div class="player-count">
-                    <i class="fas fa-users"></i> <span id="online-players">0</span> người chơi đang online
-                    <div class="player-bar-container">
-                        <div class="player-bar-fill" id="player-bar"></div>
-                    </div>
-                </div>
-                <div class="server-version" style="margin-top: 10px; font-size: 14px; color: #aaa;">
-                    Phiên bản: <span id="server-version">Đang tải...</span>
-                </div>
+  <section class="section" id="about">
+    <div class="container">
+      <div class="section-title">
+        <span class="eyebrow">WELCOME TO THE DARK SIDE</span>
+        <h2>Khám phá <span class="gradient">thế giới</span></h2>
+        <p>Bắt đầu hành trình, xây dựng thế giới và kết nối cùng cộng đồng.</p>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <div class="card-icon">🌑</div>
+          <h3>Thế giới bí ẩn</h3>
+          <p>Phong cách hắc ám với dấu ấn riêng của NIGHTMARE TCYT.</p>
+        </article>
+        <article class="card">
+          <div class="card-icon">⚔️</div>
+          <h3>Chiến đấu</h3>
+          <p>Thử thách kỹ năng và chứng minh bản lĩnh trong game.</p>
+        </article>
+        <article class="card">
+          <div class="card-icon">🏰</div>
+          <h3>Xây dựng</h3>
+          <p>Thu thập tài nguyên và tạo nên công trình của riêng bạn.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="profile">
+    <div class="container">
+      <div class="section-title"><span class="eyebrow">PLAYER PROFILE</span><h2>Hồ sơ <span class="gradient">người chơi</span></h2><p>Thông tin tài khoản chỉ hiển thị sau khi đăng nhập.</p></div>
+      <div class="panel profile-panel" id="profileLocked">
+        <div class="card-icon">🔐</div><h3>Đăng nhập để xem hồ sơ</h3><p class="form-note">Tên nhân vật, rank, số xu và lịch sử tài khoản được bảo vệ bằng phiên đăng nhập.</p>
+        <a class="btn primary" href="#auth">Đăng nhập / Đăng ký</a>
+      </div>
+      <div class="panel profile-panel" id="profileContent" hidden>
+        <div class="profile-head"><div class="avatar-mark">☠</div><div><h3 id="profileName">Người chơi</h3><span class="rank-chip" id="profileRank">Chưa có rank</span></div><button class="btn secondary" id="logoutBtn" type="button">Đăng xuất</button></div>
+        <div class="grid two" style="margin-top:20px"><div class="stat-tile"><small>RANK</small><strong id="profileRankValue">—</strong></div><div class="stat-tile"><small>SỐ DƯ XU</small><strong id="profileCoins">—</strong></div></div>
+        <p class="status" id="profileStatus" aria-live="polite">Đang chờ API hồ sơ.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUTH -->
+  <section class="section" id="auth">
+    <div class="container">
+      <div class="section-title">
+        <span class="eyebrow">ACCOUNT ACCESS</span>
+        <h2>Tài khoản <span class="gradient">Nightmare</span></h2>
+        <p>Đăng nhập hoặc đăng ký tài khoản trên hệ thống website.</p>
+      </div>
+
+      <div class="grid two">
+        <div class="panel">
+          <h3>🔐 Đăng nhập</h3>
+          <p class="form-note">Đăng nhập bằng tài khoản Minecraft đã có trong AuthMe của máy chủ.</p>
+          <form id="loginForm">
+            <div class="form-grid" style="margin-top:18px">
+              <div class="field full-width">
+                <label for="loginUser">Tên tài khoản hoặc email</label>
+                <input id="loginUser" name="username" autocomplete="username" required placeholder="Nhập tên tài khoản">
+              </div>
+              <div class="field full-width">
+                <label for="loginPass">Mật khẩu</label>
+                <input id="loginPass" name="password" type="password" autocomplete="current-password" required placeholder="Nhập mật khẩu">
+              </div>
+              <div class="field full-width">
+                <button class="btn primary full" type="submit">Đăng nhập</button>
+              </div>
             </div>
-        </section>
+          </form>
+          <p class="status" id="loginStatus" aria-live="polite"></p>
+        </div>
 
-        <section id="about" class="features">
-            <div class="feature-card">
-                <i class="fas fa-sword"></i>
-                <h3>Survival</h3>
-                <p>Sinh tồn cơ bản với các tính năng mới lạ, cộng đồng thân thiện.</p>
+        <div class="panel">
+          <h3>📝 Đăng ký</h3>
+          <p class="form-note">Tạo tài khoản website khi backend đăng ký đã sẵn sàng.</p>
+          <form id="registerForm">
+            <div class="form-grid" style="margin-top:18px">
+              <div class="field full-width">
+                <label for="registerUser">Tên tài khoản</label>
+                <input id="registerUser" name="username" autocomplete="username" required minlength="3" maxlength="32" placeholder="Tên tài khoản">
+              </div>
+              <div class="field full-width">
+                <label for="registerEmail">Email</label>
+                <input id="registerEmail" name="email" type="email" autocomplete="email" required placeholder="ban@example.com">
+              </div>
+              <div class="field full-width">
+                <label for="registerPass">Mật khẩu</label>
+                <input id="registerPass" name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="Ít nhất 8 ký tự">
+              </div>
+              <div class="field full-width">
+                <button class="btn secondary full" type="submit">Tạo tài khoản</button>
+              </div>
             </div>
-            <div class="feature-card">
-                <i class="fas fa-cube"></i>
-                <h3>Skyblock</h3>
-                <p>Xây dựng hòn đảo từ hư không, đua top nhận quà khủng.</p>
+          </form>
+          <p class="status" id="registerStatus" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <div class="notice">
+        🔐 Đăng nhập được xác thực qua backend HTTPS bằng tài khoản AuthMe hiện có.
+        Đăng ký website và các chức năng thanh toán vẫn cần được kiểm tra, tích hợp riêng.
+      </div>
+    </div>
+  </section>
+
+  <!-- DEPOSIT -->
+  <section class="section" id="deposit">
+    <div class="container">
+      <div class="section-title">
+        <span class="eyebrow">DEPOSIT CENTER</span>
+        <h2>Nạp tiền <span class="gradient">Nightmare</span></h2>
+        <p>Chọn phương thức nạp. Giao dịch thật cần được xử lý bởi backend hoặc nhà cung cấp thanh toán.</p>
+      </div>
+
+      <div class="deposit-tabs"><a class="deposit-tab active" href="#cardDeposit">💳 Thẻ cào</a><a class="deposit-tab" href="#bankDeposit">🏦 Chuyển khoản</a><a class="deposit-tab" href="#depositHistory">📜 Lịch sử nạp</a></div>
+      <div class="grid two">
+        <!-- CARD DEPOSIT -->
+        <div class="panel" id="cardDeposit">
+          <div class="card-icon">💳</div>
+          <h3>Nạp thẻ điện thoại</h3>
+          <p>Hỗ trợ các nhà mạng sau khi cấu hình cổng nạp thẻ.</p>
+
+          <form id="cardForm">
+            <div class="form-grid" style="margin-top:20px">
+              <div class="field full-width">
+                <label for="cardProvider">Nhà mạng</label>
+                <select id="cardProvider" required>
+                  <option value="">-- Chọn nhà mạng --</option>
+                  <option value="VIETTEL">Viettel</option>
+                  <option value="MOBIFONE">MobiFone</option>
+                  <option value="VINAPHONE">VinaPhone</option>
+                  <option value="OTHER">Nhà mạng khác</option>
+                </select>
+              </div>
+              <div class="field full-width">
+                <label for="cardAmount">Mệnh giá dự kiến</label>
+                <select id="cardAmount" required>
+                  <option value="">-- Chọn mệnh giá --</option>
+                  <option value="10000">10.000 VNĐ</option>
+                  <option value="20000">20.000 VNĐ</option>
+                  <option value="50000">50.000 VNĐ</option>
+                  <option value="100000">100.000 VNĐ</option>
+                  <option value="200000">200.000 VNĐ</option>
+                  <option value="500000">500.000 VNĐ</option>
+                </select>
+              </div>
+              <div class="field full-width">
+                <button class="btn primary full" type="submit">Tiếp tục nạp thẻ</button>
+              </div>
             </div>
-            <div class="feature-card">
-                <i class="fas fa-shield-alt"></i>
-                <h3>BedWars</h3>
-                <p>Chiến thuật bảo vệ giường đỉnh cao cùng đồng đội.</p>
+          </form>
+          <p class="status" id="cardStatus" aria-live="polite"></p>
+          <p class="form-note">
+            Không nhập mã thẻ hoặc số serial ở trang tĩnh này. Khi tích hợp,
+            hãy gửi giao dịch qua API HTTPS của nhà cung cấp uy tín.
+          </p>
+        </div>
+
+        <!-- BANK DEPOSIT -->
+        <div class="panel" id="bankDeposit">
+          <div class="card-icon">🏦</div>
+          <h3>Nạp qua ngân hàng</h3>
+          <p>Chuyển khoản bằng thông tin chính thức do chủ máy chủ cung cấp.</p>
+
+          <div class="bank-details">
+            <div class="bank-item">
+              <small>Ngân hàng</small>
+              <strong id="bankName">CHƯA CẤU HÌNH</strong>
             </div>
-        </section>
-
-        <section id="rules" class="rules">
-            <h2 class="section-title">Luật <span>Máy Chủ</span></h2>
-            <div class="rules-container">
-                <div class="rules-box">
-                    <h3><i class="fas fa-gavel"></i> Quy Định Chung</h3>
-                    <ul>
-                        <li>Không sử dụng hack/cheat/mod gây mất cân bằng.</li>
-                        <li>Không lợi dụng lỗi (bug) của server để trục lợi.</li>
-                        <li>Tôn trọng người chơi khác và đội ngũ Staff.</li>
-                        <li>Không quảng cáo các server khác dưới mọi hình thức.</li>
-                    </ul>
-                </div>
-                <div class="rules-box">
-                    <h3><i class="fas fa-comments"></i> Văn Hóa Chat</h3>
-                    <ul>
-                        <li>Không spam, viết hoa vô tội vạ (caps lock).</li>
-                        <li>Không văng tục, chửi thề, xúc phạm người khác.</li>
-                        <li>Không tranh luận về chính trị, tôn giáo, sắc tộc.</li>
-                        <li>Sử dụng ngôn ngữ lịch sự, phù hợp với mọi lứa tuổi.</li>
-                    </ul>
-                </div>
+            <div class="bank-item">
+              <small>Chủ tài khoản</small>
+              <strong id="bankOwner">CHƯA CẤU HÌNH</strong>
             </div>
-        </section>
-
-        <section id="store" class="store">
-            <h2 class="section-title">Cửa Hàng <span>Nổi Bật</span></h2>
-            
-            <!-- Store Filter Bar -->
-            <div class="store-filter">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Tìm kiếm gói vật phẩm...">
-                </div>
-                <div class="category-list">
-                    <button class="cat-btn active" data-category="all">Tất Cả</button>
-                    <button class="cat-btn" data-category="ranks">Gói Hạng (Ranks)</button>
-                    <button class="cat-btn" data-category="items">Vật Phẩm</button>
-                    <button class="cat-btn" data-category="coins">Tiền Tệ (Coins)</button>
-                </div>
+            <div class="bank-item">
+              <small>Số tài khoản</small>
+              <strong id="bankAccount">CHƯA CẤU HÌNH</strong>
             </div>
-
-            <div class="store-container">
-                <div class="store-card" data-category="ranks">
-                    <div class="rank-badge">VIP</div>
-                    <h3>Gói VIP</h3>
-                    <p class="price">150.000đ <span>/tháng</span></p>
-                    <ul>
-                        <li><i class="fas fa-check"></i> Prefix [VIP] nổi bật</li>
-                        <li><i class="fas fa-check"></i> Quyền bay lượn (/fly)</li>
-                        <li><i class="fas fa-check"></i> Kit VIP hàng tuần</li>
-                    </ul>
-                    <a href="#topup" class="buy-btn" style="text-decoration: none; display: inline-block;">Mua Ngay</a>
-                </div>
-                <div class="store-card premium" data-category="ranks">
-                    <div class="rank-badge">MVP</div>
-                    <h3>Gói MVP</h3>
-                    <p class="price">250.000đ <span>/tháng</span></p>
-                    <ul>
-                        <li><i class="fas fa-check"></i> Mọi quyền lợi của VIP</li>
-                        <li><i class="fas fa-check"></i> Prefix [MVP+] rực rỡ</li>
-                        <li><i class="fas fa-check"></i> Truy cập Server Full</li>
-                        <li><i class="fas fa-check"></i> Giảm 10% các gói khác</li>
-                    </ul>
-                    <a href="#topup" class="buy-btn" style="text-decoration: none; display: inline-block;">Mua Ngay</a>
-                </div>
-                <div class="store-card" data-category="coins">
-                    <div class="rank-badge">COINS</div>
-                    <h3>1.000 Coins</h3>
-                    <p class="price">500.000đ</p>
-                    <p>Dùng để mua vật phẩm trong game, nâng cấp kỹ năng.</p>
-                    <a href="#topup" class="buy-btn" style="text-decoration: none; display: inline-block;">Mua Ngay</a>
-                </div>
+            <div class="bank-item">
+              <small>Nội dung chuyển khoản</small>
+              <strong id="bankMemo">NAP TCYT [TÊN GAME]</strong>
             </div>
-        </section>
+          </div>
+          <div style="margin:20px 0;padding:18px;text-align:center;
+            background:#fff;border-radius:14px;color:#17121c">
+  <h3>☠ QR CHUYỂN KHOẢN</h3>
+  <img id="vietQrImage"
+       alt="Mã QR VietQR chuyển khoản NIGHTMARE TCYT"
+       style="display:block;width:100%;max-width:300px;
+              margin:14px auto;min-height:200px;object-fit:contain">
+  <p>Quét bằng ứng dụng ngân hàng để chuyển khoản</p>
+</div>
+          <button class="btn secondary full" id="copyMemo" type="button" style="margin-top:16px">
+            Sao chép nội dung chuyển khoản
+          </button>
 
-        <!-- Nạp Thẻ Section -->
-        <section id="topup" class="topup-section" style="background: #1a1a1a;">
-            <h2 class="section-title">Nạp Tiền <span>Hệ Thống</span></h2>
-            <div class="topup-grid">
-                <div class="topup-box">
-                    <h3><i class="fas fa-university"></i> Chuyển Khoản</h3>
-                    <div class="bank-info">
-                        <p><strong>Ngân hàng:</strong> MB BANK</p>
-                        <p><strong>Số TK:</strong> 0935420269</p>
-                        <p><strong>Chủ TK:</strong> NGUYEN VAN AN</p>
-                        <p><strong>Nội dung:</strong> <span style="color: #4CAF50;">NAP [Ten_In_Game]</span></p>
-                    </div>
-                    <div style="text-align: center; margin-top: 20px;">
-                        <img src="https://img.vietqr.io/image/MB-0935420269-compact2.png?accountName=NGUYEN%20VAN%20AN&addInfo=NAP%20TEN_CUA_BAN" alt="QR" style="width: 180px; border-radius: 10px; border: 4px solid #fff;">
-                    </div>
-                </div>
-                <div class="topup-box">
-                    <h3><i class="fas fa-credit-card"></i> Nạp Thẻ Cào</h3>
-                    <form class="topup-form" id="topupCardForm">
-                        <input type="text" id="username" placeholder="Tên tài khoản trong game" required>
-                        <select id="cardType" required>
-                            <option value="">-- Loại thẻ --</option>
-                            <option value="viettel">Viettel</option>
-                            <option value="mobifone">Mobifone</option>
-                            <option value="vinaphone">Vinaphone</option>
-                        </select>
-                        <select id="cardAmount" required>
-                            <option value="">-- Mệnh giá --</option>
-                            <option value="20000">20.000đ</option>
-                            <option value="50000">50.000đ</option>
-                            <option value="100000">100.000đ</option>
-                            <option value="200000">200.000đ</option>
-                            <option value="500000">500.000đ</option>
-                        </select>
-                        <input type="text" id="cardCode" placeholder="Mã số thẻ" required>
-                        <input type="text" id="cardSeri" placeholder="Số seri" required>
-                        <button type="submit" class="buy-btn">Gửi Thẻ Ngay</button>
-                    </form>
-                </div>
+          <div class="divider"></div>
+
+          <form id="bankForm">
+            <div class="field">
+              <label for="gameName">Tên nhân vật Minecraft</label>
+              <input id="gameName" required maxlength="32" placeholder="Nhập tên trong game">
             </div>
-        </section>
-
-        <!-- Bảng Xếp Hạng Section -->
-        <section id="leaderboard" class="top-nap-section">
-            <h2 class="section-title">Bảng Xếp Hạng <span>Đại Gia</span></h2>
-            <div class="leaderboard-container">
-                <table class="leaderboard-table">
-                    <thead>
-                        <tr>
-                            <th>Hạng</th>
-                            <th>Người Chơi</th>
-                            <th>Số Tiền</th>
-                            <th>Danh Hiệu</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leaderboard-body">
-                        <tr><td colspan="4" style="text-align: center; padding: 40px;">Đang tải dữ liệu...</td></tr>
-                    </tbody>
-                </table>
+            <div class="field" style="margin-top:13px">
+              <label for="transactionRef">Mã giao dịch ngân hàng (nếu có)</label>
+              <input id="transactionRef" maxlength="100" placeholder="Mã tham chiếu giao dịch">
             </div>
+            <button class="btn primary full" type="submit" style="margin-top:16px">
+              Kiểm tra giao dịch
+            </button>
+          </form>
+          <p class="status" id="bankStatus" aria-live="polite"></p>
+          <p class="form-note">
+            Không nhập PIN, mật khẩu ngân hàng hoặc OTP. Biểu mẫu này chưa xác minh
+            giao dịch và chưa tự cộng tiền trong game.
+          </p>
+        </div>
+      </div>
 
-            <!-- Recent Donators -->
-            <div class="recent-donators">
-                <h4><i class="fas fa-history"></i> Ủng hộ gần đây</h4>
-                <div id="recent-donators-list">
-                    <p style="text-align: center; font-size: 12px; color: #888; padding: 10px;">Đang tải...</p>
-                </div>
-            </div>
-        </section>
+      <div class="notice">
+        🔒 Chỉ chuyển tiền khi đã xác minh đúng chủ tài khoản và thông tin thanh toán.
+        Website GitHub Pages tĩnh không thể tự xác nhận chuyển khoản hoặc cộng điểm.
+      </div>
+    </div>
+  </section>
 
-        <section id="vote" class="vote">
-            <h2 class="section-title">Bình Chọn <span>Server</span></h2>
-            <p>Vote mỗi ngày để nhận phần quà hấp dẫn và giúp server phát triển hơn!</p>
-            <div class="vote-grid">
-                <a href="https://topg.org/minecraft-servers/server-682658#vote" target="_blank" class="vote-card">
-                    <i class="fas fa-vote-yea"></i>
-                    <h3>TopG.org</h3>
-                    <p>Nhận ngay 500 Coins mỗi lần Vote</p>
-                </a>
-                <a href="https://minecraft-mp.com/server/358544/vote/" target="_blank" class="vote-card">
-                    <i class="fas fa-vote-yea"></i>
-                    <h3>Minecraft-MP</h3>
-                    <p>Cơ hội nhận Key Crate may mắn</p>
-                </a>
-                <a href="https://minecraftservers.org/vote/687978" target="_blank" class="vote-card">
-                    <i class="fas fa-vote-yea"></i>
-                    <h3>MC-Servers</h3>
-                    <p>Hỗ trợ server tăng hạng Top</p>
-                </a>
-            </div>
-        </section>
-        <section id="staff" class="staff">
-            <h2 class="section-title">Đội Ngũ <span>Quản Trị</span></h2>
-            <div class="staff-container">
-                <div class="staff-card">
-                    <div class="staff-img"><img src="https://crafatar.com/avatars/AnNgTV?size=100&overlay" alt="Nguyễn Văn An"></div>
-                    <h3>Nguyễn Văn An</h3>
-                    <p class="role owner">Owner & Dev</p>
-                    <p>Người sáng lập và chịu trách nhiệm phát triển chính cho hệ thống server.</p>
-                </div>
-                <div class="staff-card">
-                    <div class="staff-img"><img src="https://crafatar.com/avatars/606e2cbd-028a-4db0-97d3-570720444c12?size=100&overlay" alt="Thành Nam"></div>
-                    <h3>Thành Nam</h3>
-                    <p class="role admin">Admin</p>
-                    <p>Quản lý vận hành, xử lý vi phạm và hỗ trợ kỹ thuật trực tiếp cho người chơi.</p>
-                </div>
-                <div class="staff-card">
-                    <div class="staff-img"><img src="https://crafatar.com/avatars/8667ba71-b850-4eb0-9302-310231023102?size=100&overlay" alt="Ngọc Sơn"></div>
-                    <h3>Ngọc Sơn</h3>
-                    <p class="role moderator" style="background: #9b59b6;">Dev</p>
-                    <p>Phát triển các tính năng mới, tối ưu hóa plugin và duy trì ổn định máy chủ.</p>
-                </div>
-            </div>
-        </section>
-        <section id="contact" class="contact">
-            <h2 class="section-title">Kết Nối <span>Cộng Đồng</span></h2>
-            <div class="contact-container">
-                <a href="https://discord.com/users/an26_09_" target="_blank" class="contact-card discord">
-                    <i class="fab fa-discord"></i>
-                    <h3>Discord</h3>
-                    <p>an26_09_</p>
-                </a>
-                <a href="https://facebook.com/anngtvvn" target="_blank" class="contact-card facebook">
-                    <i class="fab fa-facebook"></i>
-                    <h3>Facebook</h3>
-                    <p>anngtvvn</p>
-                </a>
-                <a href="mailto:nguyenvanan.20092010@gmail.com" class="contact-card email">
-                    <i class="fas fa-envelope"></i>
-                    <h3>Email</h3>
-                    <p>nguyenvanan.20092010@gmail.com</p>
-                </a>
-            </div>
-        </section>
+  <section class="section" id="depositHistory">
+    <div class="container"><div class="section-title"><span class="eyebrow">TRANSACTION HISTORY</span><h2>Lịch sử <span class="gradient">nạp xu</span></h2><p>Ngày giờ, số tiền và phương thức của từng giao dịch đã xác minh.</p></div>
+      <div class="panel"><div class="table-wrap"><table class="history-table"><thead><tr><th>Ngày giờ</th><th>Phương thức</th><th>Số tiền</th><th>Trạng thái</th></tr></thead><tbody id="depositHistoryRows"><tr><td colspan="4" class="empty-cell">Đăng nhập để tải lịch sử giao dịch.</td></tr></tbody></table></div><p class="form-note" id="historyStatus">Lịch sử chỉ lấy từ backend, không dùng dữ liệu mẫu.</p></div>
+    </div>
+  </section>
 
-        <section id="faq" class="faq">
-            <h2 class="section-title">Câu Hỏi <span>Thường Gặp</span></h2>
-            <div class="faq-container">
-                <div class="faq-item">
-                    <div class="faq-question">Làm sao để tham gia server? <i class="fas fa-chevron-down"></i></div>
-                    <div class="faq-answer">Bạn chỉ cần mở Minecraft, chọn Multiplayer -> Add Server và nhập địa chỉ IP: comet.pikamc.vn:25870</div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question">Server hỗ trợ phiên bản nào? <i class="fas fa-chevron-down"></i></div>
-                    <div class="faq-answer">Chúng tôi hỗ trợ từ phiên bản 1.16.5 đến 1.20.x mới nhất.</div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question">Làm sao để nạp thẻ/mua rank? <i class="fas fa-chevron-down"></i></div>
-                    <div class="faq-answer">Bạn có thể truy cập phần Cửa hàng trên website hoặc dùng lệnh /napthe trong game.</div>
-                </div>
-            </div>
-        </section>
-    </main>
+  <section class="section" id="wheel">
+    <div class="container"><div class="section-title"><span class="eyebrow">DAILY LUCKY SPIN</span><h2>Vòng quay <span class="gradient">may mắn</span></h2><p>Mỗi tài khoản có tối đa 2 lượt quay miễn phí mỗi ngày.</p></div>
+      <div class="grid two">
+        <div class="panel wheel-panel"><div class="wheel-disc" aria-label="Vòng quay phần thưởng"><span>🪙</span><b>LUCKY<br>SPIN</b></div><p class="spin-count">Lượt còn lại hôm nay: <strong id="spinRemaining">— / 2</strong></p><button class="btn primary full" id="spinButton" type="button" disabled>Đăng nhập để quay</button><p class="status" id="spinStatus" aria-live="polite">Vòng quay đang chờ tích hợp API xác thực.</p></div>
+        <div class="panel"><h3>🎁 Danh sách phần thưởng</h3><div class="prize-grid"><span>1 xu</span><span>3 xu</span><span>5 xu</span><span>10 xu</span><span>20 xu</span><span>50 xu</span><span>100 xu</span><span>1.000 xu</span><span class="miss-prize">May mắn lần sau</span></div><p class="form-note">Tỉ lệ nhận 100–1.000 xu dự kiến 5–8%. Tỉ lệ chính thức phải được cấu hình và công khai ở backend trước khi mở quay.</p><div class="divider"></div><h3>🧩 Nhiệm vụ nhận lượt quay</h3><p class="form-note">Hoàn thành nhiệm vụ vượt liên kết / lấy mã nhiệm vụ hợp lệ để nhận thêm 1 lượt quay. Không tự cộng lượt nếu backend chưa xác minh.</p><button class="btn secondary full" id="taskButton" type="button" disabled>Nhiệm vụ đang cập nhật</button></div>
+      </div>
+    </div>
+  </section>
 
-    <footer>
-        <p>&copy; 2026 Minecraft Server VN. All rights reserved.</p>
-        <p style="font-size: 10px; color: #555; margin-top: 5px;">Cập nhật lần cuối: 29/05/2026 22:50 (Hệ thống đã làm mới)</p>
-    </footer>
+  <section class="section" id="community">
+    <div class="container">
+      <div class="community">
+        <span class="eyebrow">JOIN THE COMMUNITY</span>
+        <h2>Bóng tối đang gọi.<br><span class="gradient">Bạn đã sẵn sàng?</span></h2>
+        <p>Kết nối với cộng đồng NIGHTMARE TCYT để theo dõi thông tin và hoạt động của máy chủ.</p>
+        <div class="actions">
+          <a class="btn primary" href="#auth">🔐 Tài khoản</a>
+          <a class="btn secondary" href="#deposit">💳 Nạp tiền</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <button id="back-to-top" title="Lên đầu trang"><i class="fas fa-chevron-up"></i></button>
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section-title">
+        <span class="eyebrow">HELP CENTER</span>
+        <h2>Thông tin <span class="gradient">quan trọng</span></h2>
+      </div>
 
-    <!-- Minecraft Background Music (C418) -->
-    <button id="music-toggle" title="Bật/Tắt nhạc nền"><i class="fas fa-music"></i></button>
-    <audio id="bg-music" loop>
-        <source src="https://www.soundboard.com/handler/DownLoadTrack.ashx?cliptitle=Minecraft+Main+Theme&filename=24/244301-b58097b3-c1f9-4674-884c-3238166d113f.mp3" type="audio/mpeg">
-    </audio>
+      <div class="grid">
+        <article class="card">
+          <h3>🔐 Auth hoạt động thế nào?</h3>
+          <p>AuthMe trong game không đồng nghĩa với tài khoản website. Muốn dùng chung tài khoản cần backend hoặc API tích hợp phù hợp.</p>
+        </article>
+        <article class="card">
+          <h3>💳 Nạp tiền có tự động không?</h3>
+          <p>Chưa. Cần API cổng nạp thẻ hoặc dịch vụ thanh toán ngân hàng và backend kiểm tra giao dịch.</p>
+        </article>
+        <article class="card">
+          <h3>🪙 Tiền được cộng ở đâu?</h3>
+          <p>Cần tích hợp hệ thống kinh tế hoặc điểm của máy chủ Minecraft để cộng tiền sau khi giao dịch được xác nhận.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
 
-    <script src="assets/js/config.js?v=1.3"></script>
-    <script src="assets/js/main.js?v=1.3"></script>
-    <script>
-        // 1. XỬ LÝ NẠP THẺ CÀO
-        const topupForm = document.getElementById('topupCardForm');
-        if (topupForm) {
-            topupForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const btn = e.target.querySelector('button');
-                const originalText = btn.innerText;
-                
-                btn.innerText = 'Đang xử lý...';
-                btn.disabled = true;
+  <section class="section" id="support">
+    <div class="container"><div class="section-title"><span class="eyebrow">SUPPORT CENTER</span><h2>Trung tâm <span class="gradient">hỗ trợ</span></h2><p>Chọn đúng kênh để được hỗ trợ nhanh hơn.</p></div>
+      <div class="grid">
+        <article class="card"><div class="card-icon">👑</div><h3>Owner / Admin</h3><p id="ownerDiscordText">Discord Owner/Admin chưa cấu hình.</p><a class="btn secondary full" id="ownerDiscord" href="#support" aria-disabled="true">Liên hệ Owner/Admin</a></article>
+        <article class="card"><div class="card-icon">💬</div><h3>Discord máy chủ</h3><p id="serverDiscordText">Cộng đồng NIGHTMARE TCYT.</p><a class="btn secondary full" id="serverDiscord" href="#support" aria-disabled="true">Tham gia Discord</a></article>
+        <article class="card"><div class="card-icon">✉️</div><h3>Email hỗ trợ</h3><p id="supportEmailText">Email hỗ trợ chưa cấu hình.</p><a class="btn secondary full" id="supportEmail" href="#support" aria-disabled="true">Gửi email</a></article>
+      </div>
+      <div class="panel" style="margin-top:18px"><h3>🎫 Tạo ticket hỗ trợ</h3><p class="form-note">Gửi yêu cầu hỗ trợ về tài khoản, nạp xu hoặc lỗi trong game. Ticket sẽ chỉ được tạo khi backend/tích hợp Discord hoạt động.</p><form id="ticketForm" class="form-grid" style="margin-top:16px"><div class="field"><label for="ticketTopic">Chủ đề</label><select id="ticketTopic" required><option value="account">Tài khoản</option><option value="deposit">Nạp xu / giao dịch</option><option value="game">Lỗi trong game</option><option value="other">Khác</option></select></div><div class="field"><label for="ticketContact">Tên Minecraft / email liên hệ</label><input id="ticketContact" required maxlength="100" placeholder="Thông tin liên hệ"></div><div class="field full-width"><label for="ticketMessage">Nội dung cần hỗ trợ</label><textarea id="ticketMessage" required rows="4" maxlength="1500" placeholder="Mô tả vấn đề của bạn..."></textarea></div><div class="field full-width"><button class="btn primary full" type="submit">Gửi yêu cầu hỗ trợ</button></div></form><p class="status" id="ticketStatus" aria-live="polite"></p></div>
+    </div>
+  </section>
 
-                try {
-                    const response = await fetch(`${API_BASE}/api/card-recharge`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            user: document.getElementById('username').value,
-                            type: document.getElementById('cardType').value,
-                            amount: document.getElementById('cardAmount').value,
-                            code: document.getElementById('cardCode').value,
-                            seri: document.getElementById('cardSeri').value
-                        })
-                    });
-                    const result = await response.json();
-                    alert(result.message);
-                    if (result.status === 'success') topupForm.reset();
-                } catch (err) {
-                    alert('Lỗi: Không thể kết nối đến máy chủ nạp tiền!');
-                } finally {
-                    btn.innerText = originalText;
-                    btn.disabled = false;
-                }
-            });
-        }
+<footer>
+  <div class="container footer-row">
+    <span>© <span id="year"></span> NIGHTMARE TCYT. All Rights Reserved.</span>
+    <span>⛏ Minecraft Server · Enter the Darkness ☠</span>
+  </div>
+</footer>
 
-        // 2. TẢI BẢNG XẾP HẠNG (TOP NẠP)
-        async function loadLeaderboard() {
-            const tbody = document.getElementById('leaderboard-body');
-            if (!tbody) return;
+<script>
+  /*
+   * NIGHTMARE TCYT CONFIG
+   *
+   * Chỉ điền thông tin ngân hàng được phép công khai.
+   * Không đặt API secret, token hoặc mật khẩu trong JavaScript phía trình duyệt.
+   */
+  const CONFIG = {
+    serverIp: "nmtcyt.funserver.top",
 
-            try {
-                const response = await fetch(`${API_BASE}/api/top-recharge`);
-                if (!response.ok) throw new Error('Network response was not ok');
-                
-                const data = await response.json();
-                
-                tbody.innerHTML = '';
-                if (!data || data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 40px; color: #aaa;"><i class="fas fa-info-circle"></i> Chưa có dữ liệu nạp thẻ tháng này. <br> Hãy là người đầu tiên leo Top!</td></tr>';
-                    return;
-                }
+    // Điền sau khi xác minh thông tin tài khoản nhận tiền.
+    bankName: "MB/MOMO/ZaloPay",
+    bankOwner: "NGUYEN VAN AN",
+    bankAccount: "0935420269",
+    bankMemoPrefix: "NAP TCYT",
 
-                data.forEach((item, index) => {
-                    const rank = index + 1;
-                    let rankDisplay = rank;
-                    let rowClass = '';
-                    let badge = '-';
+    // Chỉ cấu hình sau khi có backend thật.
+    apiBaseUrl: "https://minecraftrechargebackend.onrender.com",
+    bedrockPort: "", // Điền cổng Bedrock đã xác minh.
+    ownerDiscordUrl: "", // Link Discord Owner/Admin.
+    serverDiscordUrl: "", // Link mời Discord máy chủ.
+    supportEmail: "" // Email hỗ trợ công khai.
+  };
 
-                    if (rank === 1) {
-                        rankDisplay = '<i class="fas fa-medal" style="color: #ffd700;"></i> 1';
-                        rowClass = 'top-1';
-                        badge = '<span class="badge gold">Chúa Tể Đồ Sơn</span>';
-                    } else if (rank === 2) {
-                        rankDisplay = '<i class="fas fa-medal" style="color: #c0c0c0;"></i> 2';
-                        rowClass = 'top-2';
-                        badge = '<span class="badge silver">Đại Phú Hộ</span>';
-                    } else if (rank === 3) {
-                        rankDisplay = '<i class="fas fa-medal" style="color: #cd7f32;"></i> 3';
-                        rowClass = 'top-3';
-                        badge = '<span class="badge bronze">Thương Gia</span>';
-                    }
+  const $ = id => document.getElementById(id);
 
-                    tbody.innerHTML += `
-                        <tr class="${rowClass}">
-                            <td>${rankDisplay}</td>
-                            <td><div class="player-info"><i class="fas fa-user-circle"></i> ${item.username}</div></td>
-                            <td>${item.total.toLocaleString()}đ</td>
-                            <td>${badge}</td>
-                        </tr>
-                    `;
-                });
-            } catch (error) {
-                console.error('Leaderboard Fetch Error:', error);
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #ff4d4d; padding: 40px;"><i class="fas fa-exclamation-triangle"></i> Không thể kết nối đến máy chủ.<br><small>Vui lòng thử lại sau hoặc liên hệ Admin.</small></td></tr>';
-            }
-        }
+  $("year").textContent = new Date().getFullYear();
+  $("serverIp").textContent = CONFIG.serverIp;
 
-        // Khởi động khi trang load
-        document.addEventListener('DOMContentLoaded', loadLeaderboard);
-    </script>
+  $("bankName").textContent = CONFIG.bankName || "MB/MOMO/ZALOPAY";
+  $("bankOwner").textContent = CONFIG.bankOwner || "NGUYEN VAN AN";
+  $("bankAccount").textContent = CONFIG.bankAccount ||"0935420269";
+
+  function getBankMemo() {
+    const name = $("gameName").value.trim();
+    return CONFIG.bankMemoPrefix + (name ? " " + name : " [TÊN GAME]");
+  }
+
+  function refreshMemo() {
+  const memo = getBankMemo();
+  $("bankMemo").textContent = memo;
+
+  const qrUrl =
+    "https://img.vietqr.io/image/MB-" +
+    encodeURIComponent(CONFIG.bankAccount) +
+    "-compact2.png?addInfo=" +
+    encodeURIComponent(memo) +
+    "&accountName=" +
+    encodeURIComponent(CONFIG.bankOwner);
+
+  $("vietQrImage").src = qrUrl;
+}
+
+refreshMemo();
+  async function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+
+    const input = document.createElement("textarea");
+    input.value = text;
+    input.style.position = "fixed";
+    input.style.opacity = "0";
+    document.body.appendChild(input);
+    input.select();
+
+    const success = document.execCommand("copy");
+    input.remove();
+    return success;
+  }
+
+  $("copyIp").addEventListener("click", async () => {
+    try {
+      const ok = await copyText(CONFIG.serverIp);
+      $("copyStatus").textContent = ok
+        ? "✓ Đã sao chép IP máy chủ!"
+        : "Không thể sao chép tự động. Hãy sao chép IP thủ công.";
+    } catch {
+      $("copyStatus").textContent = "Không thể sao chép. Hãy sao chép IP thủ công.";
+    }
+  });
+
+  $("copyMemo").addEventListener("click", async () => {
+    refreshMemo();
+
+    try {
+      const ok = await copyText(getBankMemo());
+      $("bankStatus").textContent = ok
+        ? "Đã sao chép nội dung chuyển khoản."
+        : "Không thể sao chép tự động.";
+    } catch {
+      $("bankStatus").textContent = "Không thể sao chép tự động.";
+    }
+  });
+
+  /*
+   * Các biểu mẫu bên dưới CHƯA gửi dữ liệu đi đâu cả.
+   * Chỉ kết nối sau khi đã triển khai backend HTTPS và xác thực an toàn.
+   */
+
+  $("loginForm").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const status = $("loginStatus");
+    const button = form.querySelector('button[type="submit"]');
+    const originalText = button.textContent;
+    const username = $("loginUser").value.trim();
+    const password = $("loginPass").value;
+    const apiBaseUrl = String(CONFIG.apiBaseUrl || "").replace(/\/+$/, "");
+
+    if (!apiBaseUrl) {
+      status.textContent = "Backend chưa được cấu hình. Vui lòng thử lại sau.";
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Đang đăng nhập...";
+    status.textContent = "";
+
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
+
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        throw new Error(`Backend trả về phản hồi không hợp lệ (HTTP ${response.status}).`);
+      }
+
+      if (!response.ok || data.status !== "success" || !data.token) {
+        throw new Error(data.message || `Đăng nhập thất bại (HTTP ${response.status}).`);
+      }
+
+      localStorage.setItem("mc_token", data.token);
+      localStorage.setItem("mc_user", data.username || username);
+      status.textContent = `✓ Đăng nhập thành công: ${data.username || username}`;
+      loadProfile();
+    } catch (error) {
+      console.error("NIGHTMARE TCYT login error:", error);
+      if (error instanceof TypeError) {
+        status.textContent = "Không gọi được API. Kiểm tra URL backend, trạng thái Render và CORS.";
+      } else {
+        status.textContent = error.message || "Không thể đăng nhập. Vui lòng thử lại.";
+      }
+    } finally {
+      button.disabled = false;
+      button.textContent = originalText;
+    }
+  });
+
+  
+$("registerForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const status = $("registerStatus");
+  const button = form.querySelector('button[type="submit"]');
+  const originalText = button.textContent;
+
+  const username = $("registerUser").value.trim();
+  const password = $("registerPass").value;
+  const apiBaseUrl = String(CONFIG.apiBaseUrl || "").replace(/\/+$/, "");
+
+  if (!apiBaseUrl) {
+    status.textContent = "Backend chưa được cấu hình.";
+    return;
+  }
+
+  if (!/^[A-Za-z0-9_]{3,16}$/.test(username)) {
+    status.textContent =
+      "Tên Minecraft phải có 3–16 ký tự, gồm chữ, số hoặc dấu gạch dưới.";
+    return;
+  }
+
+  if (password.length < 8) {
+    status.textContent = "Mật khẩu phải có ít nhất 8 ký tự.";
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "Đang đăng ký...";
+  status.textContent = "";
+
+  try {
+    const response = await fetch(
+      `${apiBaseUrl}/api/auth/register`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || data.status !== "success") {
+      throw new Error(data.message || "Đăng ký thất bại.");
+    }
+
+    status.textContent =
+      "✓ " + (data.message || "Đăng ký thành công!") +
+      " Hãy đăng nhập bằng tài khoản vừa tạo.";
+
+    form.reset();
+  } catch (error) {
+    console.error("Register error:", error);
+    status.textContent =
+      error instanceof TypeError
+        ? "Không kết nối được backend. Hãy kiểm tra Render và CORS."
+        : error.message;
+  } finally {
+    button.disabled = false;
+    button.textContent = originalText;
+  }
+  });
+
+  $("cardForm").addEventListener("submit", event => {
+    event.preventDefault();
+    $("cardStatus").textContent =
+      "☠ NẠP THẺ CÀO TẠM THỜI CHƯA KHẢ DỤNG!Hệ thống nạp thẻ cào NIGHTMARE TCYT đang trong quá trình tích hợp. Vui lòng sử dụng phương thức chuyển khoản ngân hàng nếu đã được kích hoạt. Hiện tại, hệ thống chưa tiếp nhận giao dịch thẻ cào. Vui lòng không gửi mã thẻ khi tính năng chưa hoạt động. Hãy liên hệ Admin/Owner để hỗ trợ!";
+  });
+
+  $("bankForm").addEventListener("submit", event => {
+    event.preventDefault();
+    $("bankStatus").textContent =
+      "Chưa kết nối API kiểm tra giao dịch. Thông tin vừa nhập chưa được gửi đi và giao dịch chưa được xác minh.";
+  });
+
+  // Menu điện thoại.
+  const menuBtn = $("menuBtn");
+  const navLinks = $("navLinks");
+
+  menuBtn.addEventListener("click", () => {
+    const open = navLinks.classList.toggle("open");
+    menuBtn.textContent = open ? "✕" : "☰";
+    menuBtn.setAttribute("aria-expanded", String(open));
+  });
+
+  navLinks.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      navLinks.classList.remove("open");
+      menuBtn.textContent = "☰";
+      menuBtn.setAttribute("aria-expanded", "false");
+    });
+  });
+
+  // NIGHTMARE TCYT portal modules — live status is public; account data stays server-side.
+  const API = String(CONFIG.apiBaseUrl || "").replace(/\/+$/, "");
+  const token = () => localStorage.getItem("mc_token") || "";
+  const setText = (id, value) => { const el = $(id); if (el) el.textContent = value; };
+  async function fetchServerStatus() {
+    const host = String(CONFIG.serverIp || "nmtcyt.funserver.top");
+    try {
+      const res = await fetch(`https://api.mcsrvstat.us/3/${encodeURIComponent(host)}`, {cache:"no-store"});
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const online = data.online === true;
+      setText("serverState", online ? "ONLINE" : "OFFLINE");
+      setText("onlinePlayers", online ? (data.players?.online ?? 0) : 0);
+      setText("maxPlayers", online ? (data.players?.max ?? "?") : "?");
+      setText("serverVersion", online ? (data.version || "Không rõ") : "Offline");
+      const dot = $("liveDot"); if (dot) dot.className = `live-dot ${online ? "online" : "offline"}`;
+      if (online && Array.isArray(data.players?.list) && data.players.list.length) setText("activityNotice", `Đang có ${data.players.online} người chơi trực tuyến. Lịch sử theo giờ chưa được cung cấp.`);
+    } catch (e) {
+      setText("serverState", "Không xác định"); setText("onlinePlayers", "?"); setText("maxPlayers", "?"); setText("serverVersion", "Chưa lấy được dữ liệu");
+      console.warn("Server status unavailable", e);
+    }
+  }
+  async function loadProfile() {
+    const hasToken = !!token();
+    if (!hasToken) { $("profileLocked").hidden = false; $("profileContent").hidden = true; setText("spinButton", "Đăng nhập để quay"); return; }
+    $("profileLocked").hidden = true; $("profileContent").hidden = false;
+    setText("profileStatus", "Đang tải hồ sơ...");
+    try {
+      const r = await fetch(`${API}/api/profile`, {headers:{Authorization:`Bearer ${token()}`}});
+      const d = await r.json();
+      if (!r.ok || d.status !== "success" || !d.profile) throw new Error(d.message || `API hồ sơ chưa sẵn sàng (HTTP ${r.status})`);
+      const p = d.profile;
+      setText("profileName", p.username || localStorage.getItem("mc_user") || "Người chơi");
+      setText("profileRank", p.rank || "Member"); setText("profileRankValue", p.rank || "Member");
+      setText("profileCoins", Number(p.coins ?? p.balance ?? 0).toLocaleString("vi-VN"));
+      setText("profileStatus", "Hồ sơ đã được tải từ máy chủ.");
+      setText("spinButton", "Quay miễn phí");
+      loadHistory(); loadSpinInfo();
+    } catch (e) { setText("profileStatus", `${e.message}. Cần triển khai endpoint /api/profile ở backend.`); }
+  }
+  async function loadHistory() {
+    if (!token()) return;
+    const body = $("depositHistoryRows"); if (!body) return;
+    try {
+      const r = await fetch(`${API}/api/recharge/history`, {headers:{Authorization:`Bearer ${token()}`}});
+      const d = await r.json();
+      if (!r.ok || !Array.isArray(d.transactions)) throw new Error("API lịch sử chưa sẵn sàng");
+      body.replaceChildren();
+      if (!d.transactions.length) { body.innerHTML = '<tr><td colspan="4" class="empty-cell">Chưa có giao dịch đã xác minh.</td></tr>'; return; }
+      for (const item of d.transactions) {
+        const tr = document.createElement("tr");
+        const date = new Date(item.createdAt || item.created_at || item.date);
+        const vals = [Number.isNaN(date.getTime()) ? "—" : date.toLocaleString("vi-VN"), String(item.method || "—"), `${Number(item.amount || 0).toLocaleString("vi-VN")} đ`, String(item.status || "Đang xử lý")];
+        vals.forEach(v => { const td = document.createElement("td"); td.textContent = v; tr.appendChild(td); }); body.appendChild(tr);
+      }
+      setText("historyStatus", "Dữ liệu giao dịch do backend cung cấp.");
+    } catch (e) { setText("historyStatus", "Chưa thể tải lịch sử: API /api/recharge/history chưa được xác nhận."); }
+  }
+  async function loadSpinInfo() {
+    if (!token()) return;
+    try { const r = await fetch(`${API}/api/wheel/status`, {headers:{Authorization:`Bearer ${token()}`}}); const d = await r.json(); if (!r.ok) throw new Error(); setText("spinRemaining", `${Number(d.remaining ?? 0)} / 2`); $("spinButton").disabled = Number(d.remaining ?? 0) < 1; $("spinButton").textContent = Number(d.remaining ?? 0) > 0 ? "Quay miễn phí" : "Đã hết lượt hôm nay"; }
+    catch { setText("spinRemaining", "API chưa kết nối / 2"); }
+  }
+  document.querySelectorAll("[data-copy]").forEach(btn => btn.addEventListener("click", async () => { const el = $(btn.dataset.copy); if (!el) return; try { await copyText(el.textContent.trim()); btn.textContent = "Đã sao chép"; setTimeout(() => btn.textContent = "Sao chép", 1600); } catch { /* Clipboard may be unavailable */ } }));
+  $("logoutBtn")?.addEventListener("click", () => { localStorage.removeItem("mc_token"); localStorage.removeItem("mc_user"); $("profileLocked").hidden = false; $("profileContent").hidden = true; setText("profileStatus", ""); $("depositHistoryRows").innerHTML = '<tr><td colspan="4" class="empty-cell">Đăng nhập để tải lịch sử giao dịch.</td></tr>'; });
+  $("spinButton")?.addEventListener("click", async () => { if (!token()) { setText("spinStatus", "Vui lòng đăng nhập trước."); return; } const b = $("spinButton"); b.disabled = true; setText("spinStatus", "Đang gửi yêu cầu quay..."); try { const r = await fetch(`${API}/api/wheel/spin`, {method:"POST",headers:{Authorization:`Bearer ${token()}`}}); const d = await r.json(); if (!r.ok || d.status !== "success") throw new Error(d.message || "Vòng quay chưa được kích hoạt."); setText("spinStatus", `🎉 ${d.message || `Bạn nhận được ${d.reward} xu!`}`); loadProfile(); } catch(e) { setText("spinStatus", `${e.message} Không tự trừ lượt hoặc cộng xu ở trình duyệt.`); } finally { b.disabled = false; loadSpinInfo(); } });
+  $("taskButton")?.addEventListener("click", () => setText("spinStatus", "Nhiệm vụ nhận lượt đang chờ API xác minh liên kết và mã hoàn thành."));
+  $("ticketForm")?.addEventListener("submit", async e => { e.preventDefault(); const status = $("ticketStatus"); if (!token()) { status.textContent = "Vui lòng đăng nhập trước khi tạo ticket."; return; } status.textContent = "Backend ticket chưa được cấu hình; nội dung chưa được gửi đi."; });
+  setText("javaAddress", CONFIG.serverIp || "Chưa cấu hình");
+  setText("bedrockAddress", CONFIG.serverIp || "Chưa cấu hình");
+  setText("bedrockPort", CONFIG.bedrockPort || "Chưa xác nhận");
+  const contactLinks = [["ownerDiscord", CONFIG.ownerDiscordUrl], ["serverDiscord", CONFIG.serverDiscordUrl]];
+  contactLinks.forEach(([id, url]) => { if (url) { $(id).href = url; $(id).target = "_blank"; $(id).rel = "noopener noreferrer"; $(id).removeAttribute("aria-disabled"); } });
+  if (CONFIG.supportEmail) { $("supportEmail").href = `mailto:${CONFIG.supportEmail}`; $("supportEmail").removeAttribute("aria-disabled"); setText("supportEmailText", CONFIG.supportEmail); }
+  fetchServerStatus(); setInterval(fetchServerStatus, 30000);
+  loadProfile();
+
+</script>
 </body>
 </html>
- 
