@@ -227,8 +227,10 @@ async function lookupAccount() {
 
         if (res.status === 'success') {
             document.getElementById('res-username').innerText = res.data.username;
-            document.getElementById('res-points').innerText = res.data.points.toLocaleString();
-            document.getElementById('res-rank').innerText = res.data.rank;
+            document.getElementById('res-points').innerText = res.data.points == null ? 'Chưa đồng bộ' : Number(res.data.points).toLocaleString('vi-VN') + ' xu';
+            document.getElementById('res-rank').innerText = res.data.rank || 'Chưa xác định';
+            const balanceNode = document.getElementById('res-balance');
+            if (balanceNode) balanceNode.innerText = res.data.balance == null ? 'Chưa đồng bộ' : Number(res.data.balance).toLocaleString('vi-VN') + 'đ';
             document.getElementById('res-total').innerText = res.data.totalRecharge.toLocaleString() + 'đ';
             
             resultDiv.style.display = 'block';
