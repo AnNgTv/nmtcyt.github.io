@@ -4,3 +4,6 @@ sync-seconds: 60
 
 # Poll website credit requests (minimum 15 seconds).
 command-poll-seconds: 20
+
+# Admin key must match ADMIN_SHARED_KEY on the backend. Keep this secret.
+admin-key: ""

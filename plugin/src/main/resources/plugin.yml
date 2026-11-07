@@ -1,5 +1,5 @@
 name: NightmareLink
-version: 1.2.0
+version: 1.3.0
 main: vn.nightmare.tcyt.NightmareLink
 api-version: '1.20'
 depend: [AuthMe, PlayerPoints, LuckPerms, Vault]
@@ -7,10 +7,16 @@ softdepend: [EssentialsX]
 commands:
   nmtcyt:
     description: Sync LuckPerms, PlayerPoints and Vault data with NIGHTMARE TCYT website
-    usage: /nmtcyt sync
+    usage: /nmtcyt <sync|duyet <ID>>
     aliases: [web]
     permission: nightmarelink.use
 permissions:
   nightmarelink.use:
     description: Allows syncing your Minecraft profile to the website
     default: true
+  nightmarelink.admin:
+    description: Allows approving website credit requests and receiving admin alerts
+    default: op
+  nightmarelink.owner:
+    description: Owner access to website credit request alerts and approvals
+    default: op

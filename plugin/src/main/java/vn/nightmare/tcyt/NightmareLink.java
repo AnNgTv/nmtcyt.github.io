@@ -19,15 +19,19 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.UUID;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class NightmareLink extends JavaPlugin implements Listener {
     private HttpClient http;
-    private String baseUrl, pluginKey;
+    private String baseUrl, pluginKey, adminKey;
+    private final Set<String> notifiedRequests = ConcurrentHashMap.newKeySet();
 
     @Override public void onEnable() {
         saveDefaultConfig();
         baseUrl = getConfig().getString("api-base-url", "").replaceAll("/+$", "");
         pluginKey = getConfig().getString("plugin-key", "");
+        adminKey = getConfig().getString("admin-key", "");
         if (!baseUrl.startsWith("https://") || pluginKey.length() < 32 || pluginKey.startsWith("REPLACE_")) {
             getLogger().severe("Configure HTTPS api-base-url and strong plugin-key.");
             getServer().getPluginManager().disablePlugin(this); return;
@@ -46,19 +50,43 @@ public final class NightmareLink extends JavaPlugin implements Listener {
         Bukkit.getScheduler().runTaskTimer(this, this::syncOnlinePlayers, 60L, syncSeconds * 20L);
         int pollSeconds = Math.max(15, getConfig().getInt("command-poll-seconds", 20));
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::claimWebsiteCommand, 100L, pollSeconds * 20L);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::pollPendingRequests, 120L, pollSeconds * 20L);
         getLogger().info("Enabled. Snapshot sync and website credit queue are active.");
     }
 
     @Override public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) { sender.sendMessage("Use this command in game."); return true; }
-        if (args.length != 1 || !args[0].equalsIgnoreCase("sync")) {
-            player.sendMessage("§cDùng: §f/nmtcyt sync"); return true;
+        if (args.length == 1 && args[0].equalsIgnoreCase("sync")) {
+            if (!authMeLoggedIn(player)) {
+                player.sendMessage("§cBạn phải đăng nhập AuthMe thành công trước."); return true;
+            }
+            player.sendMessage("§7Đang đồng bộ dữ liệu game...");
+            syncOnePlayer(player);
+            return true;
         }
-        if (!authMeLoggedIn(player)) {
-            player.sendMessage("§cBạn phải đăng nhập AuthMe thành công trước."); return true;
+        if (args.length == 2 && args[0].equalsIgnoreCase("duyet")) {
+            if (!player.hasPermission("nightmarelink.admin") && !player.hasPermission("nightmarelink.owner")) {
+                player.sendMessage("§cBạn không có quyền duyệt yêu cầu."); return true;
+            }
+            if (adminKey == null || adminKey.length() < 32) {
+                player.sendMessage("§cChưa cấu hình admin-key trong NightmareLink/config.yml."); return true;
+            }
+            String requestId = args[1];
+            if (!requestId.matches("[0-9a-fA-F-]{36}")) {
+                player.sendMessage("§cMã yêu cầu không hợp lệ."); return true;
+            }
+            player.sendMessage("§eĐang duyệt yêu cầu " + requestId + "...");
+            Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+                try {
+                    JsonObject result = postAdmin("/internal/commands/" + requestId + "/approve", new JsonObject());
+                    send(player, "§aĐã duyệt yêu cầu " + requestId + ". Plugin sẽ tự xử lý khi đến lượt.");
+                } catch (Exception e) {
+                    send(player, "§cDuyệt thất bại: " + e.getMessage());
+                }
+            });
+            return true;
         }
-        player.sendMessage("§7Đang đồng bộ dữ liệu game...");
-        syncOnePlayer(player);
+        player.sendMessage("§cDùng: §f/nmtcyt sync §7hoặc §f/nmtcyt duyet <ID>");
         return true;
     }
 
@@ -162,6 +190,57 @@ public final class NightmareLink extends JavaPlugin implements Listener {
         HttpResponse<String> res = http.send(req, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
         if (res.statusCode() < 200 || res.statusCode() >= 300) throw new IOException("HTTP " + res.statusCode());
         return JsonParser.parseString(res.body()).getAsJsonObject();
+    }
+
+    private JsonObject get(String path) throws IOException, InterruptedException {
+        HttpRequest req = HttpRequest.newBuilder(URI.create(baseUrl + path))
+            .timeout(Duration.ofSeconds(12)).header("X-Plugin-Key", pluginKey).GET().build();
+        HttpResponse<String> res = http.send(req, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+        if (res.statusCode() < 200 || res.statusCode() >= 300) throw new IOException("HTTP " + res.statusCode());
+        return JsonParser.parseString(res.body()).getAsJsonObject();
+    }
+
+    private JsonObject postAdmin(String path, JsonObject body) throws IOException, InterruptedException {
+        HttpRequest req = HttpRequest.newBuilder(URI.create(baseUrl + path))
+            .timeout(Duration.ofSeconds(12)).header("Content-Type", "application/json")
+            .header("X-Admin-Key", adminKey)
+            .POST(HttpRequest.BodyPublishers.ofString(body.toString(), StandardCharsets.UTF_8)).build();
+        HttpResponse<String> res = http.send(req, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+        if (res.statusCode() < 200 || res.statusCode() >= 300) {
+            String detail = "HTTP " + res.statusCode();
+            try { detail = JsonParser.parseString(res.body()).getAsJsonObject().get("message").getAsString(); }
+            catch (Exception ignored) { }
+            throw new IOException(detail);
+        }
+        return JsonParser.parseString(res.body()).getAsJsonObject();
+    }
+
+    // Notify online admins/owners once per pending request while this plugin session is running.
+    private void pollPendingRequests() {
+        try {
+            JsonObject response = get("/internal/commands/pending");
+            if (!response.has("requests") || !response.get("requests").isJsonArray()) return;
+            for (var element : response.getAsJsonArray("requests")) {
+                if (!element.isJsonObject()) continue;
+                JsonObject request = element.getAsJsonObject();
+                String id = request.get("id").getAsString();
+                String username = request.get("username").getAsString();
+                String type = request.get("type").getAsString();
+                long amount = request.get("amount").getAsLong();
+                Bukkit.getScheduler().runTask(this, () -> {
+                    java.util.List<? extends Player> admins = Bukkit.getOnlinePlayers().stream()
+                        .filter(p -> p.hasPermission("nightmarelink.admin") || p.hasPermission("nightmarelink.owner"))
+                        .toList();
+                    if (admins.isEmpty() || !notifiedRequests.add(id)) return;
+                    String label = "points".equalsIgnoreCase(type) ? "xu" : "tiền";
+                    String msg = "§8[§cNIGHTMARE§8] §eYêu cầu mới §7| §f" + username + " §7muốn nhận §a" + amount + " " + label
+                        + "§7.\n§7Mã: §f" + id + "\n§aDuyệt: §f/nmtcyt duyet " + id;
+                    for (Player admin : admins) admin.sendMessage(msg);
+                });
+            }
+        } catch (Exception e) {
+            getLogger().warning("Pending request notification poll failed: " + e.getClass().getSimpleName());
+        }
     }
 
     // Claim is durable on the backend before any balance mutation. A command left in
