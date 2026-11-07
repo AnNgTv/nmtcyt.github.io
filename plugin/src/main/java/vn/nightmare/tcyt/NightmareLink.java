@@ -6,29 +6,23 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.time.Duration;
-import java.util.Properties;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-public final class NightmareLink extends JavaPlugin {
+public final class NightmareLink extends JavaPlugin implements Listener {
     private HttpClient http;
     private String baseUrl, pluginKey;
-    private Properties ledger;
-    private Path ledgerPath;
-    private final AtomicBoolean busy = new AtomicBoolean(false);
 
     @Override public void onEnable() {
         saveDefaultConfig();
@@ -39,51 +33,30 @@ public final class NightmareLink extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this); return;
         }
         if (Bukkit.getPluginManager().getPlugin("AuthMe") == null ||
-            Bukkit.getPluginManager().getPlugin("PlayerPoints") == null) {
-            getLogger().severe("AuthMe and PlayerPoints must be installed.");
+            Bukkit.getPluginManager().getPlugin("PlayerPoints") == null ||
+            Bukkit.getPluginManager().getPlugin("LuckPerms") == null ||
+            Bukkit.getPluginManager().getPlugin("Vault") == null) {
+            getLogger().severe("AuthMe, PlayerPoints, LuckPerms and Vault must be installed.");
             getServer().getPluginManager().disablePlugin(this); return;
         }
         http = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(8))
             .followRedirects(HttpClient.Redirect.NEVER).build();
-        ledgerPath = getDataFolder().toPath().resolve("delivery-ledger.properties");
-        ledger = new Properties();
-        try {
-            Files.createDirectories(getDataFolder().toPath());
-            if (Files.exists(ledgerPath)) try (var in = Files.newInputStream(ledgerPath)) { ledger.load(in); }
-        } catch (IOException e) {
-            getLogger().severe("Cannot open delivery ledger; disabling plugin.");
-            getServer().getPluginManager().disablePlugin(this); return;
-        }
-        int seconds = Math.max(10, getConfig().getInt("poll-seconds", 10));
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::poll, 40L, seconds * 20L);
-        getLogger().info("Enabled. Use /nmtcyt link (alias /web link).");
+        Bukkit.getPluginManager().registerEvents(this, this);
+        int syncSeconds = Math.max(30, getConfig().getInt("sync-seconds", 60));
+        Bukkit.getScheduler().runTaskTimer(this, this::syncOnlinePlayers, 60L, syncSeconds * 20L);
+        getLogger().info("Enabled. Sync sources: LuckPerms rank, PlayerPoints xu, Vault/EssentialsX balance.");
     }
 
     @Override public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) { sender.sendMessage("Use this command in game."); return true; }
-        if (args.length != 1 || !args[0].equalsIgnoreCase("link")) {
-            player.sendMessage("§cDùng: §f/nmtcyt link"); return true;
+        if (args.length != 1 || !args[0].equalsIgnoreCase("sync")) {
+            player.sendMessage("§cDùng: §f/nmtcyt sync"); return true;
         }
         if (!authMeLoggedIn(player)) {
             player.sendMessage("§cBạn phải đăng nhập AuthMe thành công trước."); return true;
         }
-        JsonObject body = new JsonObject();
-        body.addProperty("uuid", player.getUniqueId().toString());
-        body.addProperty("username", player.getName());
-        player.sendMessage("§7Đang tạo mã liên kết...");
-        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
-            try {
-                JsonObject result = post("/internal/link/create", body);
-                if (!result.has("success") || !result.get("success").getAsBoolean()) {
-                    send(player, "§cKhông tạo được mã. Hãy thử lại sau."); return;
-                }
-                send(player, "§aMã liên kết: §f" + result.get("code").getAsString());
-                send(player, "§eMã dùng một lần, hết hạn sau 5 phút. Không chia sẻ mã này.");
-            } catch (Exception e) {
-                getLogger().warning("Link request failed: " + e.getClass().getSimpleName());
-                send(player, "§cKhông kết nối được website. Hãy thử lại sau.");
-            }
-        });
+        player.sendMessage("§7Đang đồng bộ dữ liệu game...");
+        syncOnePlayer(player);
         return true;
     }
 
@@ -95,69 +68,88 @@ public final class NightmareLink extends JavaPlugin {
         } catch (Exception e) { getLogger().warning("AuthMe API check failed."); return false; }
     }
 
-    private void poll() {
-        if (!busy.compareAndSet(false, true)) return;
-        try {
-            JsonObject response = post("/internal/points/claim", new JsonObject());
-            if (!response.has("job") || response.get("job").isJsonNull()) { busy.set(false); return; }
-            JsonObject job = response.getAsJsonObject("job");
-            String id = job.get("id").getAsString(), uuid = job.get("uuid").getAsString();
-            int points = job.get("points").getAsInt();
-            Bukkit.getScheduler().runTask(this, () -> process(id, uuid, points));
-        } catch (Exception e) {
-            getLogger().warning("Queue poll failed: " + e.getClass().getSimpleName());
-            busy.set(false);
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Bukkit.getScheduler().runTaskLater(this, () -> {
+            if (event.getPlayer().isOnline()) syncOnePlayer(event.getPlayer());
+        }, 40L);
+    }
+
+    // Snapshot is read from the live server APIs, never parsed from chat/RCON output.
+    private void syncOnlinePlayers() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            try {
+                UUID uuid = player.getUniqueId();
+                String rank = readLuckPermsPrimaryGroup(uuid);
+                Number points = readPlayerPoints(uuid);
+                Number balance = readVaultBalance(player);
+                if (rank == null || points == null || balance == null) {
+                    getLogger().fine("Skipping incomplete snapshot for " + player.getName());
+                    continue;
+                }
+                JsonObject body = new JsonObject();
+                body.addProperty("uuid", uuid.toString());
+                body.addProperty("username", player.getName());
+                body.addProperty("rank", rank);
+                body.addProperty("points", points.longValue());
+                body.addProperty("balance", balance.doubleValue());
+                Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+                    try { post("/internal/sync/player", body); }
+                    catch (Exception e) { getLogger().warning("Player sync failed for " + player.getName() + ": " + e.getClass().getSimpleName()); }
+                });
+            } catch (Exception e) {
+                getLogger().warning("Could not read game data for " + player.getName() + ": " + e.getClass().getSimpleName());
+            }
         }
     }
 
-    private void process(String orderId, String uuidText, int points) {
-        try {
-            String old = ledger.getProperty(orderId);
-            if ("DONE".equals(old)) { ackAsync(orderId, "done"); return; }
-            if ("STARTED".equals(old) || "REVIEW".equals(old)) {
-                ledger.setProperty(orderId, "REVIEW"); saveLedger();
-                ackAsync(orderId, "review");
-                getLogger().severe("Order " + orderId + " needs manual review; refusing to grant twice.");
-                return;
-            }
-            UUID uuid = UUID.fromString(uuidText);
-            if (points < 1 || points > 100000000) {
-                ledger.setProperty(orderId, "REVIEW"); saveLedger(); ackAsync(orderId, "review"); return;
-            }
-
-            // Persist STARTED before grant. A crash in an uncertain window goes to
-            // manual review instead of automatic re-granting.
-            ledger.setProperty(orderId, "STARTED"); saveLedger();
-            try {
-                org.bukkit.plugin.Plugin pp = Bukkit.getPluginManager().getPlugin("PlayerPoints");
-                if (pp == null || !pp.isEnabled()) throw new IllegalStateException("PlayerPoints unavailable");
-                Object api = pp.getClass().getMethod("getAPI").invoke(pp);
-                Method give = api.getClass().getMethod("give", UUID.class, int.class);
-                Object ok = give.invoke(api, uuid, points);
-                if (!Boolean.TRUE.equals(ok)) throw new IllegalStateException("PlayerPoints returned false");
-                ledger.setProperty(orderId, "DONE"); saveLedger();
-                ackAsync(orderId, "done");
-                Player online = Bukkit.getPlayer(uuid);
-                if (online != null) online.sendMessage("§aNIGHTMARE TCYT: Bạn đã nhận §e" + points + " §ađiểm.");
-            } catch (Exception e) {
-                ledger.setProperty(orderId, "REVIEW"); saveLedger(); ackAsync(orderId, "review");
-                getLogger().severe("Uncertain delivery for " + orderId + "; manual review required.");
-            }
-        } catch (Exception e) {
-            getLogger().severe("Queue job could not be processed safely; review required.");
-            ackAsync(orderId, "review");
-        } finally { busy.set(false); }
+    private String readLuckPermsPrimaryGroup(UUID uuid) throws Exception {
+        Class<?> provider = Class.forName("net.luckperms.api.LuckPermsProvider");
+        Object luckPerms = provider.getMethod("get").invoke(null);
+        Object userManager = luckPerms.getClass().getMethod("getUserManager").invoke(luckPerms);
+        Object user = userManager.getClass().getMethod("getUser", UUID.class).invoke(userManager, uuid);
+        if (user == null) return null; // Wait for LuckPerms cache; never guess a rank.
+        Object group = Class.forName("net.luckperms.api.model.user.User").getMethod("getPrimaryGroup").invoke(user);
+        return group instanceof String ? (String) group : null;
     }
 
-    private void ackAsync(String id, String status) {
-        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
-            try {
-                JsonObject body = new JsonObject(); body.addProperty("status", status);
-                post("/internal/points/" + id + "/ack", body);
-            } catch (Exception e) {
-                getLogger().warning("ACK failed for " + id + "; retry will use local ledger.");
+    private Number readPlayerPoints(UUID uuid) throws Exception {
+        org.bukkit.plugin.Plugin plugin = Bukkit.getPluginManager().getPlugin("PlayerPoints");
+        if (plugin == null || !plugin.isEnabled()) return null;
+        Object api = plugin.getClass().getMethod("getAPI").invoke(plugin);
+        Object value = api.getClass().getMethod("look", UUID.class).invoke(api, uuid);
+        return value instanceof Number ? (Number) value : null;
+    }
+
+    private Number readVaultBalance(Player player) throws Exception {
+        Class<?> economyClass = Class.forName("net.milkbowl.vault.economy.Economy");
+        Object registration = Bukkit.getServicesManager().getRegistration(economyClass);
+        if (registration == null) return null;
+        Object economy = registration.getClass().getMethod("getProvider").invoke(registration);
+        Object value = economyClass.getMethod("getBalance", org.bukkit.OfflinePlayer.class).invoke(economy, player);
+        return value instanceof Number ? (Number) value : null;
+    }
+
+    private void syncOnePlayer(Player player) {
+        try {
+            UUID uuid = player.getUniqueId();
+            String rank = readLuckPermsPrimaryGroup(uuid);
+            Number points = readPlayerPoints(uuid);
+            Number balance = readVaultBalance(player);
+            if (rank == null || points == null || balance == null) {
+                player.sendMessage("§cChưa đọc đủ dữ liệu LuckPerms/PlayerPoints/Vault."); return;
             }
-        });
+            JsonObject body = new JsonObject();
+            body.addProperty("uuid", uuid.toString());
+            body.addProperty("username", player.getName());
+            body.addProperty("rank", rank);
+            body.addProperty("points", points.longValue());
+            body.addProperty("balance", balance.doubleValue());
+            Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+                try { post("/internal/sync/player", body); send(player, "§aĐã đồng bộ hồ sơ lên website."); }
+                catch (Exception e) { send(player, "§cĐồng bộ thất bại. Hãy kiểm tra cấu hình plugin-key/backend."); }
+            });
+        } catch (Exception e) { player.sendMessage("§cKhông đọc được dữ liệu game. Kiểm tra plugin phụ thuộc."); }
     }
 
     private JsonObject post(String path, JsonObject body) throws IOException, InterruptedException {
@@ -174,11 +166,5 @@ public final class NightmareLink extends JavaPlugin {
         Bukkit.getScheduler().runTask(this, () -> { if (player.isOnline()) player.sendMessage(msg); });
     }
 
-    private synchronized void saveLedger() throws IOException {
-        Path tmp = ledgerPath.resolveSibling("delivery-ledger.tmp");
-        try (var out = Files.newOutputStream(tmp)) { ledger.store(out, "NIGHTMARE TCYT delivery ledger; do not delete"); }
-        try { Files.move(tmp, ledgerPath, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE); }
-        catch (IOException ex) { Files.move(tmp, ledgerPath, StandardCopyOption.REPLACE_EXISTING); }
-    }
   }
             
