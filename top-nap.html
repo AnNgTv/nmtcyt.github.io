@@ -1,180 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bảng Xếp Hạng Nạp | Nightmare YTYC | TCYT</title>
-    <link rel="stylesheet" href="assets/css/style.css?v=1.7">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#08060c">
+<title>Bảng xếp hạng | NIGHTMARE TCYT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#08060c;--panel:#15101d;--red:#ff2947;--purple:#ad63ff;--text:#f8f3fa;--muted:#b5a9bd;--line:#ffffff1b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 8% 0,#35101f,transparent 38%),radial-gradient(ellipse at 95% 25%,#241039,transparent 38%),var(--bg);color:var(--text);font:15px/1.6 Inter,Arial,sans-serif}
+a{color:inherit;text-decoration:none}.wrap{width:min(1120px,calc(100% - 30px));margin:auto}
+header{position:sticky;top:0;z-index:5;background:#09070deF;border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
+nav{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}.logo{font-weight:900;letter-spacing:.04em}.logo span{color:#ff7185}.links{display:flex;gap:16px;flex-wrap:wrap;font-size:.88rem;color:#d7ccdc}
+.hero{text-align:center;padding:65px 0 35px}.eyebrow{color:#ff8293;font-size:.72rem;font-weight:800;letter-spacing:.18em}.hero h1{font-size:clamp(2.2rem,7vw,4rem);line-height:1.1;margin:12px 0}.grad{background:linear-gradient(100deg,#ff2947,#ff9aa8,#bd83ff);color:transparent;background-clip:text}.muted{color:var(--muted)}
+.toolbar{display:flex;justify-content:center;align-items:center;gap:12px;margin:20px auto 28px;flex-wrap:wrap}.toolbar select{background:#17101e;color:white;border:1px solid var(--line);border-radius:10px;padding:10px 14px;font:inherit}
+.boards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;padding-bottom:45px}.board{min-width:0;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,#1b1120e8,#0e0b14f5);overflow:hidden}
+.board-head{padding:20px 20px 12px}.board-head h2{margin:0;font-size:1.35rem}.board-head p{margin:5px 0 0;color:var(--muted);font-size:.86rem}
+.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:340px}th,td{text-align:left;padding:12px 14px;border-top:1px solid var(--line)}th{font-size:.75rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em}td:last-child,th:last-child{text-align:right}.player{font-weight:700}.amount{font-weight:800;color:#ff9aa8;white-space:nowrap}.rank{color:#c8b9d0;font-weight:800}.empty{text-align:center!important;color:var(--muted);padding:26px 12px}.note{text-align:center;color:var(--muted);font-size:.84rem;padding:0 0 35px}
+@media(max-width:760px){nav{padding:12px 0;align-items:flex-start}.links{gap:10px}.boards{grid-template-columns:1fr}.hero{padding-top:45px}}
+</style>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">Nightmare <span>YTYC | TCYT</span></div>
-            <div class="menu-toggle" id="mobile-menu">
-                <i class="fas fa-bars"></i>
-            </div>
-            <ul class="nav-links">
-                <li><a href="index.html">Trang Chủ</a></li>
-                <li><a href="index.html#store">Cửa Hàng</a></li>
-                <li><a href="topup.html" class="nav-topup">Nạp Thẻ</a></li>
-                <li id="nav-user-info" style="display: none;"><a href="index.html#profile" class="user-link"><i class="fas fa-user-circle"></i> <span id="nav-username">Cá nhân</span></a></li>
-                <li id="nav-login-btn">
-                    <a href="javascript:void(0)" onclick="openAuthModal('login')">Đăng Nhập</a>
-                    <span style="color: rgba(255,255,255,0.3); margin: 0 5px;">|</span>
-                    <a href="javascript:void(0)" onclick="openAuthModal('register')" style="color: var(--primary);">Đăng Ký</a>
-                </li>
-                <li><a href="top-nap.html">Top Nạp</a></li>
-                <li><a href="index.html#staff">Đội Ngũ</a></li>
-                <li><a href="index.html#contact">Liên Hệ</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main class="top-nap-section">
-        <h2 class="section-title">Bảng Xếp Hạng <span>Đại Gia</span></h2>
-        <p style="text-align: center; color: #ccc; margin-bottom: 40px;">Vinh danh những chiến binh đã ủng hộ nhiệt tình nhất cho server trong tháng này!</p>
-
-        <div class="leaderboard-container">
-            <table class="leaderboard-table">
-                <thead>
-                    <tr>
-                        <th>Hạng</th>
-                        <th>Người Chơi</th>
-                        <th>Số Tiền Ủng Hộ</th>
-                        <th>Danh Hiệu</th>
-                    </tr>
-                </thead>
-                <tbody id="leaderboard-body">
-                    <!-- Dữ liệu sẽ được tải từ API -->
-                    <tr>
-                        <td colspan="4" style="text-align: center; padding: 40px;">Đang tải dữ liệu...</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Recent Donators -->
-        <div class="recent-donators">
-            <h4><i class="fas fa-history"></i> Ủng hộ gần đây</h4>
-            <div id="recent-donators-list">
-                <p style="text-align: center; font-size: 12px; color: #888; padding: 10px;">Đang tải...</p>
-            </div>
-        </div>
-        <div class="top-nap-footer">
-            <p><i class="fas fa-info-circle"></i> Bảng xếp hạng cập nhật tự động mỗi khi có nạp mới.</p>
-            <a href="topup.html" class="buy-btn" style="display: inline-block; width: auto; margin-top: 20px; text-decoration: none;">Đua Top Ngay</a>
-        </div>
-    </main>
-
-    <footer>
-        <p>&copy; 2026 Minecraft Server VN. All rights reserved.</p>
-    </footer>
-
-    <!-- Auth Modal -->
-    <div id="auth-modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <span class="close" onclick="closeAuthModal()">&times;</span>
-            <div id="auth-tabs">
-                <button id="tab-login" class="active" onclick="switchAuthTab('login')">Đăng Nhập</button>
-                <button id="tab-register" onclick="switchAuthTab('register')">Đăng Ký</button>
-            </div>
-            
-            <!-- Login Form -->
-            <form id="login-form" onsubmit="handleAuth(event, 'login')">
-                <input type="text" placeholder="Tên tài khoản" required id="login-user">
-                <input type="password" placeholder="Mật khẩu" required id="login-pass">
-                <button type="submit" class="auth-btn">Vào hệ thống</button>
-            </form>
-
-            <!-- Register Form -->
-            <form id="register-form" onsubmit="handleAuth(event, 'register')" style="display: none;">
-                <input type="text" placeholder="Tên tài khoản Minecraft" required id="reg-user">
-                <input type="password" placeholder="Mật khẩu" required id="reg-pass">
-                <input type="password" placeholder="Xác nhận mật khẩu" required id="reg-pass-confirm">
-                <button type="submit" class="auth-btn">Tạo tài khoản</button>
-            </form>
-        </div>
-    </div>
-
-    <script src="assets/js/config.js?v=1.3"></script>
-    <script src="assets/js/main.js?v=1.3"></script>
-    <script>
-        async function loadLeaderboard() {
-            try {
-                const response = await fetch(`${API_BASE}/api/top-recharge`);
-                const data = await response.json();
-                
-                const tbody = document.getElementById('leaderboard-body');
-                tbody.innerHTML = '';
-
-                if (data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px;">Chưa có dữ liệu nạp thẻ.</td></tr>';
-                    return;
-                }
-
-                data.forEach((item, index) => {
-                    const rank = index + 1;
-                    let rankDisplay = rank;
-                    let rowClass = '';
-                    let badge = '-';
-
-                    if (rank === 1) {
-                        rankDisplay = '<i class="fas fa-medal" style="color: #ffd700;"></i> 1';
-                        rowClass = 'top-1';
-                        badge = '<span class="badge gold">Chúa Tể Đồ Sơn</span>';
-                    } else if (rank === 2) {
-                        rankDisplay = '<i class="fas fa-medal" style="color: #c0c0c0;"></i> 2';
-                        rowClass = 'top-2';
-                        badge = '<span class="badge silver">Đại Phú Hộ</span>';
-                    } else if (rank === 3) {
-                        rankDisplay = '<i class="fas fa-medal" style="color: #cd7f32;"></i> 3';
-                        rowClass = 'top-3';
-                        badge = '<span class="badge bronze">Thương Gia</span>';
-                    }
-
-                    const row = `
-                        <tr class="${rowClass}">
-                            <td>${rankDisplay}</td>
-                            <td><div class="player-info"><i class="fas fa-user-circle"></i> ${escapeHTML(item.username)}</div></td>
-                            <td>${escapeHTML(formatAmount(item.total))}đ</td>
-                            <td>${badge}</td>
-                        </tr>
-                    `;
-                    tbody.innerHTML += row;
-                });
-            } catch (error) {
-                console.error('Error:', error);
-                const tbody = document.getElementById('leaderboard-body');
-                if (tbody) tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #ff4d4d; padding: 20px;">Không thể tải dữ liệu từ máy chủ.</td></tr>';
-            }
-        }
-
-        async function loadRecentDonators() {
-            const list = document.getElementById('recent-donators-list');
-            if (!list) return;
-            try {
-                const response = await fetch(`${API_BASE}/api/recent-recharge`);
-                if (!response.ok) throw new Error('Recent recharge request failed');
-                const data = await response.json();
-                if (!Array.isArray(data)) throw new Error('Invalid recent recharge response');
-                if (data.length === 0) {
-                    list.innerHTML = '<p style="text-align: center; font-size: 12px; color: #888; padding: 10px;">Chưa có hoạt động nạp thẻ gần đây.</p>';
-                    return;
-                }
-                list.innerHTML = data.map(item => `
-                    <div class="donator-item">
-                        <span class="donator-name"><i class="fas fa-user-circle"></i> ${escapeHTML(item.username)}</span>
-                        <span class="donator-amount">+${escapeHTML(formatAmount(item.amount))}đ</span>
-                    </div>
-                `).join('');
-            } catch (error) { console.error(error); }
-        }
-
-        loadLeaderboard();
-        loadRecentDonators();
-        setInterval(loadRecentDonators, 30000);
-    </script>
-</body>
-</html>
+<header><div class="wrap"><nav><a class="logo" href="index.html">☠ NIGHTMARE <span>TCYT</span></a><div class="links"><a href="index.html">Trang chủ</a><a href="topup.html">Nạp xu</a><a href="profile/">Hồ sơ</a><a href="ungho/">Ủng hộ</a></div></nav></div></header>
+<main class="wrap">
+<section class="hero"><span class="eyebrow">NIGHTMARE TCYT HONOR BOARD</span><h1>BẢNG <span class="grad">VINH DANH</span></h1><p class="muted">Hai bảng độc lập dành cho người nạp xu và người ủng hộ server.</p>
+<div class="toolbar"><label for="period">Thời gian:</label><select id="period"><option value="all">Toàn thời gian</option><option value="month">30 ngày gần đây</option><option value="week">7 ngày gần đây</option></select></div></section>
+<section class="boards">
+<article class="board"><div class="board-head"><h2>⚡ TOP NẠP</h2><p>Tổng tiền từ các đơn nạp xu đã hoàn tất.</p></div><div class="table-wrap"><table><thead><tr><th>Hạng</th><th>Người chơi</th><th>Tổng nạp</th></tr></thead><tbody id="recharge-body"><tr><td class="empty" colspan="3">Đang tải...</td></tr></tbody></table></div></article>
+<article class="board"><div class="board-head"><h2>❤️ TOP ỦNG HỘ</h2><p>Tổng tiền ủng hộ / từ thiện đã hoàn tất.</p></div><div class="table-wrap"><table><thead><tr><th>Hạng</th><th>Người chơi</th><th>Tổng ủng hộ</th></tr></thead><tbody id="donation-body"><tr><td class="empty" colspan="3">Đang tải...</td></tr></tbody></table></div></article>
+</section>
+<p class="note">Chỉ tính giao dịch đã được server xác nhận cấp xu thành công. Không sử dụng số dư Vault hoặc PlayerPoints để xếp hạng.</p>
+</main>
+<script>
+const API='https://minecraftrechargebackend.onrender.com';
+const money=n=>Number(n||0).toLocaleString('vi-VN')+'đ';
+const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function loadBoard(type,bodyId){
+ const body=document.getElementById(bodyId),period=document.getElementById('period').value;
+ body.innerHTML='<tr><td class="empty" colspan="3">Đang tải...</td></tr>';
+ try{
+  const response=await fetch(API+(type==='recharge'?'/api/top-recharge':'/api/top-donation')+'?period='+encodeURIComponent(period));
+  const result=await response.json();
+  if(!response.ok||result.status!=='success'||!Array.isArray(result.data))throw new Error(result.message||'Không tải được bảng.');
+  if(!result.data.length){body.innerHTML='<tr><td class="empty" colspan="3">Chưa có giao dịch hoàn tất trong thời gian này.</td></tr>';return;}
+  body.innerHTML=result.data.map((item,index)=>'<tr><td class="rank">'+(index+1)+'</td><td class="player">'+safe(item.username)+'</td><td class="amount">'+money(item.total)+'</td></tr>').join('');
+ }catch(error){console.error(error);body.innerHTML='<tr><td class="empty" colspan="3">Không thể tải dữ liệu. Vui lòng thử lại.</td></tr>';}
+}
+function refresh(){loadBoard('recharge','recharge-body');loadBoard('donation','donation-body');}
+document.getElementById('period').addEventListener('change',refresh);
+refresh();
+</script>
+</body></html>
