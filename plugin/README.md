@@ -31,3 +31,18 @@ Plugin gửi snapshot khi người chơi vào server, theo chu kỳ `sync-second
 Plugin gửi `POST /internal/sync/player` với UUID, username, rank, points và balance. Backend xác thực bằng `X-Plugin-Key` và lưu snapshot trong MySQL table `nightmare_player_sync`.
 
 Website dùng `/api/auth/me`, `/api/player/:username` và `/api/top-players` để đọc snapshot. Snapshot cuối cùng vẫn được giữ khi người chơi offline; thời gian cập nhật được trả về trong `syncedAt`.
+
+## NightmareLink 1.2.0 — Website → Minecraft credits
+
+Trang `/profile/` cho phép tài khoản đã đăng nhập tạo yêu cầu cộng `points` hoặc `money` (tối đa 1.000.000 mỗi yêu cầu). Yêu cầu chỉ ở trạng thái `pending` và KHÔNG tự cộng tài nguyên.
+
+Quản trị viên phải xác minh giao dịch/ủy quyền độc lập rồi mới duyệt qua backend:
+
+```sh
+curl -X POST 'https://minecraftrechargebackend.onrender.com/internal/commands/REQUEST_UUID/approve' \\
+  -H 'X-Admin-Key: YOUR_ADMIN_SHARED_KEY'
+```
+
+Cấu hình `ADMIN_SHARED_KEY` trên Render bằng một chuỗi ngẫu nhiên riêng (không dùng lại `PLUGIN_SHARED_KEY`). Không đưa khóa vào website, GitHub, Discord hoặc gửi trong chat. Plugin dùng `PLUGIN_SHARED_KEY` để nhận yêu cầu đã duyệt, áp dụng PlayerPoints/Vault trên server thread, rồi xác nhận trạng thái.
+
+Trạng thái `processing` không được tự động chạy lại sau khi server/backend gặp sự cố giữa lúc cộng và lúc xác nhận. Quản trị viên cần kiểm tra số dư trong game trước khi xử lý thủ công để tránh cộng trùng.

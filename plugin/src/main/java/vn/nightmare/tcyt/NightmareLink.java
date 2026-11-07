@@ -44,7 +44,9 @@ public final class NightmareLink extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(this, this);
         int syncSeconds = Math.max(30, getConfig().getInt("sync-seconds", 60));
         Bukkit.getScheduler().runTaskTimer(this, this::syncOnlinePlayers, 60L, syncSeconds * 20L);
-        getLogger().info("Enabled. Sync sources: LuckPerms rank, PlayerPoints xu, Vault/EssentialsX balance.");
+        int pollSeconds = Math.max(15, getConfig().getInt("command-poll-seconds", 20));
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::claimWebsiteCommand, 100L, pollSeconds * 20L);
+        getLogger().info("Enabled. Snapshot sync and website credit queue are active.");
     }
 
     @Override public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -160,6 +162,68 @@ public final class NightmareLink extends JavaPlugin implements Listener {
         HttpResponse<String> res = http.send(req, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
         if (res.statusCode() < 200 || res.statusCode() >= 300) throw new IOException("HTTP " + res.statusCode());
         return JsonParser.parseString(res.body()).getAsJsonObject();
+    }
+
+    // Claim is durable on the backend before any balance mutation. A command left in
+    // processing after a crash is deliberately not replayed automatically.
+    private void claimWebsiteCommand() {
+        try {
+            JsonObject response = post("/internal/commands/claim", new JsonObject());
+            if (!response.has("command") || response.get("command").isJsonNull()) return;
+            JsonObject command = response.getAsJsonObject("command");
+            Bukkit.getScheduler().runTask(this, () -> processWebsiteCommand(command));
+        } catch (Exception e) {
+            getLogger().warning("Website command poll failed: " + e.getClass().getSimpleName());
+        }
+    }
+
+    private void processWebsiteCommand(JsonObject command) {
+        String id = command.get("id").getAsString();
+        String username = command.get("username").getAsString();
+        String type = command.get("type").getAsString();
+        long amount = command.get("amount").getAsLong();
+        boolean success = false;
+        String message;
+        try {
+            if (amount < 1 || amount > 1_000_000L) throw new IllegalArgumentException("Số lượng vượt giới hạn.");
+            org.bukkit.OfflinePlayer target = Bukkit.getOfflinePlayer(username);
+            if ("points".equals(type)) {
+                org.bukkit.plugin.Plugin pointsPlugin = Bukkit.getPluginManager().getPlugin("PlayerPoints");
+                if (pointsPlugin == null || !pointsPlugin.isEnabled()) throw new IllegalStateException("PlayerPoints chưa hoạt động.");
+                Object api = pointsPlugin.getClass().getMethod("getAPI").invoke(pointsPlugin);
+                Object result = api.getClass().getMethod("give", UUID.class, int.class)
+                    .invoke(api, target.getUniqueId(), (int) amount);
+                if (result instanceof Boolean && !((Boolean) result)) throw new IllegalStateException("PlayerPoints từ chối cộng xu.");
+            } else if ("money".equals(type)) {
+                Class<?> economyClass = Class.forName("net.milkbowl.vault.economy.Economy");
+                Object registration = Bukkit.getServicesManager().getRegistration(economyClass);
+                if (registration == null) throw new IllegalStateException("Không tìm thấy Vault Economy.");
+                Object economy = registration.getClass().getMethod("getProvider").invoke(registration);
+                Object result = economyClass.getMethod("depositPlayer", org.bukkit.OfflinePlayer.class, double.class)
+                    .invoke(economy, target, (double) amount);
+                Object ok = result.getClass().getMethod("transactionSuccess").invoke(result);
+                if (!Boolean.TRUE.equals(ok)) throw new IllegalStateException("Vault từ chối cộng tiền.");
+            } else throw new IllegalArgumentException("Loại giao dịch không hợp lệ.");
+            success = true;
+            message = "Đã cộng " + amount + ("points".equals(type) ? " xu" : " tiền") + " cho " + username + ".";
+        } catch (Exception e) {
+            message = e.getCause() != null && e.getCause().getMessage() != null
+                ? e.getCause().getMessage() : (e.getMessage() == null ? "Không xử lý được giao dịch." : e.getMessage());
+            getLogger().warning("Website command " + id + " failed: " + e.getClass().getSimpleName());
+        }
+        final boolean completed = success;
+        final String resultMessage = message;
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+            try {
+                JsonObject ack = new JsonObject();
+                ack.addProperty("success", completed);
+                ack.addProperty("message", resultMessage);
+                post("/internal/commands/" + id + "/complete", ack);
+            } catch (Exception e) {
+                getLogger().severe("Could not acknowledge website command " + id + ". It remains processing for manual review.");
+            }
+        });
+        if (success) Bukkit.broadcastMessage("§8[§cNIGHTMARE§8] §aĐã xử lý yêu cầu website cho §e" + username + "§a.");
     }
 
     private void send(Player player, String msg) {

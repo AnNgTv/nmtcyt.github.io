@@ -1,3 +1,6 @@
 api-base-url: "https://minecraftrechargebackend.onrender.com"
 plugin-key: "REPLACE_WITH_THE_SAME_RANDOM_SECRET_CONFIGURED_ON_RENDER"
 sync-seconds: 60
+
+# Poll website credit requests (minimum 15 seconds).
+command-poll-seconds: 20

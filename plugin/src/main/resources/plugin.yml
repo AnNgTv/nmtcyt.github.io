@@ -1,5 +1,5 @@
 name: NightmareLink
-version: 1.1.0
+version: 1.2.0
 main: vn.nightmare.tcyt.NightmareLink
 api-version: '1.20'
 depend: [AuthMe, PlayerPoints, LuckPerms, Vault]
