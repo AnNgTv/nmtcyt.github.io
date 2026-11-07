@@ -1,6 +1,111 @@
-<!doctype html><html lang="vi"><head><base href="/nmtcyt.github.io/"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#08060c"><meta name="description" content="Trang ủng hộ và theo dõi giao dịch NIGHTMARE TCYT."><title>Ủng hộ máy chủ | NIGHTMARE TCYT</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><style>
-:root{--bg:#08060c;--panel:#15101d;--red:#ff2947;--purple:#ad63ff;--text:#f8f3fa;--muted:#b5a9bd;--line:#ffffff1b}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 10% 0,#35101f,transparent 40%),radial-gradient(ellipse at 95% 35%,#241039,transparent 38%),var(--bg);color:var(--text);font:16px/1.65 Inter,Arial,sans-serif}a{color:inherit;text-decoration:none}.wrap{width:min(1080px,calc(100% - 32px));margin:auto}.nav{position:sticky;top:0;background:#09070deF;border-bottom:1px solid var(--line);backdrop-filter:blur(14px);z-index:5}.navin{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{font-weight:900;letter-spacing:.04em}.brand span{color:#ff7185}.links{display:flex;gap:18px;flex-wrap:wrap;font-size:.88rem;color:#d7ccdc}.links a:hover{color:#ff8293}.hero{padding:90px 0 65px;text-align:center}.eyebrow{color:#ff8293;font-size:.75rem;font-weight:800;letter-spacing:.16em}.title{font-size:clamp(2.6rem,9vw,5.8rem);line-height:1.05;letter-spacing:-.06em;margin:16px 0}.grad{background:linear-gradient(100deg,#ff2947,#ff9aa8,#bd83ff);color:transparent;background-clip:text}.muted{color:var(--muted)}.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px}.btn{display:inline-flex;justify-content:center;align-items:center;padding:12px 18px;border-radius:10px;background:linear-gradient(110deg,#c91233,var(--red));font-weight:800;border:1px solid #ff294766}.btn.alt{background:#ffffff0a;border-color:var(--line)}.section{padding:45px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}.card,.panel{padding:24px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,#1b1120e8,#0e0b14f5)}h2{font-size:clamp(1.7rem,5vw,2.6rem);line-height:1.2}.card p{color:var(--muted)}.field{display:grid;gap:7px;margin:14px 0}.field input,.field textarea{width:100%;padding:13px;border:1px solid var(--line);border-radius:9px;background:#09070d;color:white;font:inherit}.status{color:#ff9aa8;overflow-wrap:anywhere}.foot{padding:28px 0;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem;margin-top:50px}@media(max-width:700px){.navin{align-items:flex-start;flex-direction:column;padding:13px 0}.links{gap:12px}.hero{padding:65px 0 40px}}
-</style></head><body><header class="nav"><div class="wrap navin"><a class="brand" href="./">☠ NIGHTMARE <span>TCYT</span></a><nav class="links"><a href="./">Trang chủ</a><a href="profile/">Hồ sơ</a><a href="ungho/">Ủng hộ</a><a href="news/">Tin tức</a><a href="rules/">Nội quy</a><a href="rank/">Xếp hạng</a><a href="shop/">Cửa hàng</a><a href="support/">Hỗ trợ</a><a href="login/">Đăng nhập</a><a href="register/">Đăng ký</a></nav></div></header><main>
-<section class="hero"><div class="wrap"><span class="eyebrow">SUPPORT NIGHTMARE</span><h1 class="title">Ủng hộ <span class="grad">máy chủ</span></h1><p class="muted">Trang riêng dành cho thông tin nạp và lịch sử giao dịch.</p></div></section><section class="section"><div class="wrap"><div class="grid"><article class="card"><h3>💳 Chuyển khoản</h3><p>Phương thức thanh toán sẽ chỉ hiển thị khi thông tin nhận tiền và API xác nhận giao dịch được cấu hình, kiểm thử.</p><p class="status">Chưa kích hoạt thanh toán tự động.</p></article><article class="card"><h3>📜 Lịch sử giao dịch</h3><p>Đăng nhập để xem lịch sử cá nhân đã được backend ghi nhận.</p><a class="btn" href="login/">Đăng nhập</a><div id="recent-donations" style="margin-top:18px"><p class="muted">Đang tải hoạt động gần đây...</p></div><p id="donation-status" class="status"></p></article></div><p class="muted">Không chuyển tiền theo thông tin chưa được công bố chính thức. Website không tự xác nhận giao dịch hoặc cộng xu khi chưa có phản hồi hợp lệ từ backend.</p></div></section>
-</main><footer class="foot"><div class="wrap">© <span id="year"></span> NIGHTMARE TCYT · Enter the Darkness</div></footer><script>document.getElementById('year').textContent=new Date().getFullYear();fetch('https://minecraftrechargebackend.onrender.com/api/recent-recharge').then(async r=>{if(!r.ok)throw Error('Backend chưa sẵn sàng');const data=await r.json(),root=document.getElementById('recent-donations');if(!Array.isArray(data)||!data.length){root.textContent='Chưa có giao dịch gần đây.';return}root.innerHTML=data.slice(0,5).map(t=>{const name=String(t.username||'Người chơi').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));return '<p><strong>'+name+'</strong> · '+Number(t.amount||0).toLocaleString('vi-VN')+'đ</p>'}).join('')}).catch(e=>document.getElementById('donation-status').textContent=e.message);</script></body></html>
+<!doctype html>
+<html lang="vi">
+<head>
+  <base href="/nmtcyt.github.io/">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#08060c">
+  <meta name="description" content="Nạp xu và ủng hộ máy chủ NIGHTMARE TCYT qua VietQR.">
+  <title>Ủng hộ & Nạp xu | NIGHTMARE TCYT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#08060c;--panel:#15101d;--red:#ff2947;--purple:#ad63ff;--text:#f8f3fa;--muted:#b5a9bd;--line:#ffffff1b;--green:#6ee7a0}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 10% 0,#35101f,transparent 40%),radial-gradient(ellipse at 95% 35%,#241039,transparent 38%),var(--bg);color:var(--text);font:16px/1.65 Inter,Arial,sans-serif}
+    a{color:inherit;text-decoration:none}.wrap{width:min(1080px,calc(100% - 32px));margin:auto}.nav{position:sticky;top:0;background:#09070def;border-bottom:1px solid var(--line);backdrop-filter:blur(14px);z-index:5}.navin{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{font-weight:900;letter-spacing:.04em}.brand span{color:#ff7185}.links{display:flex;gap:18px;flex-wrap:wrap;font-size:.88rem;color:#d7ccdc}.links a:hover{color:#ff8293}
+    .hero{padding:76px 0 42px;text-align:center}.eyebrow{color:#ff8293;font-size:.75rem;font-weight:800;letter-spacing:.16em}.title{font-size:clamp(2.5rem,8vw,5rem);line-height:1.05;letter-spacing:-.06em;margin:16px 0}.grad{background:linear-gradient(100deg,#ff2947,#ff9aa8,#bd83ff);color:transparent;background-clip:text}.muted{color:var(--muted)}
+    .section{padding:25px 0 55px}.layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(280px,.9fr);gap:18px;align-items:start}.card{padding:24px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,#1b1120e8,#0e0b14f5);box-shadow:0 18px 55px #0004}.card h2{margin:0 0 8px;font-size:1.35rem}.field{display:grid;gap:7px;margin:16px 0}.field label{font-weight:700;font-size:.9rem}.field select{width:100%;padding:13px;border:1px solid var(--line);border-radius:10px;background:#09070d;color:white;font:inherit}.types{display:grid;grid-template-columns:1fr 1fr;gap:10px}.type{padding:14px;border:1px solid var(--line);border-radius:12px;background:#09070d;cursor:pointer}.type:has(input:checked){border-color:var(--red);background:#ff294714}.type input{accent-color:var(--red)}.type strong{display:block}.type small{color:var(--muted)}
+    .summary{padding:16px;border:1px solid #ad63ff55;border-radius:13px;background:#ad63ff0d;margin:18px 0}.sumrow{display:flex;justify-content:space-between;gap:12px;margin:5px 0}.total{font-size:1.5rem;font-weight:900;color:var(--green)}.btn{display:inline-flex;justify-content:center;align-items:center;width:100%;padding:13px 18px;border-radius:10px;background:linear-gradient(110deg,#c91233,var(--red));font-weight:800;border:1px solid #ff294766;color:white;font:inherit;cursor:pointer}.btn:disabled{opacity:.55;cursor:not-allowed}.status{color:#ff9aa8;overflow-wrap:anywhere;min-height:1.5em}.note{font-size:.86rem;color:var(--muted)}.qrbox{text-align:center}.qr{width:min(100%,300px);aspect-ratio:1;object-fit:contain;background:white;padding:8px;border-radius:12px}.code{font-weight:900;letter-spacing:.08em;color:#ff9aa8;font-size:1.15rem;overflow-wrap:anywhere}.copy{border:1px solid var(--line);background:#ffffff0a;color:white;border-radius:8px;padding:8px 12px;font:inherit;cursor:pointer}.hidden{display:none!important}.pill{display:inline-block;padding:4px 9px;border-radius:99px;background:#ff29471c;color:#ff9aa8;font-size:.75rem;font-weight:800}.foot{padding:28px 0;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem;margin-top:35px}
+    @media(max-width:760px){.navin{align-items:flex-start;flex-direction:column;padding:13px 0}.links{gap:12px}.hero{padding:55px 0 30px}.layout{grid-template-columns:1fr}.card{padding:19px}}
+  </style>
+</head>
+<body>
+<header class="nav"><div class="wrap navin"><a class="brand" href="./">☠ NIGHTMARE <span>TCYT</span></a><nav class="links"><a href="./">Trang chủ</a><a href="profile/">Hồ sơ</a><a href="ungho/">Ủng hộ</a><a href="news/">Tin tức</a><a href="rules/">Nội quy</a><a href="rank/">Xếp hạng</a><a href="shop/">Cửa hàng</a><a href="support/">Hỗ trợ</a><a href="login/">Đăng nhập</a></nav></div></header>
+<main>
+<section class="hero"><div class="wrap"><span class="eyebrow">SUPPORT THE NIGHT</span><h1 class="title">Nạp xu & <span class="grad">Ủng hộ</span></h1><p class="muted">Mỗi giao dịch đều góp phần duy trì thế giới NIGHTMARE TCYT.</p></div></section>
+<section class="section"><div class="wrap layout">
+  <article class="card">
+    <h2>💳 Tạo giao dịch</h2><p class="muted">Đăng nhập bằng tài khoản website trước khi tạo đơn.</p>
+    <div class="field"><label>Loại giao dịch</label><div class="types">
+      <label class="type"><input type="radio" name="type" value="recharge" checked> <strong>⚡ Nạp xu</strong><small>Bonus theo sự kiện</small></label>
+      <label class="type"><input type="radio" name="type" value="donation"> <strong>❤️ Ủng hộ</strong><small>Thêm 5% bonus</small></label>
+    </div></div>
+    <div class="field"><label for="amount">Số tiền</label><select id="amount"><option value="10000">10.000đ</option><option value="20000">20.000đ</option><option value="50000">50.000đ</option><option value="100000">100.000đ</option><option value="200000">200.000đ</option><option value="500000">500.000đ</option><option value="1000000">1.000.000đ</option></select></div>
+    <div class="summary"><div class="sumrow"><span>Xu gốc</span><strong id="base">100 xu</strong></div><div class="sumrow"><span>Bonus</span><strong id="bonus">0% · +0 xu</strong></div><div class="sumrow"><span>Tổng nhận</span><strong class="total" id="total">100 xu</strong></div><p class="note" id="rate-note">Tỷ lệ cơ bản: 10.000đ = 100 xu.</p></div>
+    <button class="btn" id="create" disabled>Đang kiểm tra thanh toán...</button><p id="form-status" class="status" role="status"></p>
+    <p class="note">Đơn có hiệu lực 30 phút. Chỉ chuyển đúng số tiền và nội dung được cấp cho đơn này. Không gửi ảnh QR hoặc mã thanh toán cho người khác.</p>
+  </article>
+  <aside class="card qrbox">
+    <h2>📲 Thông tin thanh toán</h2>
+    <div id="empty"><p class="muted">Sau khi tạo đơn, mã VietQR và nội dung chuyển khoản sẽ xuất hiện tại đây.</p><span class="pill">Chờ tạo đơn</span></div>
+    <div id="payment" class="hidden">
+      <img id="qr" class="qr" alt="Mã QR chuyển khoản VietQR">
+      <p id="bank" class="note"></p><p class="note">Nội dung chuyển khoản</p><div id="payment-code" class="code"></div>
+      <button class="copy" id="copy-code" type="button">Sao chép nội dung</button>
+      <div class="summary" style="text-align:left"><div class="sumrow"><span>Số tiền</span><strong id="pay-amount"></strong></div><div class="sumrow"><span>Xu dự kiến</span><strong id="pay-points"></strong></div><div class="sumrow"><span>Trạng thái</span><strong id="order-status">Đang chờ thanh toán</strong></div></div>
+      <p class="note">Hệ thống tự xác nhận qua SePay. Không cần gửi biên lai cho bot hoặc admin.</p>
+    </div>
+  </aside>
+</div></section>
+</main>
+<footer class="foot"><div class="wrap">© <span id="year"></span> NIGHTMARE TCYT · Enter the Darkness</div></footer>
+<script>
+(() => {
+  const API='https://minecraftrechargebackend.onrender.com';
+  const $=id=>document.getElementById(id);
+  const token=()=>localStorage.getItem('mc_token')||'';
+  let config=null, activeOrder=null, pollTimer=null;
+  $('year').textContent=new Date().getFullYear();
+  const money=n=>Number(n).toLocaleString('vi-VN')+'đ';
+  const points=n=>Number(n).toLocaleString('vi-VN')+' xu';
+  function selection(){return {amount:Number($('amount').value),type:document.querySelector('input[name="type"]:checked').value};}
+  function preview(){
+    if(!config)return;
+    const {amount,type}=selection(),base=Math.floor(amount/1000*config.rate);
+    const pct=config.eventBonus+(type==='donation'?config.donationBonus:0);
+    const extra=Math.floor(base*pct/100);
+    $('base').textContent=points(base);$('bonus').textContent=pct+'% · +'+points(extra);
+    $('total').textContent=points(base+extra);
+    $('rate-note').textContent='Tỷ lệ cơ bản: 10.000đ = '+points(config.rate*10)+'. Bonus được cộng dồn, không nhân chồng.';
+  }
+  async function loadConfig(){
+    try{
+      const r=await fetch(API+'/api/payments/config');config=await r.json();
+      if(!r.ok||config.status!=='success')throw Error('Không tải được cấu hình thanh toán.');
+      preview();
+      if(config.enabled){$('create').disabled=false;$('create').textContent='Tạo mã QR thanh toán';$('form-status').textContent='';}
+      else{$('create').disabled=true;$('create').textContent='Thanh toán chưa được kích hoạt';$('form-status').textContent='Backend chưa có đủ cấu hình ngân hàng và SePay. Chưa thể nhận tiền thật.';}
+    }catch(e){$('create').disabled=true;$('create').textContent='Không kết nối được backend';$('form-status').textContent=e.message;}
+  }
+  async function refreshOrder(){
+    if(!activeOrder||!token())return;
+    try{
+      const r=await fetch(API+'/api/payments/orders/'+encodeURIComponent(activeOrder.id),{headers:{Authorization:'Bearer '+token()}});
+      const d=await r.json();if(!r.ok||!d.order)throw Error(d.message||'Không đọc được trạng thái đơn.');
+      const o=d.order;const labels={pending:'Đang chờ SePay xác nhận',paid:'Đã nhận tiền · chờ server cộng xu',fulfilled:'Đã cộng xu thành công',needs_review:'Cần quản trị viên kiểm tra',expired:'Đơn đã hết hạn'};
+      $('order-status').textContent=labels[o.status]||o.status;
+      if(['fulfilled','needs_review','expired'].includes(o.status)&&pollTimer){clearInterval(pollTimer);pollTimer=null;}
+    }catch(e){$('order-status').textContent=e.message;}
+  }
+  $('amount').addEventListener('change',preview);
+  document.querySelectorAll('input[name="type"]').forEach(x=>x.addEventListener('change',preview));
+  $('create').addEventListener('click',async()=>{
+    if(!token()){ $('form-status').textContent='Bạn cần đăng nhập trước khi tạo giao dịch.';return; }
+    const {amount,type}=selection(),b=$('create');b.disabled=true;b.textContent='Đang tạo đơn...';$('form-status').textContent='';
+    try{
+      const r=await fetch(API+'/api/payments/orders',{method:'POST',headers:{Authorization:'Bearer '+token(),'Content-Type':'application/json'},body:JSON.stringify({amount,type})});
+      const d=await r.json();if(!r.ok||!d.order)throw Error(d.message||'Không tạo được đơn.');
+      activeOrder=d.order;$('empty').classList.add('hidden');$('payment').classList.remove('hidden');
+      $('qr').src=d.order.qrUrl;$('bank').textContent=d.order.bank.accountName+' · '+d.order.bank.account;
+      $('payment-code').textContent=d.order.transferContent;$('pay-amount').textContent=money(d.order.amount);
+      $('pay-points').textContent=points(d.order.totalPoints)+' (gồm '+d.order.bonusPercent+'% bonus)';
+      $('order-status').textContent='Đang chờ SePay xác nhận';await refreshOrder();
+      if(pollTimer)clearInterval(pollTimer);pollTimer=setInterval(refreshOrder,5000);
+      b.textContent='Đã tạo đơn';$('form-status').textContent='Hãy quét QR và chuyển khoản trong 30 phút.';
+    }catch(e){$('form-status').textContent=e.message;b.textContent='Tạo mã QR thanh toán';}
+    finally{b.disabled=!config?.enabled;}
+  });
+  $('copy-code').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('payment-code').textContent);$('copy-code').textContent='Đã sao chép';}catch{$('copy-code').textContent='Không sao chép được';}});
+  loadConfig();
+})();
+</script>
+</body></html>
